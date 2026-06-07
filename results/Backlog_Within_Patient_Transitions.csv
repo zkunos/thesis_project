@@ -1,0 +1,6 @@
+metric,value
+multi_assessment_patients,5206.0
+stable,2613.0
+transitioning,2593.0
+stable_fraction,0.5019208605455244
+mannwhitney_p_TSI,4.0469007249007985e-28

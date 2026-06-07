@@ -1,0 +1,5 @@
+Hypothesis,Verdict,Key Metric,Threshold
+H1: Discrete Cognitive Profiles,Supported,"Jaccard=0.586, Sil=0.564","Jaccard>0.7, Sil>0.5"
+H2: Imputation Robustness,SUPPORTED,Mean ARI=0.7098,ARI>0.80
+H3: Clinical Unit Association,SUPPORTED,"Chi2=911.34, V=0.1621","p<0.01, V>0.15"
+H4: Domain vs Variable Level,SUPPORTED,Domain wins: 3/4,≥3/4 metrics

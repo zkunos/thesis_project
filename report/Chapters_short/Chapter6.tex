@@ -1,0 +1,73 @@
+% Chapter 6
+
+\chapter{Limitations and Future Work}\label{Chapter6}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Limitations}\label{sec:limits}
+Firstly, the study was based in a single centre. All data were obtained from one rehabilitation unit. Therefore, the possibility of selection bias exists and extrapolation to other clinical groups cannot be made. Although all tests used have been extensively studied and have international validity, the six cognitive domains provide a common framework for the description of post-injury cognition. However, the validation of this cognitive severity structure will require multi-centre studies prior to its acceptance as a general characteristic of ABI rather than as a specific characteristic of this unit.
+
+
+
+Secondly, the recovered structure is a limitation on interpretation. The major finding is a continuum rather than distinct categories. Most of the cohort fall along a single dimension representing overall cognitive severity with PC1 accounting for 56\% of the variance. The three tiers represent a discretization of this continuum. Therefore, the tiers should not be regarded as phenotypic entities with well defined boundaries. Tier count will be influenced by both the resolution of clustering and the proportion of missing data. Assessments located near tier boundaries should be viewed cautiously. Ultimately, a continuous severity score may be more representative than discrete tiers (Section~\ref{sec:future}).
+
+
+
+Thirdly, the analytical approach has limited capacity to model temporal change. ABI recovery is typically rapid during the early stages and follows a slower rate thereafter \parencite{ponsford2014longitudinal,maas2017traumatic}. Therefore, a single assessment provides only a 'snapshot' of a patient's recovery status. For many patients in the dataset, the inclusion of multiple assessments allows for the examination of change within patients (below); however, the timing of follow-up assessments is still determined by clinical necessity rather than being standardized.
+
+
+
+Of the 5{,}206 patients with longitudinal data (Section~\ref{sec:robustness}), the pattern described above is clinically plausible: 50.2\% of patients remain in the same tier, while of those whose tier changed, 706 moved towards improved function whereas 206 moved towards worsened function. This 3:1 ratio represents the expected direction of recovery. However, the degree to which this reflects true recovery versus selection factors (e.g., patients being discharged when they demonstrate improvement) cannot be completely distinguished.
+
+
+
+Future longitudinal designs with standardized assessment intervals will be necessary to determine this question.
+
+
+
+Furthermore, the imputation strategy introduces another constraint on interpretation. The MAR assumption cannot be tested from observed data alone \parencite{rubin1976inference,little2019statistical}. In clinical settings, a test may be incomplete due to the inability of a patient to complete it; therefore, the missing value may be informative and may represent impaired performance. If patterns of MNAR were prevalent in clinical settings, function might be overestimated. An upper bound on the impact of MNAR is provided by re-imputing every missing value to the lowest observed performance (the "tipping point" check; Section~\ref{sec:robustness}). Under that extreme assumption, the Global Impairment tier persisted and included 65\% of its original membership; however, the finer partition degraded. A formally-specified delta-shifted sensitivity analysis would further refine this bound.
+
+
+
+Additionally, a structured co-occurrence of missingness may provide some reassurance regarding test-battery protocol-driven dropout rather than solely outcome-driven dropout. The comparison of 10 imputation methods also serves as a sensitivity analysis. High-confidence consensus labels were assigned to 86.2\% of assessments across methods, indicating that plausible imputation differences did not substantially affect the primary cognitive-severity structure for most of the cohort.
+
+
+
+Another related caveat concerns the Tier-1 filter that removes assessments where more than half of their values are missing. Upon review (Section~\ref{sec:robustness}), removed records averaged only 0.8 out of 14 completed tests and were highly similar demographically to retained records. Therefore, the Tier-1 filter likely removed primarily empty administrative records rather than an undetected severely impaired group. Still, due to missing data issues, the cognitive severity of removed records cannot be assessed directly, and only the 30-70\% threshold sensitivity analysis bounds the potential effect of this decision.
+
+
+
+Finally, the pipeline imputes and then clusters, whereas model-based alternatives exist (such as latent-profile analysis via full-information maximum likelihood). The Gaussian-mixture baseline (Section~\ref{sec:robustness}) demonstrated that BIC decreased monotonically with increasing numbers of classes, providing support for a continuum rather than a discrete optimum. Thus, developing a latent-profile analysis that utilizes FIML instead of HDBSCAN is another viable area of future development.
+
+
+
+Feature-engineering remains relevant. Non-cognitive features are eliminated and every feature is standardized (direction aligned), and winsorized prior to summarizing them as composites and generating potentially artificial profile differences. More generally, the methodological lesson is clear: unsupervised phenotyping relies on preprocessing. Any distinctive phenotype identified in an exploratory fashion should be examined relative to choices about scaling, variable selection and cohort definition before it receives a clinical label.
+
+
+
+Finally, HDBSCAN introduces sensitivity to hyperparameters. I conducted an extensive search (\(9 \times 120\) configurations) and selected optimal parameters [\texttt{min\_cluster\_size}$=1000$ and \texttt{epsilon}$=0.0$], maximizing the composite quality metric \(Q\). Because the underlying structure is unidimensional, however, there is a relationship between cluster size and number of tiers. In addition to examining UMAP + HDBSCAN stochastically and potentially sensitively to random initialization and imperfect preservation of global structure, I applied ten random seeds per configuration/bootstrap sample/variable subset/subsampling rate combination, and PCA as an additional form of comparison. The main conclusion does not rely on UMAP alone; PCA also demonstrates that there is a strong cognitive-severity gradient (PC1 \(=56\%\)) represented by the first principal component. Re-running the entire pipeline with ten random seeds resulted in nearly identical labels (mean pairwise \(\mathrm{ARI}=.957\); Section~\ref{sec:robustness}). While the exact number of tiers can vary slightly depending upon these checks, the overall order of severity is robust.
+
+
+
+Lastly, computational cost presents a fourth practical limit. Running UMAP + HDBSCAN fifty times per method is computationally intensive; however, due to modularity allowing for parallel processing, runtime costs were manageable on a typical consumer-grade laptop.
+
+\section{Future Directions}\label{sec:future}
+Four potential areas for future work arise from the findings and limitations described above.
+
+
+
+Firstly, modeling the continuum directly. The most obvious implication of the findings regarding cognitive-severity gradients is that continuous cognitive-severity indices - either derived from PCA or supervised learning models trained on functional-outcome measures - may provide more accurate representations and may be more useful summaries than tier-based classifications. Future research should investigate comparing continuous cognitive-severity indexes to tier classification schemes for predicting prognosis and for assigning rehabilitation intensity according to need by treating tier classification as an interpretable discretization of a continuous measure rather than as natural categories.
+
+
+
+Secondly, longitudinal clustering represents an obvious next step. Applying the developed pipeline to assessments collected at regular time points would allow researchers to describe how individual patients' positions on the cognitive-severity gradient evolve over time as part of their recovery trajectories: i.e., whether patients' initial levels predict longer-term outcomes and whether recovery rates differ depending on severity level \parencite{ponsford2014longitudinal}. Severity-based models describing recovery trajectories would represent much more valuable inputs to clinicians determining prognosis and rehabilitation-intensity decisions than cross-sectionally-derived assessments.
+
+
+
+Thirdly, multi-center validation represents an essential requirement for considering cognitive-severity stratification as a feature of acquired-brain injury rather than as a feature of this specific service. A multi-center study across different health care systems would assess whether the one-dimensional cognitive-severity gradient found here survives changes in catchment population, test batteries, and assessment schedules \parencite{maas2017traumatic}.
+
+
+
+Fourthly, integrating neuroimaging will help link cognitive-severity gradings with neural mechanisms. By correlating an individual's position on the cognitive-severity gradient to structural-functional imaging metrics, researchers may identify the neural correlates of global cognitive impairments following ABI; this type of evidence may assist in targeting interventions \parencite{saatman2008classification,maas2017traumatic}.

@@ -1,0 +1,51 @@
+<!-- Exported prose chunk 2. Word count: 582. -->
+
+
+## Acquired Brain Injury and Cognitive Assessment
+
+_Source: `report/Chapters_short/Chapter2.tex`_
+
+In this clinical context, acquired brain injury (ABI) denotes a non-hereditary, non-congenital insult to the brain that is neither degenerative nor attributable to birth trauma. The category spans stroke, encephalitis, hypoxic-ischaemic encephalopathy, and traumatic brain injury (TBI). Although their aetiologies differ, these conditions share a central rehabilitation problem: cognitive outcome often remains a major determinant of long-term functional status after the acute injury has resolved [@lezak2012neuropsychological, ponsford2008functional].
+
+Neuropsychological assessment provides the principal measurement framework for these effects. Standard batteries typically sample visuospatial ability, language, executive function, learning, memory, and processing speed. These domains are not abstract constructs only; they map onto everyday rehabilitation constraints. Attention problems can limit engagement in therapy. Memory impairment can prevent the retention of compensatory strategies. Executive and language deficits may disrupt planning, self-advocacy, and communication of needs, while visuospatial impairment can compromise navigation and independence. A cognitive profile therefore informs rehabilitation planning, medicolegal judgement, and return-to-work decisions.
+
+In moderate to severe TBI, such deficits often persist and do not resolve uniformly. Some patients recover attention while memory and executive function remain impaired; others show the inverse pattern, as reported in the longitudinal review by [@ponsford2014longitudinal]. A meta-analysis by [@rabinowitz2014neuropsychological] similarly indicates that cognitive deficits occur across injury-severity strata. Injury severity alone is therefore an inadequate proxy for the structure of an individual patient's cognitive impairment.
+
+Assessment practice introduces an additional source of complexity. Neuropsychologists adapt batteries within and across clinics according to referral question, patient tolerance, and clinical judgement. The resulting datasets contain substantial, patterned missingness. Multivariate analysis must account for that structure rather than treating absent values as a minor technical inconvenience.
+
+
+
+## Missing Data in Clinical Research
+
+_Source: `report/Chapters_short/Chapter2.tex`_
+
+Missing data are pervasive in clinical research [@gravesteijn2021missing, nielson2020statistical]. [@rubin1976inference] distinguished three mechanisms. Under missing completely at random (MCAR), missingness is independent of both observed and unobserved data. Under missing at random (MAR), missingness is related to observed variables but not to the missing value itself once those variables are conditioned upon. Under missing not at random (MNAR), missingness depends on the unobserved value.
+
+The assumed mechanism constrains the analysis. Listwise deletion may be unbiased under MCAR, although it reduces efficiency. Multiple imputation and maximum-likelihood estimators can support valid inference under MAR, provided the model is specified appropriately. MNAR requires sensitivity analysis, because no observed-data procedure can simply remove dependence on unobserved values [@rubin1987multiple].
+
+Clinical neuropsychology makes this distinction more than theoretical. A patient with severe attentional impairment may be too fatigued to complete a demanding executive-function test; a disoriented patient may not be administered a memory test at all. In both examples, the missing score is plausibly related to the value that would have been observed. MAR is therefore a defensible working assumption, not an established fact. MNAR behaviour may coexist with protocol-driven missingness. Although the mechanism cannot usually be identified from the observed data alone, auxiliary variables can make the MAR assumption more tenable by conditioning on clinically relevant information [@little2019statistical].
+
+The rate of missingness is only one part of the problem. The pattern of absence, and the process that generated it, determine how much bias is likely. Broad neuropsychological batteries require imputation because many clinically meaningful assessments are incomplete; yet the credibility of imputed values depends on the observed relationships among variables. Preprocessing must therefore retain variables with enough observed information to support conditional estimation, and the subsequent clustering analysis must acknowledge the uncertainty carried forward by imputation.
+
+---REWORK
+Acquired brain injury & cognitive evaluation
+
+_source: `report/chapters_short/Chapter2.tex`
+
+In the current clinical context, "acquired brain injury" (abi) refers to a non-inherited/non-congenital insult to the brain that is either degenerative or due to perinatal trauma. While abi is used to classify different injuries (e.g., stroke, encephalitis, hypoxic/ischemic brain damage and traumatic brain injury (TBI)) their etiologies vary, they share common rehabilitation challenges: cognitive outcomes are frequently major determinants of long-term functional status post-acute injury resolution. The primary tool for measuring the impact of these injuries is neuropsychological evaluation. Standardized neuropsychological batteries generally assess performance in several areas including visuospatial abilities, language, executive functions, learning/memory, and processing speed. Each of these areas represents practical issues that arise during rehabilitation. For example, attention difficulties can limit the patient's participation in therapy. Memory impairments can preclude the development of new strategies to compensate for lost skills. Executive and/or language impairments can affect a person's ability to plan and advocate for themselves, as well as communicate their needs. Visuospatial impairments can affect a person's ability to navigate independently. Therefore, a cognitive profile will provide valuable information regarding the course of rehabilitation, medicolegally, and ultimately regarding return-to-work issues.
+
+It is also important to note that in individuals who sustain a moderate to severe TBI, there may be persistent cognitive deficits that do not uniformly resolve. In some cases, patients may demonstrate recovery of attention, while their memory and executive functions remain impaired. Conversely, other patients may display the opposite pattern, as documented in ponsford et al.'s [12] longitudinal study. Similarly, rabinowitz et al. [13], in their meta-analysis, indicated that significant cognitive deficits were present regardless of injury severity. Thus, severity of injury does not adequately represent the organization of each individual's cognitive deficit.
+
+Additionally, assessment practices introduce further variability into cognitive assessments. Neuropsychologists adjust standardized batteries based on a variety of factors, including referral questions, patient tolerance for testing and clinical judgment. As a result, the resultant databases exhibit considerable structured missingness. Therefore, multivariate analyses should accommodate this structural aspect of missingness rather than treat missing values as just another minor technical issue.
+
+## missing values in clinical studies
+
+_source: `report/chapters_short/Chapter2.tex`_
+
+Missing Data are ubiquitous in clinical studies. Gravesteijn et al. [10] indicate that approximately 20% of clinical trials report greater than 10% Missing Data rates. Rubin [22] delineated three ways missing values could occur. Missing completely at random (MCAR) implies that missingness occurs randomly and independently of observed and unobserved variables. Missing at random (MAR) suggests that missingness is associated with observed variables but not with the missing variable given those variables are controlled for. Missing not at random (MNAR) suggests that missingness is dependent on the unobserved variable.
+
+The type of missingness affects what methods can be applied. Listwise deletion is unbiased when the missingness follows an MCAR pattern but results in loss of efficiency. Methods like multiple imputation and maximum likelihood estimation allow valid inference when the assumptions for MAR are met and when the model is properly formulated. Sensitivity analysis is necessary when assuming MNAR behavior since there is no method using only observable data which can remove dependency on unobservable values [22].
+
+This distinction between types of missingness is particularly critical in clinical neuropsychology. For example, a severely impaired patient in terms of attentional functioning may not have sufficient energy to complete an executive-functioning task. A disoriented patient may receive no memory test whatsoever. Both situations describe missing scores which are likely related to the value that would have been scored if they had completed the test. Thus, MAR is a reasonable working assumption rather than a proven fact. It is possible that MNAR patterns exist simultaneously with missingness due to adherence to protocol. Although the specific mechanism of missingness cannot be determined solely from the observed data, auxiliary variables can help make the MAR assumption more plausible by controlling for clinically relevant information [25].
+
+The proportion of Missing Data is only part of the issue. The way data are missing influences potential biases. Simply knowing that data are missing (how frequent the Missing Data are) is only part of the problem. More importantly, understanding why data are missing and how they came to be missing determines how large an expected bias will be. Because broad neuropsychological batteries are typically incomplete and thus necessitate imputations (many clinically meaningful evaluations are done incompletely), the reliability of imputed values depend upon observed relationships among variables. Prior to performing preprocessing that retains variables containing enough observed data to enable conditional estimation; the subsequent cluster analysis must take into account the uncertainty propagated through imputation.

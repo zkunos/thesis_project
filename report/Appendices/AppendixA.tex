@@ -1,0 +1,31 @@
+% Appendix A
+
+\chapter{Imputation Hyperparameters}
+
+\label{AppendixA}
+
+This appendix lists the hyperparameters used for each of the ten imputation methods evaluated in this thesis. Settings followed published defaults where defaults exist; remaining choices were selected by cross-validation or grid search as noted. The methods themselves are described in Chapter~\ref{Chapter3}, §\ref{sec:imputation}.
+
+\begin{table}[ht]
+\caption{Hyperparameters for the ten imputation methods.}
+\label{tab:imputation_hyperparams}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{} l p{10.5cm} @{}}
+\toprule
+\textbf{Method} & \textbf{Hyperparameters} \\
+\midrule
+Mean       & Single-pass arithmetic mean per variable. \\
+EM         & Multivariate normal model; convergence $10^{-6}$; max 500 iterations. \\
+MICE       & Linear regression per variable; 10 iterations; single imputed dataset for clustering. \\
+KNN        & $k = 5$; inverse-distance weighting; Euclidean distance. \\
+MissForest & 100 trees per forest; up to 10 iterations; variables imputed in order of increasing missingness. \\
+PMM        & 5 donors; 10 iterations; implemented within the MICE framework. \\
+SoftImpute & Regularisation chosen by cross-validation over 20 log-spaced values from $10^{-3}$ to $10^{2}$; convergence $10^{-5}$; max 200 iterations. \\
+NMF        & Rank $r = 5$ selected by grid search over $\{2, 3, 5, 7, 10\}$; multiplicative updates; max 500 iterations. \\
+DAE        & Architecture $15 \to 128 \to 64 \to 32 \to 64 \to 128 \to 15$; ReLU + batch normalisation; dropout $(0.5, 0.3)$; corruption rate 20\% with pattern-aware masking; MSE loss on observed entries; Adam optimiser ($\text{lr} = 10^{-3}$); ReduceLROnPlateau + early stopping (patience 20); 5 runs averaged. \\
+VAE        & Same layer dimensions as DAE; latent dim 32; loss $= $~MSE~$+$~$\beta$-weighted KL divergence; cyclical annealing with $\beta_{\max} = 0.1$ over 40-epoch cycles; $K = 20$ latent samples averaged for final imputation. \\
+\bottomrule
+\end{tabular}
+\end{table}

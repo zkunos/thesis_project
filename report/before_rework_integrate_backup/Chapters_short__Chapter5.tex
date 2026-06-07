@@ -1,0 +1,75 @@
+% Chapter 5
+
+\chapter{Discussion}\label{Chapter5}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{A Cognitive Severity Gradient, Not Discrete Phenotypes}
+
+The central empirical result is negative in one sense and informative in another: this ABI cohort does not resolve into qualitatively distinct cognitive phenotypes, but it does exhibit a robust gradation of cognitive severity. The algorithm partitions patients into Above-Average, Near-Normal, and Global Impairment tiers. Those tiers differ by level, not by profile shape. In Figure~\ref{fig:radar_profiles}, all six domains move together; one principal component explains 56 per cent of the variance and loads positively, with similar magnitude, across the domain scores. The recovered structure is therefore better characterised as severity stratification than as a set of dissociable profiles. This remains clinically relevant because the axis is derived from cognitive test performance itself, not from the injury-severity bands or diagnostic categories criticised in Chapter~\ref{Chapter1}. Its association with clinical-unit placement beyond diagnosis (§\ref{sec:h3_results}) indicates that it captures information used, implicitly or explicitly, in rehabilitation routing.
+
+The finding also informs a broader question in neuropsychology: whether variability across test batteries is primarily domain-specific or dominated by a general factor. In this routinely collected cohort, the general severity axis accounts for most of the recoverable structure. Secondary domain-specific variation is present but does not define the clustering. That pattern is consistent with both clinical observation, where global impairment often separates patients before narrower dissociations are considered, and the positive manifold of inter-test correlations described in neuropsychology \parencite{lezak2012neuropsychological}. The phenotyping result is therefore more conservative than some prior accounts would suggest. When the data are processed under an imputation-robust, sensitivity-tested pipeline, overall severity emerges before specific profile patterns.
+
+This does not invalidate studies such as \textcite{garcia2020data}, which report two to four dissociable profiles after brain injury. It qualifies their interpretation. The present pipeline differs in several respects: UMAP+HDBSCAN accommodates non-convex structures and low-density noise; bootstrap analysis evaluates reproducibility; and each variable is winsorised, direction-aligned, and standardised before aggregation. These steps matter. A high-variance raw measure, such as a timed Trail Making score, can dominate an unstandardised composite; a non-cognitive variable can impose an artificial axis; a nearly empty record can perturb density estimates. Apparent phenotypes may then reflect preprocessing rather than neuropsychological structure. Chapter~\ref{Chapter6} returns to this methodological dependency.
+
+The stability analyses (§\ref{sec:h1_results}) reinforce the severity-gradient interpretation. Across bootstrap resamples, all ten imputation methods meet the pre-registered H1 criterion. The core Jaccard analysis shows greater stability for the two extreme tiers than for the central Near-Normal tier, which is the expected pattern when a middle band is cut from a continuum. Boundary patients can move between adjacent tiers without undermining the underlying ordering.
+
+For that reason, the three-tier solution from the primary MICE pipeline should be used as an interpretable discretisation rather than as a claim about natural kinds. Other methods recover between three and five tiers. Rubin pooling and threshold sensitivity show that cluster count can vary while severity ordering remains stable. The clinically useful object is the continuum; the tiers are a practical representation of it.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Imputation Sensitivity}
+
+Hypothesis~2 provides the most important methodological result. Cluster solutions change relatively little across imputation methods: on the domain-level features, the mean pairwise ARI is 0.710, and all 45 method pairs exceed 0.50 (§\ref{sec:h2_results}). A strong severity gradient is easier to recover than a fragile multidimensional profile structure, which likely explains the robustness while still allowing method-specific variation \parencite{rubin1987multiple}.
+
+The method dendrogram in Figure~\ref{fig:h2_dendrogram} makes a clean separation between two imputation families: the smooth, model-based methods (EM, DAE, and VAE), which tend to smooth toward a model-based conditional mean; and the local, donor-based KNN, which relies on a few local donors to plug in missing values. A division along the lines of statistical, machine-learning, or deep-learning families might be expected; however, the more telling distinction is smooth versus local.
+
+At assessment level, instability correlates moderately with the fraction of imputed data ($r = 0.474$; §\ref{sec:h2_results}). Method choice matters most when the observed part of the assessment is sparse \parencite{little2019statistical}. Downstream applications should therefore treat heavily imputed assessments differently from nearly complete ones, either by reporting lower confidence or by comparing more than one imputation strategy.
+
+Consensus clustering offers a practical response. The ten methods are aligned, their labels are allowed to vote, and the resulting confidence score quantifies agreement. Overall confidence is high (mean 0.929, with 86.2\% of assessments high-confidence), but the minority of lower-confidence cases is clinically informative rather than inconvenient. These patients are typically near tier boundaries and should prompt caution or reassessment.
+
+In the literature, MICE is commonly used for neuropsychological data before clustering \parencite{vanbuuren2011mice}, while MissForest \parencite{stekhoven2012missforest} is often preferred when non-linear relationships are expected. After Holm--Bonferroni correction across the 45 pairs (Section~\ref{sec:robustness}), 44 reject the null hypothesis that ARI~$\le 0.5$. The KNN--SoftImpute pair remains near the threshold, but the broader result is clear: the severity signal is not dependent on a single imputation method.
+
+The listwise-deletion baseline in Section~\ref{sec:robustness} shows why imputation is necessary. Restricting the analysis to complete cases produces a different cluster count, a lower silhouette (0.257), and only moderate agreement with the MICE solution for the shared patients (ARI 0.625). Imputation is therefore not merely a cosmetic step: removing the 46.9\% of assessments with missing data changes the recovered structure. Rubin pooling across independent MICE draws confirms the domain-level advantage and the tier--unit association, although cluster count remains somewhat variable.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Clinical Unit Association}
+
+Cognitive severity is associated with clinical unit, although the effect size is small by Cohen's conventions. The Cochran-Mantel-Haenszel test indicates that the association is not reducible to diagnosis group (§\ref{sec:h3_results}). Severity tier therefore carries placement information beyond diagnostic category.
+
+This is clinically plausible. Diagnosis is often used as a proxy for injury mechanism and expected recovery when patients are referred to rehabilitation units \parencite{saatman2008classification, maas2017traumatic}. Yet a patient in the Global Impairment tier generally requires more intensive and structured rehabilitation than a patient in the Above-Average tier, even if diagnostic labels overlap. The persistence of the tier--unit association after diagnostic stratification suggests that rehabilitation services may already be routing patients partly by impairment level. Making that stratification explicit would allow triage decisions to be audited and refined \parencite{corrigan2010epidemiology}.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Feature Engineering}
+
+The H4 result is clear: domain-aggregated features are much better conditioned than variable-level features, even though the improvement in cluster separation is small. The silhouette changes only slightly (0.481 vs.\ 0.473), but mean VIF falls from 2.77 to 1.88 and the condition number falls from 61.7 to 11.8 (§\ref{sec:h4_results}). If several highly correlated tests enter the model as separate features, UMAP and HDBSCAN can over-weight the shared cognitive dimension in their distance computations. Aggregation gives one feature per construct, so each domain contributes more evenly. This provides quantitative support for the clinical practice of interpreting test batteries by domain rather than test by test \parencite{lezak2012neuropsychological}. This benefit depends on preprocessing: variables must be winsorised, direction-aligned, and standardised before aggregation so that raw scale differences do not dominate the composites.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{Feature Importance and What Drives Severity}
+
+The feature-importance results (§\ref{sec:feature_importance}) should be treated as descriptive rather than explanatory. The Random Forest surrogate reaches 99.4\% accuracy using the same domain scores that generated the labels, so its ranking mainly reconstructs the partition boundaries. It ranks orientation, visuoperception, and language above attention and executive function, but this ordering should not be given a strong clinical interpretation. The domains are highly correlated, and Gini importance can be unstable under correlated predictors \parencite{boulesteix2012overview}.
+
+The more reliable finding is the principal-component structure: one component captures 56\% of the variance in overall cognitive severity, with similar positive loadings across all six domains. The tiers are therefore best interpreted as general severity levels rather than as domain-specific dissociations or an attention-specific pattern. The robustness checks (§\ref{sec:robustness}), including subsampling and missingness-threshold evaluations, support this conclusion. The severity ordering remains stable, even though the exact tier count depends on clustering resolution and inclusion threshold. Data-driven phenotyping studies should therefore report preprocessing choices clearly and include sensitivity analyses.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 6
+%----------------------------------------------------------------------------------------
+
+\section{Clinical Implications}
+
+In clinical practice, a three-tier stratification of cognitive severity is more modest than a set of dissociable phenotypes, but it is still useful. Used alongside diagnosis, the tier provides a consistent summary of a patient's overall cognitive impairment across the battery, including imputed values for tests that were not completed and a confidence estimate for the assignment. Rehabilitation services can use this information to calibrate treatment intensity to need. The analysis suggests that this can be done reliably and that the tiers align with existing clinical placement.
+
+The analysis does not support a novel attention-specific cognitive phenotype. The tiers reflect overall cognitive severity, not selective impairment or preservation of one domain. More broadly, unsupervised phenotyping depends heavily on feature engineering, and any striking profile should be tested against scaling, variable-selection, and cohort-definition choices before being given a clinical label. The main contribution of this thesis is a reproducible severity-stratification pipeline for incomplete routine clinical data. It provides a framework for handling missing neuropsychological assessments and creates a basis for future prospective validation against functional outcomes \parencite{maas2017traumatic, corrigan2010epidemiology}.

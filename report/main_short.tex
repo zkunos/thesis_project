@@ -1,0 +1,294 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Masters Thesis 
+% LaTeX Template
+%
+% This template is based on a template by:
+% Steve Gunn (http://users.ecs.soton.ac.uk/srg/softwaretools/document/templates/)
+% Sunil Patel (http://www.sunilpatel.co.uk/thesis-template/)
+%
+% Template license:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+11pt, % The default document font size, options: 10pt, 11pt, 12pt
+%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+english, % ngerman for German
+onehalfspacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
+%nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
+%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
+%toctotoc, % Uncomment to add the main table of contents to the table of contents
+%parskip, % Uncomment to add space between paragraphs
+%nohyperref, % Uncomment to not load the hyperref package
+headsepline, % Uncomment to get a line under the header
+%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
+%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+]{MastersDoctoralThesis} % The class file specifying the document structure
+
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+
+\usepackage{mathpazo} % Use the Palatino font by default
+
+\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+
+\addbibresource{references.bib} % The filename of the bibliography
+
+% --- Citation style: square-bracket author-year with "et al." (match reference TFM) ---
+\ExecuteBibliographyOptions{maxcitenames=2,mincitenames=1}
+\renewcommand*{\nameyeardelim}{\addcomma\space} % renders as [Author, year]
+\DeclareCiteCommand{\parencite}[\mkbibbrackets]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}\usebibmacro{cite}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\let\autocite\parencite
+\let\textcite\parencite % bracket subject-citations too, as in the reference thesis
+
+% --- Hyperlink colours (match reference TFM) ---
+\definecolor{linkcol}{HTML}{1B7F79} % teal: internal cross-references
+\definecolor{citecol}{HTML}{B5179E} % magenta: citations
+\definecolor{urlcol}{HTML}{7B241C}  % maroon: URLs / DOIs
+
+\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
+
+\usepackage{amsmath} % Mathematical symbols and environments
+\usepackage{amssymb} % Additional math symbols (\mathbb, etc.)
+\usepackage{booktabs} % Better table formatting
+\usepackage{graphicx} % Enhanced graphics support
+\usepackage{caption} % Better caption control
+\usepackage{subcaption} % Sub-figures
+\usepackage{tikz} % Pipeline diagram in Chapter 3
+
+\emergencystretch=2em % Allow whitespace stretch to avoid overfull hboxes
+\tolerance=1500 % Slightly more tolerant line breaking
+
+%----------------------------------------------------------------------------------------
+%	MARGIN SETTINGS
+%----------------------------------------------------------------------------------------
+
+\geometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=2.5cm, % Inner margin
+	outer=3.8cm, % Outer margin
+	bindingoffset=.5cm, % Binding offset
+	top=1.5cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+
+%----------------------------------------------------------------------------------------
+%	THESIS INFORMATION
+%----------------------------------------------------------------------------------------
+
+\thesistitle{Data-Driven Cognitive Phenotyping in Acquired Brain Injury: A Clustering Analysis with Imputation Robustness Assessment} % Your thesis title
+\supervisor{Dr.\ Alejandro García-Rudolph} % Your supervisor's name
+\examiner{} % Your examiner's name
+\degree{MSc} % Your degree name
+\author{Zoltan Kunos} % Your name
+\addresses{} % Your address
+
+\subject{Data Science} % Your subject area
+\keywords{acquired brain injury, cognitive phenotyping, clustering, UMAP, HDBSCAN, missing data imputation, neuropsychology} % Keywords
+\university{\href{http://www.ub.edu}{Universitat de Barcelona}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{http://department.university.com}{}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{\href{http://researchgroup.university.com}{}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\faculty{\href{http://mat.ub.edu}{Facultat de Matemàtiques i Informàtica}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+
+\AtBeginDocument{
+\hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
+\hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
+\hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
+\hypersetup{linkcolor=linkcol} % Teal cross-references
+\hypersetup{citecolor=citecol} % Magenta citations
+\hypersetup{urlcolor=urlcol} % Maroon URLs / DOIs
+}
+
+\begin{document}
+
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+\vspace*{.06\textheight}
+{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
+\textsc{\Large Fundamental Principles of Data Science Master's Thesis}\\[0.5cm] % Thesis type
+
+\HRule \\[0.4cm] % Horizontal line
+{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
+\HRule \\[1.5cm] % Horizontal line
+ 
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+\href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\end{flushright}
+\end{minipage}\\[3cm]
+ 
+\vfill
+
+\large \textit{A thesis submitted in partial fulfillment of the requirements\\ for the degree of MSc in Fundamental Principles of Data Science}\\[0.3cm] % University requirement text
+\textit{in the}\\[0.4cm]
+\facname\\[2cm] % Research group name and department name
+ 
+\vfill
+
+{\large \today}\\[4cm] % Date
+%\includegraphics{Logo} % University/department logo - uncomment to place it
+ 
+\vfill
+\end{center}
+\end{titlepage}
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}[]
+\addchaptertocentry{\abstractname}
+Cognitive performance post Acquired Brain Injury (ABI) has been identified as one of the greatest predictors of long term functional outcome. However, the patients who need intensive rehabilitation are usually the ones who will be unable to complete a full neuropsychological battery. Therefore, missingness is informative in this context. Fatigue, confusion, motor limitations, test tolerance, and examiner judgment can limit the testing completed. As a result, retaining healthier assessments will favorably bias the selection of patients included in analyses and exclude the most impaired patients. While broad diagnostic categories and injury severity bands provide some way to group patients based upon similar characteristics, they do not capture the necessary variability required to create personalized rehabilitation plans.
+
+
+
+This dissertation addresses these concerns through using a combination of missing-data imputation and unsupervised clustering. Complete assessments are retained and cognitive structures are inferred directly from test data. The dependency of the cognitive structures created by the selected imputation strategy is explicitly assessed.
+
+
+
+Data were collected from 17{,}406 neuropsychological evaluations performed on 7{,}285 patients with ABI. Three cognitive structures were found to exist: Above Average (38.6\%, $n = 6{,}725$); Near Normal (36.4\%, $n = 6{,}328$); and Global Impairment (25\%, $n = 4{,}353$). The main difference between the cognitive structures relates to the general level of cognition instead of the profile shape. All six cognitive domains vary together across the cognitive structures and one severity factor explains 56\% of the common variance among them. Therefore, the clusters are better described as a data-derived cognitive severity continuum than as qualitatively distinct phenotypes. Furthermore, there is no evidence to suggest an attention-specific dissociation exists.
+
+
+
+The cognitive structure found was independent of the imputation strategy. The majority of the imputation strategies produced well-defined clusters with minimal noise. Ten pre-registered imputation strategies produced distinct clusters with little to no residual noise. The average adjusted rand index (ARI) between the imputation strategies was 0.71. The primary multiple imputation chained equations (MICE) strategy had a full coverage silhouette of 0.526 and no noise points remained in the sample. After adjusting for diagnosis, the cluster assignment was significantly related to clinical unit placement (Cramér's V = 0.16; Cochran-Mantel-Haenszel test). This suggests that the cognitive structure discovered reflects real differences in patient populations being served by different clinics. Additionally, aggregating at the domain level produced improved conditions over variable level clustering for numerical computations. Specifically, it resulted in a decrease in the mean variance inflation factor (VIF) from 2.8 to 1.9 and the mean condition number from 62 to 12.
+
+
+
+CogDash is an interactive dashboard developed to implement this entire pipeline for future patients. Additionally, it provides both severity tier assignments along with consensus confidence across all imputation methods. The code, notebooks and dashboard are accessible at \url{https://github.com/zkunos/thesis_project}.
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\begin{acknowledgements}
+First and foremost I would like to thank my advisor, Dr. Alejandro García Rudolph, for his knowledge and expertise in both clinical neuropsychology and neurorehabilitation which helped guide me throughout my research and provided valuable insights into how to interpret my results. I would also like to express my gratitude toward Dr. Laura Igual Munoz for her assistance during my graduate program. Last but certainly not least I would like to say thank you to Daniel for his continued support and encouragement throughout my graduate program.
+\end{acknowledgements}
+
+%----------------------------------------------------------------------------------------
+%	STATEMENT ON THE USE OF AI
+%----------------------------------------------------------------------------------------
+
+\newpage
+\chapter*{Statement on the Use of Artificial Intelligence}
+\addchaptertocentry{Statement on the Use of AI}
+According to the guidelines provided by the Facultad de Matemàtiques i Informàtica of the Universitat de Barcelona regarding the use of large language models (LLMs) in final master's thesis research I make the following statement.
+
+
+
+Throughout my research I utilized Claude (Anthropic) as an AI-assistant tool to improve my research workflow.
+
+
+
+Claude was used as follows:
+
+
+
+\begin{itemize}
+
+    \item To write code for Python, for performing data cleaning/preprocessing, imputation, clustering and visualization, and debugging.
+
+\end{itemize}
+
+
+
+\begin{itemize}
+
+    \item To assist with drafting: editing draft versions to improve academic tone/clarity and rephrase initial drafts.
+
+\end{itemize}
+
+
+
+\begin{itemize}
+
+    \item To develop dashboard: assisting in developing the Streamlit interactive dashboard (CogDash).
+
+\end{itemize}
+
+
+
+\begin{itemize}
+
+    \item To format LaTex document: formatting of thesis document (LaTex), tables, figures, compiling issues.
+
+\end{itemize}
+
+
+
+I take responsibility for designing/researching hypothesis creation, methodology development, data analysis and interpretation/discussion. I reviewed/edit all generated AI-texts myself and verified referenced materials with source documents.
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{thesis} % Return the page headers back to the "thesis" style
+
+% Include the chapters of the thesis as separate files from the Chapters folder
+% Uncomment the lines as you write the chapters
+
+\include{Chapters_short/Chapter1}
+\include{Chapters_short/Chapter2}
+\include{Chapters_short/Chapter3}
+\include{Chapters_short/Chapter4}
+\include{Chapters_short/Chapter5}
+\include{Chapters_short/Chapter6}
+\include{Chapters_short/Chapter7}
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - APPENDICES
+%----------------------------------------------------------------------------------------
+
+\appendix % Cue to tell LaTeX that the following "chapters" are Appendices
+
+% Include the appendices of the thesis as separate files from the Appendices folder
+% Uncomment the lines as you write the Appendices
+
+\include{Appendices/AppendixA}
+\include{Appendices/AppendixB}
+%\include{Appendices/AppendixC}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}  

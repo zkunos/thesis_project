@@ -1,0 +1,46 @@
+% Chapter 1
+
+\chapter{Introduction}\label{Chapter1}
+
+%----------------------------------------------------------------------------------------
+
+\section{Background and Problem Statement}
+
+Acquired brain injury (ABI) includes traumatic brain injury (TBI), stroke, encephalitis, and hypoxic-ischaemic injury. The clinical burden is substantial. TBI alone accounts for millions of hospitalisations and emergency-room admissions each year \parencite{maas2017traumatic, brazinova2021epidemiology}; among working-age adults, ABI frequently produces long-term disability involving physical, emotional, and cognitive sequelae \parencite{corrigan2010epidemiology}. Cognitive impairment may involve attention, memory, language, executive function, or several domains simultaneously. Its configuration, however, varies markedly from one patient to another.
+
+That heterogeneity creates a practical problem for rehabilitation. Patients with comparable injury severity may present sharply different cognitive profiles at neuropsychological follow-up, while the labels commonly used for triage, including diagnosis and broad severity bands, are too coarse to parse those differences \parencite{saatman2008classification}. When clinically distinct profiles are aggregated under the same category, the within-group variation most relevant to treatment planning is obscured.
+
+This thesis approaches the problem empirically. Rather than imposing an existing clinical taxonomy on the dataset, I use unsupervised clustering to recover cognitive subgroups from neuropsychological test scores and then assess their clinical relevance. Routinely collected clinical data introduce a second complication: missing values. In rehabilitation practice, full batteries are often curtailed by time constraints, fatigue, clinical judgement, or patient limitations, so omissions cannot be assumed to be random. Imputation allows incomplete assessments to be retained, but each method imposes its own assumptions on the unobserved data. The extent to which those assumptions alter downstream clustering remains insufficiently documented; this thesis evaluates that sensitivity directly.
+
+In this work, \emph{phenotyping} refers to the data-driven identification of cognitive subgroups. Whether such subgroups represent qualitatively distinct profiles or graded levels of overall severity is left as an empirical question. The present findings support the latter interpretation.
+
+%----------------------------------------------------------------------------------------
+
+\section{Research Questions}
+
+There are four questions I want to answer in this work:
+
+\begin{enumerate}
+    \item \textbf{RQ1:} Will unsupervised clustering of the imputed data reveal distinct cognitive phenotypes in patients with acquired brain injury?
+    \item \textbf{RQ2:} How much does the choice of imputation method influence the phenotypes that emerge?
+    \item \textbf{RQ3:} Can cluster membership be linked to the clinical unit of assessment? If so, this implies that phenotypes reflect actual differences in the populations seen by different services.
+    \item \textbf{RQ4:} Are the phenotypes more consistent and easier to interpret when clustering on domain-level composites rather than individual test variables?
+\end{enumerate}
+
+The broader aim is to build a reproducible phenotyping pipeline for routine clinical data. Missingness is modelled as part of the rehabilitation process itself, not treated as a retrospective nuisance.
+
+%----------------------------------------------------------------------------------------
+
+\section{Hypotheses}
+
+This study investigates the following four hypotheses:
+
+\textbf{H1:} Using a UMAP and HDBSCAN pipeline, I expect to identify at least two separate, stable cognitive clusters for most imputation methods, with noise kept under 30\% and silhouette scores exceeding 0.40.
+
+\textbf{H2:} There should be moderate to high agreement between cluster solutions derived from different imputation approaches (ARI and NMI both exceeding 0.50). Such agreement would show that the phenotypes are not merely an artefact of the imputation process.
+
+\textbf{H3:} Chi-square tests and Cram\'{e}r's V effect sizes (above 0.10) should demonstrate a significant connection between cluster membership and clinical unit, thereby mirroring the disparity in cognitive profiles between the services.
+
+\textbf{H4:} By clustering on domain-level features, I expect a representation that is more interpretable than variable-level features; this should be reflected in higher silhouette scores and reduced multicollinearity, evidenced by lower condition numbers and mean variance inflation factors.
+
+%----------------------------------------------------------------------------------------

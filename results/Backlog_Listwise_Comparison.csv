@@ -1,0 +1,8 @@
+metric,value
+n_complete_cases,9245.0
+fraction_of_full_sample,0.5311386878088016
+n_clusters_listwise,2.0
+silhouette_listwise,0.2570596755236892
+noise_pre_knn_listwise,0.0
+ARI_listwise_vs_MICE,0.624897612283105
+NMI_listwise_vs_MICE,0.5185849664426312

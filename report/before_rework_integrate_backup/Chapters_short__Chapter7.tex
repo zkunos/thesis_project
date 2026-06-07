@@ -1,0 +1,61 @@
+% Chapter 7
+
+\chapter{Conclusions}\label{Chapter7}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Summary of Key Findings}
+
+The primary aim of this research was to determine whether data-driven clustering of neuropsychological assessments can recover a cognitive structure in acquired brain injury that is robust, interpretable, and clinically meaningful. Four hypotheses were evaluated with a pipeline combining UMAP dimensionality reduction, HDBSCAN density-based clustering, and multiple imputation methods for incomplete clinical data.
+
+The main conclusion is that the recovered structure is a \emph{cognitive severity gradient}, not a set of separate phenotypes. The cohort lies along one axis of overall severity. The first principal component explains 56\% of the variance across the six cognitive domains, with nearly equal positive loadings. The pipeline discretises this gradient into three tiers: Above-Average (38.6\%, $n = 6{,}725$), Near-Normal (36.4\%, $n = 6{,}328$), and Global Impairment (25.0\%, $n = 4{,}353$). Level separates the tiers. Shape does not.
+
+Hypothesis~1 is supported, with an important qualification. The pipeline identifies stable groups, but those groups are best interpreted as severity bands. All ten imputation methods meet the pre-registered silhouette and noise criteria, and the two outer tiers remain reasonably stable under Hennig per-cluster matching (core Jaccard 0.63 and 0.62 respectively; §\ref{sec:h1_results}).
+
+Hypothesis~2 is also supported. Under a shared pipeline, the mean Adjusted Rand Index across all 45 pairwise method comparisons is 0.710 (95\% bootstrap CI [0.704, 0.716]), above the 0.50 threshold. After Holm--Bonferroni correction, 44 of the 45 pairs reject $H_0$:~ARI~$\le 0.5$ at $\alpha = 0.05$; KNN--SoftImpute is the only borderline case. Consensus clustering reaches a mean confidence of 0.929, with 86.2 per cent of assessments assigned high-confidence labels. The listwise-deletion baseline confirms that imputation is analytically necessary: removing the 46.9 per cent of assessments with missing values changes the cluster count and lowers the silhouette to 0.257.
+
+Hypothesis~3 is supported as well. Clinical unit is significantly associated with cognitive severity tier ($\chi^2 = 911.3$, $p \approx 4 \times 10^{-156}$), although the effect size is modest (Cram\'{e}r's V = 0.162). The Cochran-Mantel-Haenszel test indicates that the association is not explained by diagnosis group alone \parencite{cochran1954some}. Cognitive severity therefore contributes to unit placement beyond diagnostic category.
+
+Finally, Hypothesis~4 is supported. Domain-level aggregation produces cluster separation comparable to variable-level features (silhouette 0.481 vs.\ 0.473), while reducing multicollinearity (mean VIF 1.88 vs.\ 2.77) and improving numerical conditioning (11.8 vs.\ 61.7). This provides quantitative support for interpreting cognitive performance at the domain level.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Methodological Contribution}
+
+This thesis makes two methodological contributions. First, it provides an imputation-robustness framework. Pairwise ARI and NMI comparisons, combined with consensus confidence scores, offer a structured way to test whether clustering results depend on the missing-data method. Because the framework is domain-agnostic, it can be transferred to other incomplete clinical or biomedical datasets, including electronic health records, genomics, or survey data.
+
+Second, it provides a methodological caution. Unsupervised cognitive phenotyping is highly sensitive to feature engineering. A demographic variable included by mistake, a record without cognitive test data, or variables aggregated across incompatible raw scales can create an apparent phenotype that is actually a preprocessing artefact. The pipeline reduces this risk by excluding non-cognitive variables, requiring at least one cognitive measure per record, and winsorising, direction-aligning, and standardising every variable before aggregation. Clinical labels should be assigned only after this preprocessing and sensitivity checking have been completed.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Clinical Recommendations}
+
+In light of these findings, I offer the following recommendations:
+\begin{itemize}
+    \item \textbf{Pair diagnosis with a battery-wide severity summary.} A severity tier provides a reproducible description of overall cognitive impairment for a given visit, including imputed values for tests that were not completed. Rehabilitation teams can use this alongside diagnosis to calibrate treatment intensity to need.
+    \item \textbf{Flag boundary assessments rather than hiding uncertainty.} Consensus clustering assigns 86.2\% of assessments high-confidence labels, but about 2{,}400 assessments are sensitive to the imputation method and lie near a tier boundary. Decision-support tools should report confidence scores rather than forcing all labels to appear equally certain.
+    \item \textbf{Prefer model-based imputation for operational use.} MICE, EM, MissForest, and the autoencoder methods produce broadly similar results, with pairwise ARI values as high as 0.88. KNN is more idiosyncratic, and Mean Imputation loses variance. MICE is a sensible operational default, while MissForest is a useful non-parametric option when non-linear relationships are expected.
+    \item \textbf{Define rehabilitation goals at the domain level.} Domain aggregation gives clustering performance comparable to individual variables while reducing multicollinearity. This supports the established neuropsychological practice of interpreting batteries by cognitive domain \parencite{lezak2012neuropsychological}. Progress monitoring and treatment plans should follow the same structure.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Final Remarks}
+
+When applied with careful attention to scaling and data structure, unsupervised clustering recovers a cognitive severity gradient in ABI that is robust across imputation methods and diagnostic groups and interpretable at the domain level. In this cohort, the recovered structure reflects overall cognitive severity rather than dissociable phenotypes.
+
+Prospective validation is required before this framework can be integrated into routine care:
+\begin{itemize}
+    \item Can a severity tier or score predict functional outcomes---such as return to work or length of stay---better than diagnosis and current scales?
+    \item Will allocating resources based on severity make a difference in a controlled setting, or is it merely formalising the findings of the CMH analysis?
+    \item Will the one-dimensional structure I see here persist in an independent multi-centre cohort, or will the granularity shift with the catchment and timing of the assessment?
+\end{itemize}
+The pipeline and dashboard are designed to support that next phase. During validation, a new cohort can be processed through the same MICE, UMAP, and HDBSCAN pipeline so that CogDash returns a tier and consensus-confidence score for each patient. Until prospective validation is complete, severity stratification should be treated as a decision-support signal, not as a substitute for clinical judgement.
