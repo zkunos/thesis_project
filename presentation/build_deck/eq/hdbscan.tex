@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\pagestyle{empty}
+\newsavebox\eqbox
+\savebox\eqbox{$\displaystyle \begin{aligned} \mathrm{core}_k(x) &= d\big(x,\,N_k(x)\big) \\[6pt] d_{\mathrm{mreach}}(a,b) &= \max\{\mathrm{core}_k(a),\,\mathrm{core}_k(b),\,d(a,b)\} \\[6pt] S(C) &= \sum_{x\in C}\big(\lambda_{\max}(x)-\lambda_{\mathrm{birth}}(C)\big), \qquad \lambda=\tfrac{1}{\mathrm{dist}} \\[8pt] \widehat{\mathcal{P}} &= \arg\max_{\mathcal{P}}\ \textstyle\sum_{C\in\mathcal{P}} S(C)\quad(\text{non-nested}) \end{aligned}$}
+\pdfpagewidth=\dimexpr\wd\eqbox+12pt\relax
+\pdfpageheight=\dimexpr\ht\eqbox+\dp\eqbox+12pt\relax
+\setlength{\hoffset}{-1in}\setlength{\voffset}{-1in}
+\setlength{\oddsidemargin}{6pt}\setlength{\topmargin}{6pt}
+\setlength{\headheight}{0pt}\setlength{\headsep}{0pt}\setlength{\topskip}{0pt}
+\setlength{\parindent}{0pt}\setlength{\textwidth}{2\paperwidth}
+\begin{document}\noindent\usebox\eqbox\end{document}

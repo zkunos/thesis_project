@@ -5,7 +5,7 @@
 %----------------------------------------------------------------------------------------
 
 \section{Acquired Brain Injury and Cognitive Assessment}
-In the current clinical context, "acquired brain injury" (abi) refers to a non-inherited/non-congenital insult to the brain that is either degenerative or due to perinatal trauma. While abi is used to classify different injuries (e.g., stroke, encephalitis, hypoxic/ischemic brain damage and traumatic brain injury (TBI)) their etiologies vary, they share common rehabilitation challenges: cognitive outcomes are frequently major determinants of long-term functional status post-acute injury resolution. The primary tool for measuring the impact of these injuries is neuropsychological evaluation. Standardized neuropsychological batteries generally assess performance in several areas including visuospatial abilities, language, executive functions, learning/memory, and processing speed. Each of these areas represents practical issues that arise during rehabilitation. For example, attention difficulties can limit the patient's participation in therapy. Memory impairments can preclude the development of new strategies to compensate for lost skills. Executive and/or language impairments can affect a person's ability to plan and advocate for themselves, as well as communicate their needs. Visuospatial impairments can affect a person's ability to navigate independently. Therefore, a cognitive profile will provide valuable information regarding the course of rehabilitation, medicolegally, and ultimately regarding return-to-work issues.
+In the current clinical context, acquired brain injury (ABI) refers to damage to the brain that occurs after birth and is not attributable to a congenital or degenerative condition \parencite{ukdhsc2022abi}. ABI includes traumatic and non-traumatic causes, such as traumatic brain injury (TBI), stroke, encephalitis, and hypoxic-ischaemic brain injury. Although their aetiologies vary, these conditions share common rehabilitation challenges: cognitive outcomes are frequently major determinants of long-term functional status after the acute injury has resolved. The primary tool for measuring the cognitive effects of these injuries is neuropsychological evaluation. Standardised neuropsychological batteries generally assess visuospatial abilities, language, executive functions, learning and memory, and processing speed. Each domain relates to practical issues during rehabilitation. Attention difficulties can limit participation in therapy; memory impairment can impede the development of compensatory strategies; executive and language impairments can affect planning, self-advocacy, and communication; and visuospatial impairment can affect independent navigation. A cognitive profile can therefore provide valuable information for rehabilitation planning, medicolegal assessment, and return-to-work decisions.
 
 
 
@@ -51,7 +51,7 @@ The mean imputation method is fast and does not require any iteration. However, 
 \par\medskip
 \noindent\textbf{K-Nearest Neighbors (KNN)}.
 
-The KNN imputation method finds the \(k\) most similar donor cases and assigns the missing value a weighted average of their observed values based on the Euclidean distance as the similarity measure. We can define the KNN imputation method as follows:
+The KNN imputation method finds the \(k\) most similar donor cases and assigns the missing value a weighted average of their observed values based on the Euclidean distance as the similarity measure. The KNN imputation method can be defined as follows:
 
 \begin{equation}\label{eq:knn}
 \hat{x}_{ij}=\frac{\sum_{k\in\mathcal{N}_i}w_{ik}\,x_{kj}}{\sum_{k\in\mathcal{N}_i}w_{ik}},\qquad w_{ik}=\frac{1}{d(i,k)},
@@ -71,7 +71,7 @@ x_{ij}^{(t)}\sim p\!\left(x_{ij}\,\middle|\,\mathbf{x}_{i,-j}^{(t)};\,\theta_j\r
 \end{equation}
 
 
-We can adapt the form of the conditional model to the type of data; e.g., we can use linear models for continuous variables and logistic models for binary variables. MICE retains multivariate relationships and can produce multiple imputations to quantify uncertainty. One of its limitations is that we must specify a model for every variable, and there are possibilities for problems during convergence.
+The form of the conditional model can be adapted to the type of data; e.g., linear models can be used for continuous variables and logistic models for binary variables. MICE retains multivariate relationships and can produce multiple imputations to quantify uncertainty. One of its limitations is that a model must be specified for every variable, and there are possibilities for problems during convergence.
 
 
 
@@ -93,7 +93,7 @@ In doing so, imputed values will always lie within the range of observed data, t
 \par\medskip
 \noindent\textbf{MissForest}.
 
-MissForest is an iterative random-forest imputation method \parencite{stekhoven2012missforest}. For each variable \(j\), we train a forest \(f_j\) using all available data with the remaining variables as predictors. Afterward, we update missing values using the newly created forest and repeat this procedure until little change occurs:
+MissForest is an iterative random-forest imputation method \parencite{stekhoven2012missforest}. For each variable \(j\), a forest \(f_j\) is trained using all available data with the remaining variables as predictors. Afterward, missing values are updated using the newly created forest, and this procedure is repeated until little change occurs:
 
 \begin{equation}\label{eq:missforest}
 \hat{x}_{ij}=f_j\!\left(\mathbf{x}_{i,-j}\right)\quad\text{until}\quad \sum_{(i,j)\notin\Omega}\bigl(x_{ij}^{(t)}-x_{ij}^{(t-1)}\bigr)^2 \text{ stops decreasing.}
@@ -177,44 +177,44 @@ Deep learning methods typically require more computation than simple methods; ho
 
 
 
-\parencite{afkanpour2024identify} categorize imputation methods for clinical research into four classes: traditional methods (mean, EM, MICE); machine learning methods (KNN, MissForest); hybrid methods like PMM; and matrix completion methods like SoftImpute and NMF. I add a fifth class to these: Deep Learning - specifically for DAEs and VAEs. By comparing methods across these classes we can determine whether the recovered cognitive structure is stable across assumptions of the imputation method.
+\parencite{afkanpour2024identify} categorize imputation methods for clinical research into four classes: traditional methods (mean, EM, MICE); machine learning methods (KNN, MissForest); hybrid methods like PMM; and matrix completion methods like SoftImpute and NMF. I add a fifth class to these: Deep Learning - specifically for DAEs and VAEs. Comparing methods across these classes can determine whether the recovered cognitive structure is stable across assumptions of the imputation method.
 
 \section{Clustering in Neuropsychology}
-Cluster analysis has been extensively applied to neuropsychological research. Clinical diagnoses or levels of severity are typically established through diagnostic or severity categories; yet cluster analyses conducted across various cohorts including stroke, traumatic brain injury (TBI), mild cognitive impairment (MCI) - often result in data-driven groupings that do not correspond with clinical categories or severity classifications. Clinically speaking this disparity indicates that medical classifications do not effectively reflect cognitive heterogeneity.
+Clustering is a commonly employed statistical method within neuropsychology. A primary way of establishing clinical diagnoses or severity levels for patients who have experienced stroke, traumatic brain injury (TBI), or mild cognitive impairment (MCI) is to use diagnostic and/or severity categories. However, cluster analyses performed across different clinical groups, including TBI and MCI, show that statistically derived groupings of cognitive performance data do not always align with clinical diagnosis or severity level. From an empirical standpoint, this indicates that medical classifications used to represent cognitive heterogeneity after injury may fail to portray the full extent of that heterogeneity.
 
 
 
-Data-driven cognitive phenotyping following brain injury were reviewed in \parencite{garcia2020data}; several consistent trends emerged throughout reviews. Data-driven grouping methods typically yield two to four subgroups; subgroups are often identified based on relative strengths and weaknesses in cognition compared to overall levels of severity; and, when relevant outcome measures are provided, subgroup classification can correlate with clinically significant endpoints - such as return to work.
+A review of data-driven cognitive phenotyping following brain injury was completed by \parencite{garcia2020data}. Several common findings emerged across the reviewed studies. First, most studies identified two to four data-driven cognitive groupings. Second, grouping was usually based on comparisons between relative cognitive strengths and weaknesses in relation to each individual's overall level of cognitive functioning. Third, when applicable outcome measures were available, group membership was significantly associated with meaningful outcomes, such as return to work.
 
 
 
-However, as discussed above, there remain significant gaps in evidence regarding data-driven cognitive phenotyping following brain injury. Sample sizes are generally very small - often <200 participants; missing values are frequently excluded using complete-case analysis - although exclusion of missing values could introduce biases in samples when missingness is informative; and algorithmic sensitivities are seldom evaluated systemically in previous studies; furthermore k-means - a widely used clustering algorithm - requires users to fix \(k\) prior to examining their data.
+Despite these findings, several gaps remain in the literature on data-driven cognitive phenotyping following brain injury. Sample sizes in many studies range from approximately 100 to fewer than 200 participants. Missing values are often excluded from analyses through complete-case methods, even though this can bias the resulting sample when missingness is informative. Few studies systematically evaluate the algorithmic sensitivity of clustering methods. This is particularly relevant for k-means, a widely used clustering algorithm that requires users to determine the number of clusters, \(k\), before analysing the data.
 
 
 
-Therefore this dissertation proposes four design features to address these issues. It utilizes a larger clinical database (Chapter~\ref{Chapter3}); compares ten imputation methods against complete-case analysis; evaluates sensitivity to hyperparameters and missingness thresholds; and utilizes HDBSCAN - which treats low-density observations as outliers instead of forcing them into pre-determined centroids - to identify dense regions of observation as clusters.
+Consequently, this dissertation proposes four design features to address limitations in the existing literature. Chapter~\ref{Chapter3} uses a larger clinical database; compares ten imputation methodologies against complete-case analysis; evaluates sensitivity to changes in hyperparameters and missingness thresholds; and uses HDBSCAN, which does not force outlier observations into predetermined centroids but instead identifies denser regions of observations as clusters.
 
 \section{UMAP and HDBSCAN}
-There are two primary components to our clustering pipeline. First UMAP reduces the dimensionality of our data. Second HDBSCAN identifies dense regions of observations as clusters.
+There are two primary components to the clustering pipeline. First, UMAP reduces the dimensionality of the data. Second, HDBSCAN identifies dense regions of observations as clusters.
 
 \subsection{UMAP}
-UMAP is a manifold learning algorithm that maps high dimensional data onto lower dimensions in order to maintain the overall topology of the data. This is a nonlinear approach to dimensionality reduction. Instead of using a linear approach like PCA, which will capture straight line patterns, UMAP attempts to find the underlying geometric structure of your data. The tradeoff of finding the right balance between maintaining the local and global structure of the data is addressed through tuning the hyperparameters. There are three major hyperparameters in UMAP:
+UMAP is a type of non-linear manifold learning that preserves the general topological features of the data while reducing higher-dimensional data into lower-dimensional spaces. As such, this method does not use linear techniques like PCA, but instead seeks out the geometry of the original data. There is always a trade-off between preserving both local and global structure in the data. Three primary hyperparameters used in UMAP can help to achieve an optimal balance between the two:
 
 
 
 \begin{itemize}
 
-    \item \texttt{n\_neighbors} - The number of neighbors to consider when creating the connections between data points in the original space. Larger values provide a broader view of the global structure, whereas smaller values focus more strongly on local structure.
+    \item \texttt{n\_neighbors}: Number of neighbors to consider when drawing connections between original space objects. Higher values of \texttt{n\_neighbors} create a larger-scale picture of the global properties of the data; conversely, lower values draw attention to the details of local structure.
 
-    \item \texttt{min\_dist} - The minimum distance between samples in the new space. Larger values allow for a less dense representation, whereas smaller values result in a denser representation.
+    \item \texttt{min\_dist}: Minimum distance required between objects within the new space. If set too large, object proximity may become less meaningful; if set too small, object proximity will be highly relevant.
 
-    \item \texttt{n\_components} - The desired dimension of the output.
+    \item \texttt{n\_components}: Target number of components in the new space.
 
 \end{itemize}
 
 
 
-Technically speaking, UMAP begins with a weighted neighbor graph. For an observation \(x_i\) and one of its neighboring observations \(x_j\), the directed membership strength is defined in Equation~\ref{eq:umap_p}. Here, \(\rho_i\) is the distance from \(x_i\) to its nearest neighbor, and \(\sigma_i\) is calibrated so that \(\sum_j p_{j\mid i}=\log_2(k)\), where \(k\) is the \texttt{n\_neighbors} setting. The directed weights are then symmetrized as shown in Equation~\ref{eq:umap_sym}. On the embedding side, the low-dimensional membership \(q_{ij}\) is defined by Equation~\ref{eq:umap_q}, with \(a\) and \(b\) determined by the \texttt{min\_dist} setting. UMAP then minimizes the cross-entropy in Equation~\ref{eq:umap_ce} between the high-dimensional and low-dimensional memberships.
+Technically, UMAP works with a graph of weighted neighbors. For each pair of an object \(x_i\) and one of its neighboring objects \(x_j\), there exists a directed membership probability denoted by \(p_{j\mid i}\). In Equation~\ref{eq:umap_p}, \(\rho_i\) denotes the distance from \(x_i\) to its closest neighbor and \(\sigma_i\) denotes a calibration factor such that \(\sum_j p_{j\mid i}=\log_2(k)\), where \(k\) is the value specified for \texttt{n\_neighbors}. The directed probabilities are then made symmetric according to Equation~\ref{eq:umap_sym}. Finally, in Equation~\ref{eq:umap_q}, \(q_{ij}\) defines the low-dimensional membership probability, with \(a\) and \(b\) being functions of \texttt{min\_dist}. Next, UMAP minimizes the cross-entropy in Equation~\ref{eq:umap_ce} between the high-dimensional and low-dimensional memberships.
 
 \begin{equation}\label{eq:umap_p}
 p_{j\mid i}=\exp\!\left(-\frac{\max\{0,\,d(x_i,x_j)-\rho_i\}}{\sigma_i}\right),
@@ -233,23 +233,23 @@ C=\sum_{i\ne j}\left[p_{ij}\log\frac{p_{ij}}{q_{ij}}+(1-p_{ij})\log\frac{1-p_{ij
 \end{equation}
 
 \subsection{HDBSCAN}
-HDBSCAN builds upon traditional DBSCAN, extending it by building hierarchical representations of clusterings at multiple densities, and identifying persistent structures. Traditional DBSCAN is limited in that you cannot identify overlapping or nested clusters without having a preconceived notion of how many groups exist. HDBSCAN solves these issues by automatically determining the number of clusters and providing a clear definition of noise. The key parameters include:
+HDBSCAN extends the capabilities of traditional DBSCAN by generating hierarchical representations of clusterings at varying levels of density and by identifying those aspects of the data that remain consistent across different clusterings. One major limitation of DBSCAN is that nested or variable-density clusters are difficult to recover from a single fixed neighbourhood radius. HDBSCAN addresses this issue directly by defining noise and allowing for automatic determination of the number of clusters. Key parameters include:
 
 
 
 \begin{itemize}
 
-    \item min\_samples: Controls the density estimation
+    \item \texttt{min\_samples}: Density estimate parameter.
 
-    \item min\_cluster\_size: Sets the minimum size of the identified clusters
+    \item \texttt{min\_cluster\_size}: Smallest acceptable cluster size.
 
-    \item cluster\_selection\_epsilon: Determines how aggressively clusters are merged
+    \item \texttt{cluster\_selection\_epsilon}: Specifies how aggressively clusters should be merged.
 
 \end{itemize}
 
 
 
-HDBSCAN adjusts distances based on local density. Given a point \(x\), let \(k\) denote the \texttt{min\_samples} setting, and let \(\operatorname{core}_k(x)\) be the distance from \(x\) to its \(k\)-th nearest neighbor. Mutual reachability distance is then defined in Equation~\ref{eq:mreach}. A minimum spanning tree (MST) is built on these distances to generate the hierarchy. HDBSCAN then selects the most stable clusters using Equation~\ref{eq:hdbscan_stab}, where \(\lambda_{\mathrm{birth}}(C)\) is the density level at which cluster \(C\) first forms and \(\lambda_{\max}(x,C)\) is the highest level at which point \(x\) remains assigned to cluster \(C\). Points not belonging to any persistent cluster are classified as noise.
+In addition to adjusting distance measurements based on local density, HDBSCAN also uses mutual reachability distance as defined in Equation~\ref{eq:mreach} to connect pairs of objects. An MST is generated over these adjusted distances to form the basis for a hierarchical representation. Each node in this tree corresponds to either an object or a previously formed cluster. Persistent clusters are then selected based on their stability as described in Equation~\ref{eq:hdbscan_stab}, where \(\lambda_{\mathrm{birth}}(C)\) represents the density level at which cluster \(C\) was created and \(\lambda_{\max}(x,C)\) represents the highest density level at which point \(x\) remained part of cluster \(C\). Any remaining points that do not belong to any persistent cluster are designated as noise.
 
 \begin{equation}\label{eq:mreach}
 d_{\mathrm{mreach}}(a,b)=\max\bigl\{\operatorname{core}_k(a),\,\operatorname{core}_k(b),\,d(a,b)\bigr\}.
@@ -259,24 +259,24 @@ d_{\mathrm{mreach}}(a,b)=\max\bigl\{\operatorname{core}_k(a),\,\operatorname{cor
 S(C)=\sum_{x\in C}\bigl(\lambda_{\max}(x,C)-\lambda_{\mathrm{birth}}(C)\bigr),\qquad \lambda=\frac{1}{d_{\mathrm{mreach}}},
 \end{equation}
 
-The pairing of UMAP and HDBSCAN is commonly employed in computational biology and related disciplines due to their ability to identify complex structures in high-dimensional datasets.
+Both UMAP and HDBSCAN have found widespread applications throughout computational biology and related fields because they can effectively discover structural elements in very-high-dimensional datasets.
 
 \section{Cluster Validation}
-When a gold standard is absent, assessing the validity of discovered clusters is indirect. Henceforth, we employ a combination of internal validations, external consistency measurements and sensitivity analyses.
+When a gold standard is absent, assessing the validity of discovered clusters is indirect. Henceforth, this thesis employs a combination of internal validations, external consistency measurements and sensitivity analyses.
 
 \subsection{Internal Validation}
-Internal validation involves comparing various attributes of different possible cluster solutions. Here we primarily rely on silhouette coefficients \parencite{rousseeuw1987silhouettes}, which compare within-cluster cohesion (the average similarity of each data-point to the other data-points in its own cluster) and between-cluster separation (the average similarity between each data-point and data-points outside its cluster). The silhouette value for an individual item lies in the interval [-1,+1]: Positive values denote good fit, values close to zero signify poor fit (as either an item fits poorly into its own group or fits very well into adjacent group(s)), and negative values represent incorrect assignment. The individual silhouette value is defined in Equation~\ref{eq:silhouette}, where \(a(i)\) denotes the mean intra-cluster dissimilarity for observation \(i\), and \(b(i)\) denotes the mean dissimilarity between observation \(i\) and members of the nearest alternative cluster. The average silhouette is then obtained by taking the mean of \(s(i)\) across all observations. As previously stated, we utilize the mean silhouette as our principal internal evaluation measure. Noise percentage is our second measure of evaluating how much of our total population is clustered in meaningful ways.
+Internal validation involves comparing various attributes of different possible cluster solutions. Here, this thesis primarily relies on silhouette coefficients \parencite{rousseeuw1987silhouettes}, which compare within-cluster cohesion (the average similarity of each data-point to the other data-points in its own cluster) and between-cluster separation (the average similarity between each data-point and data-points outside its cluster). The silhouette value for an individual item lies in the interval [-1,+1]: Positive values denote good fit, values close to zero signify poor fit (as either an item fits poorly into its own group or fits very well into adjacent group(s)), and negative values represent incorrect assignment. The individual silhouette value is defined in Equation~\ref{eq:silhouette}, where \(a(i)\) denotes the mean intra-cluster dissimilarity for observation \(i\), and \(b(i)\) denotes the mean dissimilarity between observation \(i\) and members of the nearest alternative cluster. The average silhouette is then obtained by taking the mean of \(s(i)\) across all observations. As previously stated, I utilize the mean silhouette as the principal internal evaluation measure. Noise percentage is the second measure of evaluating how much of the total population is clustered in meaningful ways.
 
 \begin{equation}\label{eq:silhouette}
 s(i)=\frac{b(i)-a(i)}{\max\{a(i),\,b(i)\}}.
 \end{equation}
 
 \subsection{External Validation}
-Measuring two different cluster solutions, e.g., when examining how consistent cluster assignments are between two different imputation methods, necessitates the employment of external validation measures. One common method is the Adjusted Rand Index (ARI) \parencite{hubert1985comparing}. The ARI examines how many pairs of cases have been assigned to identical clusters across two separate clusterings and then adjusts this count for chance. Let $U = \{U_i\}$ and $V = \{V_j\}$ be two clusterings of \(n\) objects with contingency counts $n_{ij} = |U_i \cap V_j|$, marginal sums $a_i = \sum_j n_{ij}$ and $b_j = \sum_i n_{ij}$. The ARI is calculated using Equation~\ref{eq:ari}; +1 represents perfect agreement, 0 represents random agreement, and values below 0 demonstrate systematic disagreement \parencite{robert2020comparing}. Next, we calculate Normalized Mutual Information (NMI), a mutual-information-theoretic method of quantifying how much one clustering discloses regarding another clustering normalized by entropy. Specifically, using mutual information $I(U;V)$ and Shannon entropies \(H(\cdot)\) \parencite{shannon1948mathematical}, Equation~\ref{eq:nmi} defines full agreement as 1 and no agreement as 0.
+Measuring two different cluster solutions, e.g., when examining how consistent cluster assignments are between two different imputation methods, necessitates the employment of external validation measures. One common method is the Adjusted Rand Index (ARI) \parencite{hubert1985comparing}. The ARI examines how many pairs of cases have been assigned to identical clusters across two separate clusterings and then adjusts this count for chance. Let $U = \{U_i\}$ and $V = \{V_j\}$ be two clusterings of \(n\) objects with contingency counts $n_{ij} = |U_i \cap V_j|$, marginal sums $a_i = \sum_j n_{ij}$ and $b_j = \sum_i n_{ij}$. The ARI is calculated using Equation~\ref{eq:ari}; +1 represents perfect agreement, 0 represents random agreement, and values below 0 demonstrate systematic disagreement \parencite{robert2020comparing}. Next, I calculate Normalized Mutual Information (NMI), a mutual-information-theoretic method of quantifying how much one clustering discloses regarding another clustering normalized by entropy. Specifically, using mutual information $I(U;V)$ and Shannon entropies \(H(\cdot)\) \parencite{shannon1948mathematical}, Equation~\ref{eq:nmi} defines full agreement as 1 and no agreement as 0.
 
 
 
-For an additional insight into individual clusters' similarities/differences, we apply the Jaccard index. If \(A\) and \(B\) denote sets containing points that make up a specific cluster under two respective solutions, the Jaccard index is computed using Equation~\ref{eq:jaccard}; thus values lie in [0, 1], with larger values demonstrating closer membership. Finally, we use Hennig Matching \parencite{hennig2007cluster} as a bootstrapping method of assessing cluster stability. Across \(R\) bootstrap iterations, we pair each original cluster \(C_k\) with the resampled cluster whose Jaccard overlap with it is maximal. The stability score of each original cluster \(C_k\) is then taken as the mean of these maxima in Equation~\ref{eq:hennig}. By convention, a per-cluster score > 0.7 is considered stable.
+For additional insight into individual clusters' similarities/differences, I apply the Jaccard index. If \(A\) and \(B\) denote sets containing points that make up a specific cluster under two respective solutions, the Jaccard index is computed using Equation~\ref{eq:jaccard}; thus values lie in [0, 1], with larger values demonstrating closer membership. Finally, I use Hennig Matching \parencite{hennig2007cluster} as a bootstrapping method of assessing cluster stability. Across \(R\) bootstrap iterations, each original cluster \(C_k\) is paired with the resampled cluster whose Jaccard overlap with it is maximal. The stability score of each original cluster \(C_k\) is then taken as the mean of these maxima in Equation~\ref{eq:hennig}. By convention, a per-cluster score > 0.7 is considered stable.
 
 
 

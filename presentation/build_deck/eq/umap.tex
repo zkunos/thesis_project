@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\pagestyle{empty}
+\newsavebox\eqbox
+\savebox\eqbox{$\displaystyle \begin{aligned} p_{j\mid i} &= \exp\!\Big(-\tfrac{d(x_i,x_j)-\rho_i}{\sigma_i}\Big), \qquad \sum_{j} p_{j\mid i}=\log_2 k \\[6pt] p_{ij} &= p_{j\mid i}+p_{i\mid j}-p_{j\mid i}\,p_{i\mid j} \\[6pt] q_{ij} &= \big(1+a\,\lVert y_i-y_j\rVert_2^{\,2b}\big)^{-1} \\[8pt] \mathcal{C} &= \sum_{i\neq j} p_{ij}\log\tfrac{p_{ij}}{q_{ij}}+(1-p_{ij})\log\tfrac{1-p_{ij}}{1-q_{ij}} \end{aligned}$}
+\pdfpagewidth=\dimexpr\wd\eqbox+12pt\relax
+\pdfpageheight=\dimexpr\ht\eqbox+\dp\eqbox+12pt\relax
+\setlength{\hoffset}{-1in}\setlength{\voffset}{-1in}
+\setlength{\oddsidemargin}{6pt}\setlength{\topmargin}{6pt}
+\setlength{\headheight}{0pt}\setlength{\headsep}{0pt}\setlength{\topskip}{0pt}
+\setlength{\parindent}{0pt}\setlength{\textwidth}{2\paperwidth}
+\begin{document}\noindent\usebox\eqbox\end{document}

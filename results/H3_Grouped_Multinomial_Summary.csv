@@ -1,0 +1,2 @@
+assessments,patients,outcome_classes,rare_unit_patient_cutoff,baseline_log_loss,diagnosis_plus_tier_log_loss,log_loss_improvement,log_loss_improvement_ci_low,log_loss_improvement_ci_high,baseline_accuracy,diagnosis_plus_tier_accuracy,baseline_macro_f1,diagnosis_plus_tier_macro_f1
+17347,7243,17,50,0.60635895226271,0.6050575376904878,0.0013014145722222148,-0.0006358527130846419,0.003070310130079329,0.7771949040179859,0.7770219634518937,0.47626442973808003,0.48021288129712925
