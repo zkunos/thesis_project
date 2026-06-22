@@ -1,12 +1,64 @@
-# macOS
+# Operating-system and local application metadata
 .DS_Store
+Thumbs.db
+.claude/
+.codex/
+.agents/
+.vscode/
+.idea/
 
-# Python and notebooks
+# Python, Jupyter, and test caches
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
-# LaTeX build artifacts
+# Virtual environments and local secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# JavaScript dependencies and unused local package metadata
+node_modules/
+/package.json
+/package-lock.json
+/yarn.lock
+/pnpm-lock.yaml
+
+# Notebook execution copies. Commit the source notebooks only.
+/notebooks/*_executed.ipynb
+
+# Generated pipeline data. The notebooks recreate these from data/0_*.xlsx.
+/data/imputed_csv/
+/results/
+
+# Generated render, preview, and scratch directories
+/outputs/
+/tmp/
+/report/tmp/
+/presentation/build_deck/
+
+# Report editorial exports and backups
+/report/before_rework_integrate_backup/
+/report/prose_md_export/
+/report/report_text_no_figures*
+/report/figure_captions.md
+/report/main_short-blx.bib
+
+# Keep only the current defence deliverables from presentation/.
+/presentation/*
+!/presentation/thesis_defense_20min_professional.pptx
+!/presentation/thesis_defense_20min_transcript.pdf
+!/presentation/thesis_defense_study_cards.pdf
+
+# LaTeX build artifacts. Final PDFs remain trackable.
 *.aux
 *.bbl
 *.bcf
@@ -16,12 +68,23 @@ __pycache__/
 *.lof
 *.log
 *.lot
+*.nav
 *.out
 *.run.xml
+*.snm
 *.synctex.gz
 *.toc
+*.vrb
 
-# Temporary editor files
+# Temporary editor and archive files
 *~
 *.swp
 *.swo
+*.bak
+*.tmp
+*.temp
+*.orig
+*.rej
+*.zip
+*.tar
+*.tar.gz
