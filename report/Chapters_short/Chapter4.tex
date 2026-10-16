@@ -2,6 +2,8 @@
 
 \chapter{Results}\label{Chapter4}
 
+The chapter first presents the assessment-level results, followed by the patient-level extension in Section~\ref{sec:extension_results}. The earlier supplementary multiple-imputation and complete-case comparisons used raw-test aggregation. Their quoted results therefore describe a different preprocessing specification from the direction-aligned, standardized domain construction used in the extension and are not directly comparable with it.
+
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
@@ -11,11 +13,11 @@ Following Tier-1 filtering (Chapter~\ref{Chapter3}) and removal of all assessmen
 
 
 
-Data availability is inconsistent. The missingness levels vary from 0.7\% for Orientation items through to 27.8\% for ATMTA. Therefore, complete-case analysis would lose approximately half of the total clinical sample (46.9\%) and introduce clear selection bias \parencite{rubin1976inference}. Consequently, data imputation was adopted to conserve the entire clinical sample.
+Data availability is inconsistent. The missingness levels vary from 0.7\% for Orientation items through to 27.8\% for ATMTA. Therefore, complete-case analysis would lose approximately half of the total clinical sample (46.9\%) and risk selection bias \parencite{rubin1976inference}. Consequently, data imputation was adopted to conserve the entire clinical sample.
 
 
 
-From a co-occurrence heatmap (not shown), blocks of variables are identified that are missing simultaneously, suggesting a missing-at-random mechanism \parencite{rubin1976inference,little2019statistical}. Dependency among missing values thus supports the application of conditional imputation rather than naive substitution. Within-domain correlation coefficients are generally high, whereas cross-domain relationships appear less prominent, suggesting common variance due to general cognitive ability \parencite{lezak2012neuropsychological}. Subsequent clustering results illustrate this common variance dimension explicitly.
+From a co-occurrence heatmap (not shown), blocks of variables are identified that are missing simultaneously, showing structured missingness but not establishing a missing-at-random mechanism \parencite{rubin1976inference,little2019statistical}. Dependency among missing values thus supports the application of conditional imputation rather than naive substitution. Within-domain correlation coefficients are generally high, whereas cross-domain relationships appear less prominent, suggesting common variance due to general cognitive ability \parencite{lezak2012neuropsychological}. Subsequent clustering results illustrate this common variance dimension explicitly.
 
 \begin{table}[ht]
 \caption{Missingness summary for the 14 eligible neuropsychological variables after Tier~1 filtering. The final row reports the number of complete cases (rows with no missing values across all 14 variables).}
@@ -234,7 +236,7 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 
 
 
-\textbf{Missingness Threshold Sensitivity.} I also re-ran the entire process -- including variable selection; domain computation; MICE imputation; and UMAP+HDBSCAN -- at five Tier 1 thresholds from 30\% to 70\%. As shown in Figure~\ref{fig:sensitivity}, the solution remains in the two to three tier range with silhouettes ranging from 0.39 to 0.52 over thresholds of 40\% to 70\%. Only at 30\%, where the analysis becomes overly restrictive with regards to how many variables are allowed, does the solution break down. Therefore, the 50\% threshold used throughout the main analysis represents a reasonable balance between how much information is present in each record and how many variables are available.
+\textbf{Missingness Threshold Sensitivity.} I also re-ran the entire process -- including variable selection; domain computation; MICE imputation; and UMAP+HDBSCAN -- at five Tier 1 thresholds from 30\% to 70\%. As shown in Figure~\ref{fig:sensitivity}, the solution remains in the two to three tier range with silhouettes ranging from 0.39 to 0.52 over thresholds of 40\% to 70\%. Only at 30\%, where the analysis becomes overly restrictive with regards to how many variables are allowed, does the solution break down. This historical threshold sweep concerns the sensitivity of the selected variables and resulting pipeline. It should not be interpreted as evidence that the main saved matrix applied a 50\% row-missingness limit; the verified row rule is stated in Section~\ref{sec:filtering}.
 
 \begin{center}
 \centering
@@ -252,7 +254,7 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 
 
 
-\textbf{Gaussian Mixture / Latent Profile Baseline.} As a model-based comparison, I fit Gaussian mixture models with full covariance matrices to the imputed domain scores for \(k\) varying from 2 through 6. This analysis is analogous to latent profile analysis in that it estimates model-based continuous-profile classes, but it is not a formal latent profile analysis with full-information maximum likelihood on the incomplete raw data. BIC decreased monotonically with \(k\) (from 243{,}249 at \(k = 2\) to 92{,}606 at \(k = 6\)). This shows only that no BIC optimum was reached within the tested range; it does not establish a continuum, and a solution with more than six components might have been preferred. Mixture-model solutions agreed only modestly with the density-based tiers (\(\mathrm{ARI} = 0.350-0.400\)), while the two-component solution had the clearest silhouette (0.45). I therefore treat this baseline as inconclusive about class number. The continuum interpretation rests primarily on the concentric domain profiles, the dominant first principal component, weak original-space silhouette, and sensitivity of tier count. A formal latent profile analysis with FIML and a wider class range remains a separate model-based extension.
+\textbf{Gaussian Mixture / Latent Profile Baseline.} As a model-based comparison, I fit Gaussian mixture models with full covariance matrices to the imputed domain scores for \(k\) varying from 2 through 6. This analysis is analogous to latent profile analysis in that it estimates model-based continuous-profile classes, but it is not a formal latent profile analysis with full-information maximum likelihood on the incomplete raw data. BIC decreased monotonically with \(k\) (from 243{,}249 at \(k = 2\) to 92{,}606 at \(k = 6\)). This shows only that no BIC optimum was reached within the tested range; it does not establish a continuum, and a solution with more than six components might have been preferred. Mixture-model solutions agreed only modestly with the density-based tiers (\(\mathrm{ARI} = 0.350-0.400\)), while the two-component solution had the clearest silhouette (0.45). I therefore treat this baseline as inconclusive about class number. The continuum interpretation rests primarily on the concentric domain profiles, the dominant first principal component, weak original-space silhouette, and sensitivity of tier count. The observed-data mixture extension in Section~\ref{sec:extension_results} subsequently fits the incomplete test matrix directly, with a wider range of restricted distributional families.
 
 
 
@@ -260,7 +262,7 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 
 
 
-\textbf{Summary Characteristics of Excluded Records.} Applying the Tier-1 filter to the full raw cohort retained 17{,}406 of the 22{,}075 records used in the source extract and excluded 4{,}669 records. Discarded records averaged only 0.800 of their 14 eligible tests, whereas retained records averaged 12.5 tests per record, thereby appearing to represent nearly empty administrative encounters instead of incomplete testing of severely impaired individuals. Demographically, both excluded records and retained records are largely indistinguishable (e.g., age at injury: 45.7 vs. 46.3 years; Cohen's \(d = -0.04\); sex: male/female = [63\%;37\%] vs. [68\%;32\%]; TSI: 2.3 vs. 1.6 years; \(d = 0.16\)). Therefore, I do not believe that the Tier-1 filter suppresses detection of a cognitively impaired subgroup identifiable via measurable characteristics -- although I cannot assess cognitive impairment directly in the excluded records.
+\textbf{Assessment Eligibility.} Of 22{,}075 records, 17{,}406 had at least one observed value among the 14 retained tests and were eligible for analysis. The remaining 4{,}669 records had no observed values for these tests and were excluded. Absence of retained test values prevents direct assessment of cognitive severity in excluded encounters; it does not establish that their exclusion is clinically innocuous.
 
 \section{Cluster Clinical Naming}\label{sec:cluster_names}
 To give the density-based clusters clinically relevant labels, I employed a rule-based naming system based upon the domain-level z-score profiles associated with each cluster.
@@ -287,8 +289,10 @@ Since the tiers differ primarily in terms of overall level and not profile shape
 
 
 
-They provide valuable shorthand for clinicians engaged in discussing potential rehabilitation options with their patients -- as well as providing useful tier-based guidance for rehabilitation triaging efforts.
+They provide descriptive shorthand for the historical assessment-level partition. Clinical triage utility has not been established, and these names are not automatically transferred to the new patient-level groups.
 
 
 
-The full mapping of identifier codes to assessment frequency is contained within the interactive CogDash dashboard
+CogDash displays the assessment counts and domain profiles for these bands alongside the separate patient-level findings. Group numbers are local to each fitted solution.
+
+\input{Chapters_short/ClusteringExtensionResults}

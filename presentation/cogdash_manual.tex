@@ -1,486 +1,299 @@
-\documentclass[11pt, a4paper]{article}
-
-\usepackage[utf8]{inputenc}
+\documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{booktabs}
-\usepackage{amsmath}
-\usepackage{xcolor}
-\usepackage{fancyhdr}
-
-% Colours
-\definecolor{ubblue}{RGB}{0, 76, 147}
-\definecolor{ubgray}{RGB}{100, 100, 100}
-
-\hypersetup{
-  colorlinks=true,
-  linkcolor=ubblue,
-  urlcolor=ubblue,
-}
-
-% Headers
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small\textcolor{ubgray}{CogDash User Manual}}
-\fancyhead[R]{\small\textcolor{ubgray}{v1.0}}
-\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-
-% Compact lists
-\setlength{\itemsep}{0pt}
-\setlength{\parskip}{0.3em}
-
-% Graphics path
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm,headheight=15pt]{geometry}
+\usepackage{graphicx,booktabs,array,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{HTML}{182B49}
+\definecolor{teal}{HTML}{007C91}
+\definecolor{muted}{HTML}{425670}
+\definecolor{pale}{HTML}{EAF1F7}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,pdftitle={CogDash User Manual},pdfauthor={Zoltan Kunos}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\textcolor{muted}{CogDash / User Manual}}
+\fancyhead[R]{\small\textcolor{muted}{Version 2.0}}
+\fancyfoot[L]{\small\textcolor{muted}{16 October 2026}}
+\fancyfoot[R]{\small\thepage}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlength{\emergencystretch}{2em}
 \graphicspath{{manual_screenshots/}}
-
+\newcommand{\screen}[2]{\begin{center}\includegraphics[width=\linewidth]{#1}\\[0.4em]{\small\textcolor{muted}{#2}}\end{center}}
+\newcommand{\note}[1]{\par\smallskip\colorbox{pale}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\vspace{0.4em}#1\vspace{0.4em}}}\par\smallskip}
+\newcommand{\page}[1]{\clearpage\section{#1}}
+\newcommand{\ui}[1]{\textbf{#1}}
 \begin{document}
-
-% ──────────────────────────────────────────────────────────────────
-% TITLE
-% ──────────────────────────────────────────────────────────────────
-
+\pagenumbering{roman}
 \begin{titlepage}
-\centering
-\vspace*{3cm}
-{\Huge\bfseries\textcolor{ubblue}{CogDash}\\[0.3em]User Manual\par}
-\vspace{1.5cm}
-{\Large Cognitive Phenotyping Dashboard\\for Acquired Brain Injury\par}
-\vspace{2cm}
-{\large Version 1.0\par}
+\vspace*{1cm}
+{\large\textcolor{teal}{COGNITIVE RESEARCH / VERSION 2.0}\par}
+\vspace{0.7cm}
+{\fontsize{46}{50}\selectfont\bfseries\textcolor{navy}{CogDash}\par}
+\vspace{0.3cm}
+{\Huge User Manual\par}
+\vspace{0.6cm}
+{\Large Exploring cognitive score groupings\\in acquired brain injury\par}
 \vspace{1cm}
-{\large Zolt\'an Kunos\par}
+\includegraphics[width=\linewidth]{01_home.jpg}
 \vspace{0.5cm}
-{\normalsize MSc Fundamental Principles of Data Science\\
-Universitat de Barcelona\par}
+\note{\textbf{Reading the evidence.} Reproducible partitions were found. Membership depends on scaling and missing-data assumptions; distinct clinical phenotypes remain unconfirmed.}
 \vfill
-{\normalsize\today\par}
+{\large Zolt\'an Kunos\par}
+MSc Fundamental Principles of Data Science\\
+Universitat de Barcelona
+
+16 October 2026\quad / \quad Analysis snapshot: 15 October 2026
 \end{titlepage}
-
+\setcounter{page}{2}
 \tableofcontents
-\newpage
+\clearpage
+\pagenumbering{arabic}
 
-% ──────────────────────────────────────────────────────────────────
-\section{Introduction}
-% ──────────────────────────────────────────────────────────────────
+\page{Start here}
+CogDash presents saved clustering analyses through eleven pages. It reads local results and applies saved transformations for profile comparison. Opening a page does not rerun the experiments.
 
-CogDash is an interactive web dashboard for exploring data-driven cognitive phenotypes in patients with acquired brain injury (ABI). It is built with Streamlit and lets clinicians and researchers:
-
-\begin{itemize}  \item Visualise clustering results across 10 imputation methods
-  \item Explore cognitive profiles of identified phenotypes
-  \item Look up individual patient profiles
-  \item Compare imputation method agreement
-  \item Examine clinical unit associations
-  \item Review hypothesis testing results (H1--H4)
-  \item Classify new patients into cognitive clusters
-  \item Analyse feature importance, cross-validation stability, and sensitivity
-  \item Review the robustness suite (bootstrap CIs, Holm-corrected H2, Rubin-pooled multiple imputation, listwise-deletion baseline, time-since-injury and within-patient phenotype stability)
-\end{itemize}
-
-The dashboard reads pre-computed results from the analysis pipeline (notebooks 0--13) and runs no computation itself, which keeps load times short and the displayed results reproducible.
-
-% ──────────────────────────────────────────────────────────────────
-\section{Installation \& Launch}
-% ──────────────────────────────────────────────────────────────────
-
-\subsection{Prerequisites}
-
-\begin{itemize}  \item Python 3.10 or later
-  \item Analysis notebooks 0--10 must have been executed (results in \texttt{results/})
-  \item For hypothesis pages: notebooks 6--9; for advanced analytics: notebooks 11--13
-\end{itemize}
-
-\subsection{Local Installation}
-
-\begin{enumerate}  \item Install dependencies:
-    \begin{verbatim}
-    pip install -r dashboard/requirements.txt
-    \end{verbatim}
-  \item Launch the dashboard:
-    \begin{verbatim}
-    cd dashboard
-    streamlit run Home.py --server.headless true
-    \end{verbatim}
-  \item Open \texttt{http://localhost:8501} in a web browser.
-\end{enumerate}
-
-\subsection{Docker}
-
+\subsection*{Launch the prepared workspace}
+Open PowerShell in the project root and run:
 \begin{verbatim}
-cd dashboard
-docker build -t cogdash .
-docker run -p 8501:8501 \
-  -v $(pwd)/../results:/app/../results:ro \
-  -v $(pwd)/../data:/app/../data:ro \
-  cogdash
+./dashboard/run.ps1
 \end{verbatim}
+Open \url{http://127.0.0.1:8501}. Keep the terminal running while using CogDash; press Ctrl+C there to stop it. If an instance already occupies that port, reuse it or launch with \texttt{-Port 8502}. Fresh-environment setup is at the end of this manual.
 
-The \texttt{-v} flags mount the \texttt{results/} and \texttt{data/} directories as read-only volumes. The container exposes port 8501 and includes a health check at \texttt{/\_stcore/health}.
+\subsection*{Choose a route through the findings}
+\begin{tabular}{p{0.18\linewidth}p{0.74\linewidth}}
+\toprule
+\textbf{Sidebar area} & \textbf{Pages and purpose}\\
+\midrule
+Findings & Home; Patient-Level Research. Main conclusions and the validation design.\\[0.5em]
+Explore & Cluster Explorer; Cognitive Profiles; Patient Lookup; New Profile. Projections, group means and individual profiles.\\[0.5em]
+Compare & Imputation Compare; Clinical Units; Hypothesis Summary; Advanced Analytics; Robustness. Assumptions and supporting evidence.\\
+\bottomrule
+\end{tabular}
 
-% ──────────────────────────────────────────────────────────────────
-\section{Navigation}
-% ──────────────────────────────────────────────────────────────────
+\subsection*{Use the controls}
+Choose pages in the sidebar and tabs across the content area. Expand labeled panels for methods and supplementary tables. Scroll the main page to reach lower content; the sidebar and long tables scroll separately.
 
-CogDash uses Streamlit's multi-page layout. The sidebar on the left lists all pages. Click any page name to navigate. Each page has its own sidebar filters (imputation method, cluster selection, etc.) that appear below the navigation links.
+Hover over plots for values and chart controls. Use zoom, reset and image download where available. Drag to rotate the 3D scatterplot. Tables are readable, scrollable summaries without spreadsheet editing or built-in filtering.
 
-The nine pages are:
+\note{Screenshots are actual browser views captured on 15--16 October 2026. Some show a scrolled detail view. Individual-profile examples are synthetic. The interface may reflow on a smaller screen.}
 
-\begin{enumerate}  \item \textbf{Home} --- Overview metrics and hypothesis verdicts
-  \item \textbf{Cluster Explorer} --- t-SNE 2D and UMAP 3D scatter plots
-  \item \textbf{Cognitive Profiles} --- Radar charts and domain heatmaps
-  \item \textbf{Patient Lookup} --- Individual patient search
-  \item \textbf{Imputation Compare} --- ARI/NMI matrices and consensus clustering
-  \item \textbf{Clinical Units} --- Unit and diagnosis cross-tabulations
-  \item \textbf{Hypothesis Summary} --- H1--H4 results with detailed metrics
-  \item \textbf{New Patient} --- Classify a new patient from test scores
-  \item \textbf{Advanced Analytics} --- Feature importance, CV stability, sensitivity
+\page{Methods and interpretation}
+\subsection*{Keep the two analysis designs separate}
+The source extract contains 22,075 assessments from 8,739 patients. Eligibility and variable selection retain 17,406 assessments from 7,285 patients, using 14 tests across six domains. The 50\% missingness threshold selects \emph{variables}; an eligible assessment needs at least one observed retained test.
+
+The assessment-level analysis retains repeat visits as separate rows. Its three named bands describe broad cognitive severity within the cohort. Most resampling treats assessments as independent. Clinical Units also reports a separate patient-grouped predictive comparison.
+
+The patient-level analysis uses the earliest eligible assessment per patient. A fixed split assigns 5,828 patients to discovery and 1,457 to validation (seed 20261015). Selection and fitted transformations use discovery data. Validation patients receive those rules without refitting.
+
+\subsection*{Patient-level preprocessing}
+\begin{enumerate}
+\item Clip observed tests at discovery 1st and 99th percentiles. Reverse the timed attention test so higher aligned values indicate better performance.
+\item Standardize each test using discovery estimates. Apply bounded Bayesian iterative imputation to missing tests.
+\item Combine completed tests into six domains using discovery observation-rate weights. Apply robust domain scaling for the main partition; compare equal-domain scaling separately.
+\item Fit and select models in discovery data, then evaluate validation assignments and separation. Independent-imputation experiments repeat preprocessing and model fitting for each draw.
 \end{enumerate}
 
-% ──────────────────────────────────────────────────────────────────
-\section{Page Reference}
-% ──────────────────────────────────────────────────────────────────
-
-% ── HOME ──
-\subsection{Home}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{01_home.png}
-\caption{Home page showing overview metrics (including the new Complete Cases indicator), cluster size distribution, and hypothesis verdicts.}
-\end{figure}
-
-The Home page provides a high-level overview of the analysis:
-
-\begin{description}  \item[Top metrics row] Displays six summary statistics:
-    \begin{itemize}      \item \textbf{Assessments} --- Total number of assessments clustered (17,406; from 7,285 unique patients)
-      \item \textbf{Clusters} --- Number of clusters found by HDBSCAN on the MICE-imputed data
-      \item \textbf{Noise} --- Percentage of assessments classified as noise (unclustered)
-      \item \textbf{Imputation Methods} --- Number of methods used (10)
-      \item \textbf{Complete Cases} --- Percentage of rows with all 14 tests observed (53.1\%); shows that listwise deletion would discard 46.9\% of the data, motivating the imputation strategy
-      \item \textbf{RF Surrogate Acc.} --- Random Forest cross-validation accuracy for predicting cluster labels from domain scores
-    \end{itemize}
-  \item[Cluster Size Distribution] Bar chart showing the number of assessments in each cluster for the MICE imputation method.
-  \item[Hypothesis Results Overview] Colour-coded verdict badges for H1--H4 (green = supported, orange = partially supported, red = not supported).
-  \item[Navigation] Quick-reference list of all dashboard pages and their purpose.
-\end{description}
-
-\newpage
-
-% ── CLUSTER EXPLORER ──
-\subsection{Cluster Explorer}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{02_cluster_explorer.png}
-\caption{Cluster Explorer page with t-SNE 2D and UMAP 3D scatter plots.}
-\end{figure}
-
-This page provides interactive visualisations of the clustering results in low-dimensional space.
-
-\begin{description}  \item[Sidebar --- Imputation Method] Select any of the 10 imputation methods from the dropdown. The plots and statistics update immediately.
-  \item[t-SNE 2D (left panel)] Two-dimensional t-SNE projection of the MICE-imputed domain scores. Each point represents one assessment, coloured by cluster assignment. Points labelled as noise appear in grey. Hover over any point to see its cluster ID.
-  \item[UMAP 3D (right panel)] Three-dimensional UMAP embedding. Supports full rotation, zoom, and pan. This is the same embedding used by the HDBSCAN clustering algorithm. \textit{Note: Requires WebGL support in the browser.}
-  \item[Statistics bar] Below the plots, a summary line shows the number of clusters, noise percentage, and number of clustered assessments for the selected method.
-  \item[Cluster Clinical Names] For the MICE method, a table shows the clinical name assigned to each major cluster (e.g., ``Above-Average'', ``Near-Normal'', ``Global Impairment'').
-\end{description}
-
-\textbf{Tip:} Switch the imputation method to see how the cluster structure changes. Methods with similar foundations (DAE and VAE, for example) produce similar-looking embeddings.
-
-\newpage
-
-% ── COGNITIVE PROFILES ──
-\subsection{Cognitive Profiles}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{03_cognitive_profiles.png}
-\caption{Cognitive Profiles page showing the z-score radar, Cohen's $d$ effect-size bar, domain heatmap, and profile table for selected clusters.}
-\end{figure}
-
-This page displays the cognitive signatures of each cluster. The visualisation mirrors Figure~4.6 of the thesis report: cluster means are expressed as z-scores from the cohort mean rather than normalised to a $[0, 1]$ range, so genuine per-domain separation is visible instead of compressed.
-
-\begin{description}  \item[Sidebar --- Select Clusters] Multi-select widget to choose which clusters to display (default: the two largest). At least one cluster must be selected; selecting exactly two unlocks the Cohen's $d$ panel.
-  \item[Z-score radar] Overlaid radar plot of each selected cluster's mean domain score in z-score units. The six axes are the cognitive domains (Orientation, Attention, Visuoperception, Language, Memory, Executive Function); the dotted reference ring at $z = 0$ marks the cohort average. Polygons outside the ring score above the cohort mean on that domain; polygons inside score below.
-  \item[Between-cluster effect size (Cohen's $d$)] Visible when exactly two clusters are selected. Horizontal bar chart of $|\text{Cohen's } d|$ per domain, sorted descending, with reference gridlines at the conventional small / medium / large thresholds ($0.2$ / $0.5$ / $0.8$). An expander below the bar chart shows the per-domain means and $d$ values as a table.
-  \item[Domain heatmap] Matrix view of the same z-scores. Rows are clusters, columns are domains. Colour intensity indicates the deviation from the cohort mean on each domain.
-  \item[Profile Data table] Numerical values behind the visualisations: per-cluster z-scores from cohort \emph{and} raw mean scores side by side.
-\end{description}
-
-\textbf{Interpretation:} The three clusters are bands of a single cognitive severity gradient (all six domains move together). The Global Impairment tier (C1, $n = 4{,}353$) sits below the cohort mean on every domain; the Near-Normal tier (C2, $n = 6{,}328$) sits near the cohort average; and the Above-Average tier (C0, $n = 6{,}725$) sits above it throughout. The tiers denote overall cognitive severity rather than distinct cognitive profiles, and orientation, visuoperception, and language carry most of the separation between them.
-
-\newpage
-
-% ── PATIENT LOOKUP ──
-\subsection{Patient Lookup}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{04_patient_lookup.png}
-\caption{Patient Lookup page showing an individual patient's domain profile and radar chart.}
-\end{figure}
-
-This page allows searching and inspecting individual patient records.
-
-\begin{description}  \item[Sidebar --- Patient Index] Enter a patient index (0 to $N-1$) to look up. Use the up/down arrows or type directly.
-  \item[Patient header] Shows the patient ID and their cluster assignment with the clinical name (e.g., ``0 --- Above-Average''). Noise patients display a warning.
-  \item[Domain Scores table (left)] Normalised domain scores (0--1) for the selected patient across all six cognitive domains.
-  \item[Radar Chart (right)] Visual representation of the patient's cognitive profile. Allows quick identification of relative strengths and weaknesses.
-  \item[Raw Domain Scores table] Shows both the raw (unstandardised) domain scores and the normalised values side by side. Useful for clinical interpretation in the original measurement units.
-\end{description}
-
-\newpage
-
-% ── IMPUTATION COMPARE ──
-\subsection{Imputation Compare}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{05_imputation_compare.png}
-\caption{Imputation Compare page showing clustering metrics table and pairwise ARI/NMI heatmaps.}
-\end{figure}
-
-This page compares how different imputation methods affect the clustering results. It is the primary page for evaluating Hypothesis H2 (imputation robustness).
+\subsection*{Read the principal statistics}
+\textbf{ARI} compares partitions after adjusting for chance. One means identical membership; around zero means chance-level agreement. Permuting group labels does not change ARI.
 
-\begin{description}  \item[Clustering Metrics by Method] Table showing for each imputation method: number of clusters, silhouette score, noise percentage, and number of clustered assessments.
-  \item[ARI Heatmap (left)] $10 \times 10$ pairwise Adjusted Rand Index matrix. Values close to 1.0 (green) indicate high agreement between two methods; values near 0 (red) indicate low agreement. The mean pairwise ARI is shown below.
-  \item[NMI Heatmap (right)] Corresponding Normalised Mutual Information matrix.
-  \item[ARI Excluding Mean Imputation] Separate heatmap showing agreement among the 9 non-Mean methods, with the improvement in mean ARI.
-  \item[Consensus Clustering] Metrics for the majority-vote consensus across all 10 methods: mean confidence score and percentage of high-confidence assessments. Includes a confidence distribution histogram.
-  \item[Method Dendrogram] Hierarchical clustering of imputation methods based on ARI distance ($1 - \text{ARI}$). Reveals which methods produce similar clustering solutions (e.g., DAE/VAE, Mean/EM).
-  \item[Per-Domain Imputation Divergence] Bar chart of the coefficient of variation (CV) of domain scores across imputation methods. Higher CV indicates domains more sensitive to imputation choice.
-\end{description}
-
-\newpage
+\textbf{Silhouette} measures separation in a specified representation, from $-1$ to $1$. Higher values indicate better separation under that geometry, without establishing a clinical category.
 
-% ── CLINICAL UNITS ──
-\subsection{Clinical Units}
+\textbf{BIC} balances fit and complexity; lower is preferred for comparable models. Higher validation log likelihood indicates better held-out density fit on a common measurement basis.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{06_clinical_units.png}
-\caption{Clinical Units page showing H3 statistics, unit and diagnosis heatmaps, and cross-tabulation.}
-\end{figure}
+\note{Group numbers and colors belong to a particular solution. Matching numbers across models do not identify the same people. Cohort z-scores have no external normative calibration.}
 
-This page examines the association between cognitive phenotypes and clinical service organisation (Hypothesis H3).
+\page{Home}
+\screen{01_home.jpg}{Home combines patient-level findings with historical assessment-level bands.}
+Read the four cards first: 7,285 index patients, the discovery/validation split, two-group repeatability of ARI 0.959, and agreement across scaling of ARI 0.243.
 
-\begin{description}  \item[H3: Statistical Association] Four metrics:
-    \begin{itemize}      \item \textbf{Chi-square} --- Test statistic for cluster--unit independence (911.3)
-      \item \textbf{Cram\'er's V} --- Effect size (0.162)
-      \item \textbf{CMH p-value} --- Cochran-Mantel-Haenszel test stratified by diagnosis group ($2.21 \times 10^{-14}$)
-      \item \textbf{Confounded} --- Whether the association is fully explained by diagnosis (No)
-    \end{itemize}
-  \item[Unit Distribution (left)] Normalised heatmap of cluster membership proportions across clinical units. Each row is a cluster; each column is a unit. Darker cells indicate higher proportions.
-  \item[Diagnosis Group Distribution (right)] Same format but cross-tabulated with diagnosis group rather than clinical unit.
-  \item[Cross-Tabulation (Counts)] Raw count table of cluster $\times$ unit assignments.
-\end{description}
+The assessment-level chart shows the original named MICE groups: 6,725 Above Average, 4,353 Globally Impaired and 6,328 Near Normal assessments. These names describe the cohort partition without diagnostic or normative validation.
 
-\textbf{Key finding:} The cluster--unit association survives stratification by diagnosis group (CMH test), so cognitive phenotype carries explanatory power for unit placement beyond diagnostic category.
+Select \ui{Explore patient-level evidence} or \ui{Patient-Level Research} to inspect the new analyses. Expand \ui{Hypothesis interpretation} for the H1--H4 summary.
 
-\newpage
+\note{Reproducible score partitions were found under specified modeling choices. The current evidence does not establish distinct clinical phenotypes.}
 
-% ── HYPOTHESIS SUMMARY ──
-\subsection{Hypothesis Summary}
+\page{Patient-Level Research: repeatability}
+\screen{11_research_repeatability.jpg}{Repeatability tab. Bars summarize independent stochastic-imputation fits.}
+Choose \ui{Patient-Level Research}, then \ui{Repeatability}. The chart compares pairwise validation assignments across twenty independently refitted imputations for two- and three-group solutions.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{07_hypothesis_summary.png}
-\caption{Hypothesis Summary page showing H1--H4 results with verdict badges and detailed metrics.}
-\end{figure}
+K-means mean agreement is ARI 0.959 with two groups and 0.935 with three. Two groups were selected in all twenty silhouette screens over two to eight groups. This search does not test a one-population alternative.
 
-This page consolidates the results of all four formal hypotheses.
+Whiskers show the 5th--95th percentiles of pairwise agreement. Pairs share fitted partitions, so these are descriptive ranges, not confidence intervals.
 
-For each hypothesis, the page displays:
-\begin{itemize}  \item A colour-coded \textbf{verdict badge} (Supported / Partially Supported / Not Supported)
-  \item \textbf{Key metrics} as large-format metric cards
-  \item \textbf{Narrative interpretation} explaining the result
-  \item \textbf{Expandable detail sections} (click to reveal additional data)
-\end{itemize}
+Expand \ui{Methods and additional stability results} for the full table. Three-group k-means agreement is approximately 0.968 across fifty patient subsamples and 1.000 across initialization checks.
 
-\begin{description}  \item[H1: Discrete, Stable Clusters] Per-method bootstrap pass rate against H1's silhouette and noise thresholds (10 of 10 methods passing); per-cluster core Jaccard for the MICE severity tiers under Hennig matching. Expandable sections for between-cluster effect sizes and pairwise cluster separation matrix.
-  \item[H2: Imputation Robustness] Mean ARI (0.710), threshold (0.50), instability correlation ($r = 0.474$), exclude-Mean ARI, consensus confidence (0.929), high-confidence percentage (86.2\%). Expandable section for per-domain imputation divergence.
-  \item[H3: Clinical Unit Association] Chi-square (911.3), Cram\'er's V (0.162), CMH association not confounded by diagnosis.
-  \item[H4: Domain vs Variable Level] Domain silhouette (0.481), variable silhouette (0.473), domain wins count (3/3: silhouette, VIF, condition number).
-\end{description}
+\note{Repeatability is conditional on the representation and missing-data model. Compare Scaling sensitivity before interpreting the groups.}
 
-\newpage
+\page{Patient-Level Research: model comparison}
+\screen{14_research_models.jpg}{Scrolled detail with selected robust-domain models and observed-data mixtures.}
+Choose \ui{Model comparison}. Use \ui{Representation} to switch between robust domains, PC1 residuals, fourteen tests and the representation without orientation. Clear \ui{Show discovery-selected models only} to inspect candidate fits.
 
-% ── NEW PATIENT ──
-\subsection{New Patient Classification}
+Two-group k-means in robust domains has discovery/validation silhouettes of 0.666/0.649. Coverage is the fraction of validation observations assigned; silhouette excludes noise observations.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{08_new_patient.png}
-\caption{New Patient Classification page showing the input form with test score fields organised by cognitive domain.}
-\end{figure}
+The lower table compares mixtures fitted to observed entries. The Student $t$ family with four degrees of freedom has BIC 67,545.6 and validation log likelihood $-5.341$. Both Student $t$ families select eight components, the upper search limit.
 
-This page provides a clinical decision-support tool for classifying new patients.
+\note{Components can approximate skewness, tails or score ceilings. Eight selected components do not establish eight clinical phenotypes. Read every score with its measurement space and selection rule.}
 
-\subsubsection{Step 1: Enter Test Scores}
+\page{Patient-Level Research: scaling sensitivity}
+\screen{12_research_scaling.jpg}{Scaling sensitivity detail. Both panels use common domain-composite axes.}
+Select \ui{Scaling sensitivity}. The robust and equal-domain three-group profiles show validation group means, with sizes in the legends. Both panels use the same vertical scale and direction-aligned composites.
 
-\begin{itemize}  \item The input form is organised by cognitive domain (Orientation, Attention, Visuoperception, Language, Memory, Executive Function).
-  \item Each field shows the variable name and its code (e.g., ``Person Orientation (OPERSONA)'').
-  \item Enter available standardised scores. \textbf{Leave fields blank} for tests not administered --- missing domains will be imputed with the population mean.
-  \item Adjust the \textbf{Neighbours (K)} slider (5--50, default 10) to control the KNN fallback classifier.
-\end{itemize}
+Membership agreement is only ARI 0.243. Robust scaling produces groups of 1,221, 185 and 51 validation patients; equal-domain scaling produces 194, 571 and 692. This is a substantial partition change using the same underlying scores.
 
-\subsubsection{Step 2: Click ``Classify Patient''}
+The leading principal component explains 63.3\% of robust-space variance and 58.5\% with equal-domain scaling. Expand \ui{Domain weighting and missingness} for weights and missingness associations.
 
-After submission, the page displays:
+\note{Group 1 in one panel is not automatically Group 1 in the other. Missingness associations do not establish causation, but show why repeatability under one imputation model is insufficient evidence of biological discreteness.}
 
-\begin{description}  \item[Top metrics] Assigned cluster, confidence percentage, number of missing domains, and variables provided.
-  \item[Confidence interpretation] Colour-coded message: green ($\geq 80\%$), blue ($\geq 50\%$), or yellow ($< 50\%$).
-  \item[Classification method] Either ``UMAP + HDBSCAN (model-based)'' if fitted models are available, or ``KNN (K=\ldots)'' as fallback.
-  \item[Radar charts] Side-by-side comparison: the new patient's profile (left) and an overlay with the assigned cluster's mean profile (right).
-  \item[Domain Score Details] Table with raw score, normalised score, cluster mean, and difference for each domain. Imputed domains are flagged.
-  \item[Most Similar Patients] Ranked table of the K nearest existing assessments, with their cluster assignments, distances, and domain scores.
-\end{description}
+\page{Patient-Level Research: trajectories}
+\screen{13_research_trajectories.jpg}{Scrolled trajectory detail with class sizes, fit criteria and the selection rule.}
+Select \ui{Trajectories}. The analysis includes 2,013 patients with at least three sufficiently measured visits across 0.25--5 years: 1,590 discovery and 423 validation patients.
 
-\textbf{Clinical use:} A strong confidence ($\geq 80\%$) with a clear severity tier (such as ``Global Impairment'') is enough to inform the intensity of rehabilitation planning. Weak confidence ($< 50\%$) means the patient is on a boundary between adjacent tiers and is a candidate for re-assessment or a more flexible treatment plan.
+Linear random-intercept/slope mixtures compare one to four classes. The dashed line marks the 5\% minimum expected class-size rule. Although fit improves with more classes, the smallest discovery classes fall to 3.9\%, 2.7\% and 1.3\% for the two-, three- and four-class fits.
 
-\newpage
+The rule therefore retains one class. The table gives BIC, validation log likelihood and the smallest expected class size for each candidate.
 
-% ── ADVANCED ANALYTICS ──
-\subsection{Advanced Analytics}
+\note{One selected class supports continuous variation under this design. It does not exclude small subgroups, nonlinear change, or different results under another model specification.}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{09_advanced_analytics.png}
-\caption{Advanced Analytics page showing feature importance (Gini and permutation), cross-validation stability, and sensitivity analysis.}
-\end{figure}
+\page{Cluster Explorer}
+\screen{02_cluster_explorer.jpg}{MICE labels in fixed t-SNE coordinates and the method-specific 3D UMAP projection.}
+Choose \ui{Cluster Explorer}, then an \ui{Imputation method}. Cards report assessment count, recovered groups, noise fraction and displayed points.
 
-This page provides three advanced analysis modules.
+The left plot uses fixed MICE t-SNE coordinates, recolored with the selected partition. The right plot uses that method's UMAP coordinates. Hover over points, zoom the 2D view, or drag to rotate the 3D view. Use the toolbar to reset.
 
-\subsubsection{Feature Importance Analysis}
+A deterministic sample of up to 5,000 rows keeps display responsive. Counts refer to the full data. Every point is an assessment; repeat visits remain separate.
 
-\begin{description}  \item[Metrics row] RF cross-validation accuracy, number of estimators, training samples, and target clusters.
-  \item[Bar charts] Side-by-side Gini importance and permutation importance for each cognitive domain. Domains with higher importance are the primary drivers of cluster differentiation.
-  \item[Raw importance values] Expandable table with numerical Gini importance, permutation mean, and permutation standard deviation.
-\end{description}
+\note{Changing imputation changes labels and UMAP coordinates. Visual separation in an embedding does not by itself demonstrate separation in the measured cognitive domains.}
 
-\subsubsection{Cross-Validation Stability}
+\page{Cognitive Profiles}
+\screen{03_cognitive_profiles.jpg}{MICE group means as domain profiles and a cohort-standardized heatmap.}
+Choose an \ui{Imputation method}, then add or remove entries in \ui{Groups}. Clearing every group displays a prompt to select at least one.
 
-\begin{description}  \item[Metrics row] Mean ARI, median ARI, standard deviation, and number of iterations.
-  \item[Distribution plots] Histograms of pairwise ARI values, cluster counts, and silhouette scores across repeated 80\% subsampling iterations.
-  \item[Additional metrics] Mean and standard deviation of cluster count and silhouette across iterations.
-\end{description}
+The line chart compares six mean domain profiles. The heatmap shows the same values numerically and by color. Scroll down for the table. Zero is the assessment cohort mean after standardization; positive and negative values indicate position within this cohort.
 
-\subsubsection{Sensitivity to Missingness Threshold}
+Use profile shape to identify domains that differ between groups. Read magnitude alongside the severity gradient and preprocessing design. Labels and colors apply to the selected model.
 
-\begin{description}  \item[Line plots] Clustering metrics (silhouette, noise fraction, number of clusters) as a function of the missingness inclusion threshold. A vertical dotted line marks the 50\% threshold used in the primary analysis.
-  \item[Results table] Number of variables, domains, clusters, silhouette, and noise fraction at each threshold.
-\end{description}
+\note{These are cohort z-scores, not external age-, education- or population-adjusted norms. Historical group names are descriptive, without diagnostic cutoffs.}
 
-\newpage
+\page{Patient Lookup}
+\screen{04_patient_lookup.jpg}{Default synthetic profile. No patient record appears in this screenshot.}
+The default \ui{Use an illustrative synthetic profile} checkbox displays six example domain values and a bar chart. The information panel identifies the example as synthetic.
 
-% ── ROBUSTNESS ──
-\subsection{Robustness}
+For a local assessment review, clear the checkbox and enter an \ui{Assessment row}, from zero through 17,405. The page displays its saved MICE band and cohort-standardized domain profile.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{10_robustness.png}
-\caption{Robustness page showing bootstrap confidence intervals, Holm-corrected pairwise H2 tests, Rubin-pooled multiple imputation, listwise-deletion baseline, and outcome-adjacent validation.}
-\end{figure}
+A row number is an assessment position, not a patient identifier. Multiple assessments may belong to one patient. This page retrieves existing assessment-level results.
 
-This page consolidates the five post-hoc robustness analyses generated by \texttt{notebooks/14\_Backlog\_Additions.ipynb} (and \texttt{14b\_Fix\_A2\_Parametric\_pvalues.ipynb} for the H2 multiple-comparison correction). It is aimed at reviewers and methodologists who want to see how much of each hypothesis result survives stricter testing.
+\note{Displayed values are standardized domain composites. Use New Profile to enter original test scores for exploratory comparison with a saved patient-level partition.}
 
-\subsubsection{A-3: Bootstrap 95\% Confidence Intervals}
+\page{New Profile: enter scores}
+\screen{08_new_profile.jpg}{Upper form. Scroll to reach the remaining tests and Compare profile.}
+Select \ui{New Profile}, then the \ui{Reference partition}: two or three groups. Enter available scores in original measurement units. Fourteen fields cover orientation, attention, visuoperception, language, memory and executive function.
 
-\begin{description}  \item[Metric cards] Point estimate and 95\% bootstrap CI for H2 mean ARI, H3 Cram\'{e}r's V, and H4 silhouette gap.
-  \item[Full table] Expandable full CI table for every key metric (H1 silhouette note, H2 mean and per-pair, H3 $\chi^2$ and $V$, H4 silhouette gap).
-\end{description}
+Leave unobserved tests blank. A blank is missing; zero is an observed score. Do not pre-standardize, reverse the timed attention score, or calculate domain averages yourself.
 
-\subsubsection{A-2: Holm-Corrected Pairwise H2 Tests}
+Scroll down and select \ui{Compare profile}. Saved discovery transformations handle clipping, direction, test scaling, bounded imputation, domain aggregation and robust domain scaling. Entered profiles do not refit the model.
 
-\begin{description}  \item[Metrics row] Number of pairs tested (45), number rejecting $H_0{:}\,\mathrm{ARI}\le 0.5$ under Holm--Bonferroni and under Benjamini--Hochberg at $\alpha = 0.05$.
-  \item[Failing-pair table] Lists the pairs that fail correction (all seven involve Predictive Mean Matching).
-  \item[Full 45-pair table] Expandable table with bootstrap mean ARI, 95\% CI, one-sided $p$-value, Holm-adjusted $p$, BH-adjusted $p$, and rejection flags.
-  \item[Forest plot] Interactive pairwise ARI with 95\% bootstrap CI; green markers pass Holm, red markers fail. Dashed vertical line at the 0.5 threshold.
-\end{description}
+\note{An empty form is rejected. Fewer than seven observed tests triggers an imputation-dependence warning. Scores outside saved discovery bounds are clipped and the affected tests are reported.}
 
-\subsubsection{A-4: Rubin-Pooled Multiple Imputation}
+\page{New Profile: read the result}
+\screen{15_new_profile_result.jpg}{Synthetic complete profile using the two-group reference model.}
+Cards show the assigned research group and observed, imputed and clipped test counts. The chart compares transformed input with the assigned center in direction-aligned domain-composite units. The table gives distances to centers in robust domain space.
 
-\begin{description}  \item[Pooled-estimates table] Per-metric pooled estimate, between-imputation standard error, and 95\% CI for H1 silhouette, H3 $\chi^2$, H3 Cram\'{e}r's V, and H4 silhouette gap, using Rubin's rules with $M = 5$ MICE draws and a $t$-distribution with $M-1$ degrees of freedom.
-  \item[Per-imputation values] Expandable table with the individual metric values for each of the 5 MICE draws.
-\end{description}
+The synthetic example produces Group 1, with fourteen observed tests, no imputation and no clipping. Distances are approximately 6.054 and 6.941. Lower distance indicates the nearer center; it is not a probability or confidence score.
 
-\subsubsection{A-5: Listwise-Deletion Baseline}
+\textbf{Reproduce the example.} Enter orientation scores 6, 5 and 20; ASPAN 5; ATMTA 60; VPIMATGES 8; each language score 10; MDIGITS 6; MRAVLT075 35; MRAVLT015 6; MRAVLT015R 12; and FEPMR 18.
 
-\begin{description}  \item[Metrics row] Number of complete cases (9{,}245 / 17{,}406), cluster count recovered by listwise deletion (2, vs.\ 3 for MICE), silhouette (0.257, vs.\ 0.526 for MICE), and ARI vs.\ MICE on the shared 9{,}245 patients (0.625).
-  \item[Full comparison table] Expandable table with the listwise vs.\ MICE metrics side by side.
-\end{description}
+\note{This is exploratory comparison with a saved research partition. Group membership and distance have no established diagnostic or treatment-planning validity.}
 
-\subsubsection{D-1: Outcome-Adjacent Validation}
+\page{Imputation Compare}
+\screen{05_imputation_compare.jpg}{Pairwise ARI and NMI for the fixed-reference assignment comparison.}
+Read the ARI matrix on the left and normalized mutual information (NMI) on the right. Higher values indicate greater agreement.
 
-\begin{description}  \item[Time since injury by phenotype] Median TSI (days) for each cluster and the Mann-Whitney U $p$-value for the difference; a descriptive statistics table is also shown.
-  \item[Within-patient phenotype stability] Count of patients with $\ge 2$ assessments, count and fraction who maintain the same phenotype across all their assessments, and count that transition between phenotypes.
-  \item[Transition direction] For the subset with exactly two assessments, the transition matrix between severity tiers; movement up the gradient (toward better function) dominates by roughly three to one.
-\end{description}
+Cards summarize mean ARI 0.710, median ARI 0.739, consensus agreement 0.929, and 86.2\% of assessments with at least 80\% agreement. Expand \ui{Method metrics and domain divergence} for supplementary tables.
 
-% ──────────────────────────────────────────────────────────────────
-\section{Technical Notes}
-% ──────────────────────────────────────────────────────────────────
+The same MICE-fitted transformation and three-group partition are applied across imputations. This evaluates assignment sensitivity with the reference structure held fixed.
 
-\subsection{Data Sources}
+\note{Consensus agreement is not a calibrated clinical probability. Patient-Level Research reports independently refitted preprocessing and clustering pipelines.}
 
-All dashboard data is loaded from pre-computed files in the \texttt{results/} directory:
+\page{Clinical Units}
+\screen{06_clinical_units.jpg}{Clinical-unit distributions within each assessment-level cognitive band.}
+Switch \ui{Cross-tabulation} between \ui{Clinical unit} and \ui{Diagnosis group}. The heatmap shows proportions within each band. Expand \ui{Counts and grouped-validation results} for counts and the predictive comparison.
 
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{l l}
+The assessment-level association has chi-square 911.3 and Cram\'er's $V=0.162$: statistically detectable but small. The patient-grouped comparison asks whether cognitive tier adds predictive information beyond diagnosis.
+
+Log-loss improvement is approximately 0.0013, with a 95\% interval from $-0.00064$ to 0.00307. Clear added predictive value is not established because the interval includes zero.
+
+\note{Association with service organization does not establish appropriate placement, treatment benefit, or absence of other confounding.}
+
+\page{Hypothesis Summary}
+\screen{07_hypothesis_summary.jpg}{Hypothesis cards with conclusions matched to their analysis designs.}
+\textbf{H1: Stability and discreteness.} Partially supported. Embedding thresholds are met; moderate resampling agreement and variable group counts leave discreteness unresolved.
+
+\textbf{H2: Imputation robustness.} Supported within a fixed rule. Mean ARI is 0.710 with the same MICE-fitted structure across imputations.
+
+\textbf{H3: Clinical-unit association.} Association supported. The effect is small; patient-grouped validation shows no clear added predictive value beyond diagnosis.
+
+\textbf{H4: Domain aggregation.} Conditioning improves. Mean VIF falls from 2.77 to 1.88; silhouette changes only from 0.473 to 0.481.
+
+\note{The patient-level extension supplies separate exploratory evidence. It does not retroactively change the original hypothesis designs.}
+
+\page{Advanced Analytics}
+\screen{09_advanced_analytics.jpg}{Feature importance for a surrogate of existing assessment-level labels.}
+\textbf{Feature importance} compares Gini and permutation importance. A 500-tree random forest reproduces the three labels with approximately 99.4\% cross-validated accuracy. This is label reproduction, not medical outcome prediction. Orientation contributes strongly.
+
+\textbf{Resampling stability} displays pairwise ARI and summary statistics. It samples assessment rows without grouping repeat visits. Patient-level resampling is reported separately.
+
+\textbf{Variable availability} plots silhouette against maximum variable missingness and lists candidate results. The threshold selects tests, not rows. A silhouette of $-1$ accompanies the no-cluster solution.
+
+\note{Importance identifies inputs that reproduce this labeling. It does not establish causes of impairment or the clinical importance of a test.}
+
+\page{Robustness}
+\screen{10_robustness.jpg}{Bootstrap intervals tab; scroll for the complete table and sampling qualification.}
+\textbf{Bootstrap intervals} resample assessments and ignore within-patient dependence. Supplementary estimates can differ from headline values because of their own sampling and preprocessing basis.
+
+\textbf{Pairwise comparisons} presents multiplicity-adjusted tests within the fixed-reference design. Repeated pairwise tests do not establish discrete phenotypes.
+
+\textbf{Missing-data sensitivity} shows descriptive summaries across five MICE draws and a complete-assessment comparison. Within-imputation variances were not estimated; intervals are not Rubin-rule confidence intervals.
+
+\textbf{Follow-up} shows time-since-injury and within-patient transitions. These lack an independent functional endpoint and do not establish causal recovery or treatment benefit.
+
+\note{Earlier multiple-imputation and complete-case comparisons used raw-test aggregation. They do not validate the standardized patient-level pipeline.}
+
+\page{Installation, data and troubleshooting}
+\subsection*{Fresh environment}
+Use Python 3.12. From the project root, create the environment:
+\begin{verbatim}
+py -3.12 -m venv .venv-research
+\end{verbatim}
+Use the environment's explicit Python path to install requirements and prepare assets:
+{\small\begin{verbatim}
+$py = ".\.venv-research\Scripts\python.exe"
+& $py -m pip install -r analysis/requirements-research.lock.txt
+& $py -m pip install -r dashboard/requirements.txt
+& $py -m dashboard.export_data
+\end{verbatim}}
+Launch with \path{./dashboard/run.ps1}. The current workspace is already prepared. The setup guide is in \path{dashboard/README.md}.
+
+\subsection*{Data contract}
+CogDash needs saved assessment-level outputs in \path{results/} and patient-level outputs in \path{results/research_2026/}. These generated directories are excluded from Git; a source checkout alone is insufficient.
+
+Asset preparation reads saved models and eligible data, verifies assignments, and writes a compact inference model, aggregate clinical-unit tables, validation profiles and source hashes into \texttt{results/dashboard/}. It does not train models. Use trusted local model files. Regenerate assets when the analysis changes, then restart CogDash.
+
+\subsection*{Common issues}
+\begin{tabular}{p{0.26\linewidth}p{0.66\linewidth}}
 \toprule
-\textbf{File} & \textbf{Contents} \\
+\textbf{Symptom} & \textbf{Action}\\
 \midrule
-\texttt{shared\_infrastructure.pkl} & UMAP embeddings, cluster labels, domain scores, t-SNE 2D \\
-\texttt{h1\_results.pkl} & Bootstrap stability, Jaccard, silhouette, effect sizes \\
-\texttt{h2\_results.pkl} & ARI/NMI means, consensus clustering, domain divergence \\
-\texttt{h3\_results.pkl} & Chi-square, Cram\'er's V, CMH test \\
-\texttt{h4\_results.pkl} & Domain vs variable silhouette, VIF, condition number \\
-\texttt{ARI\_Matrix.csv} & $10 \times 10$ pairwise ARI matrix \\
-\texttt{NMI\_Matrix.csv} & $10 \times 10$ pairwise NMI matrix \\
-\texttt{feature\_importance.pkl} & Gini and permutation importance from RF surrogate \\
-\texttt{cross\_validation\_stability.pkl} & Repeated subsampling ARI, cluster counts \\
-\texttt{sensitivity\_analysis.pkl} & Metrics across missingness thresholds \\
-\texttt{fitted\_models.pkl} & UMAP and HDBSCAN models for new patient classification \\
-\texttt{cluster\_names.pkl} & Clinical names for major clusters \\
-\texttt{backlog\_results.pkl} & Bootstrap CIs, Holm-corrected H2, Rubin-pooled MI, listwise baseline, TSI analysis \\
-\texttt{Backlog\_*.csv} & Tabular exports of the robustness analyses for the Robustness page \\
+Missing-results message & Restore saved results and run asset preparation. The setup guide lists required inputs.\\[0.4em]
+Port already occupied & Reuse the instance or launch with \texttt{-Port 8502}.\\[0.4em]
+Old values remain visible & Restart after updating results or application code.\\[0.4em]
+3D plot unavailable & Use a browser with WebGL support. The 2D view and profile tables remain available.\\[0.4em]
+Empty profile rejected & Enter at least one observed raw score. Leave missing tests blank.\\
 \bottomrule
 \end{tabular}
-\end{table}
 
-\subsection{Colour Palette}
-
-All visualisations use a colour-blind safe palette based on Wong (2011). Cluster colours are consistent across all pages.
-
-\subsection{Browser Requirements}
-
-\begin{itemize}  \item A modern browser with JavaScript enabled (Chrome, Firefox, Safari, Edge)
-  \item WebGL support is required for the 3D UMAP visualisation on the Cluster Explorer page
-  \item Recommended minimum screen resolution: 1280 $\times$ 800
-\end{itemize}
-
-\subsection{Troubleshooting}
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{p{0.4\textwidth} p{0.55\textwidth}}
-\toprule
-\textbf{Problem} & \textbf{Solution} \\
-\midrule
-``Error loading data'' on Home page & Run analysis notebooks 0--10 first to generate \texttt{results/shared\_infrastructure.pkl} \\
-\addlinespace
-Hypothesis pages show ``Run notebook X'' & Execute the corresponding hypothesis notebook (6--9) or analytics notebook (11--13) \\
-\addlinespace
-3D UMAP shows ``WebGL not supported'' & Use a browser with WebGL support; check \texttt{chrome://gpu} in Chrome \\
-\addlinespace
-New Patient classification fails & Ensure \texttt{fitted\_models.pkl} exists; if not, the KNN fallback will be used \\
-\addlinespace
-Docker container cannot find data & Verify \texttt{-v} mount paths point to the correct \texttt{results/} and \texttt{data/} directories \\
-\bottomrule
-\end{tabular}
-\end{table}
-
+\subsection*{Verification and source}
+Seven functional tests cover all eleven pages, data consistency, model assignment, input validation and key controls. Using the Python path set above, run:
+{\small\begin{verbatim}
+& $py -m unittest dashboard.tests.test_dashboard -v
+\end{verbatim}}
+Source is in \path{dashboard/}; screenshots and their capture manifest accompany this manual.
 \end{document}

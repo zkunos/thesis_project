@@ -10,11 +10,11 @@
 Firstly, the study was based in a single centre. All data were obtained from one rehabilitation unit. Therefore, the possibility of selection bias exists and extrapolation to other clinical groups cannot be made. Although all tests used have been extensively studied and have international validity, the six cognitive domains provide a common framework for the description of post-injury cognition. However, the validation of this cognitive severity structure will require multi-centre studies prior to its acceptance as a general characteristic of ABI rather than as a specific characteristic of this unit.
 
 
-Secondly, most analyses treat 17{,}406 assessments as observations rather than grouping them within the 7{,}285 patients. Repeated follow-up assessments from one patient are correlated, yet the primary clustering and assessment-level bootstrap do not model that dependence. Retaining all assessments describes the clinical records available at different recovery stages, but it may inflate apparent cluster stability and produce confidence intervals that are too narrow. The patient-grouped multinomial sensitivity analysis avoids leakage for H3; equivalent patient-level resampling or mixed-effects validation is still needed for the primary clustering results.
+Secondly, most analyses treat 17{,}406 assessments as observations rather than grouping them within the 7{,}285 patients. Repeated follow-up assessments from one patient are correlated, yet the primary clustering and assessment-level bootstrap do not model that dependence. Retaining all assessments describes the clinical records available at different recovery stages, but it may inflate apparent cluster stability and produce confidence intervals that are too narrow. The patient-grouped multinomial sensitivity analysis addresses H3. The new extension adds patient-level discovery/validation, patient subsampling and integrated random-effects trajectories, but it does not retroactively correct uncertainty intervals from the historical assessment-level analysis.
 
 
 
-Thirdly, the recovered structure is a limitation on interpretation. The major finding is a continuum rather than distinct categories. Most of the cohort fall along a single dimension representing overall cognitive severity with PC1 accounting for 56\% of the variance. The three tiers represent a discretization of this continuum. Therefore, the tiers should not be regarded as phenotypic entities with well defined boundaries. Tier count will be influenced by both the resolution of clustering and the proportion of missing data. Assessments located near tier boundaries should be viewed cautiously. Ultimately, a continuous severity score may be more representative than discrete tiers (Section~\ref{sec:future}).
+Thirdly, the recovered structure is a limitation on interpretation. The historical findings are consistent with a broad severity gradient, while the extension shows that reproducible partitions remain sensitive to representation. The available analyses do not establish a unique categorical structure. Most of the cohort fall along a single dimension representing overall cognitive severity with PC1 accounting for 56\% of the variance. The three tiers represent a discretization of this continuum. Therefore, the tiers should not be regarded as phenotypic entities with well defined boundaries. Tier count will be influenced by both the resolution of clustering and the proportion of missing data. Assessments located near tier boundaries should be viewed cautiously. Ultimately, a continuous severity score may be more representative than discrete tiers (Section~\ref{sec:future}).
 
 
 
@@ -38,11 +38,11 @@ Additionally, a structured co-occurrence of missingness may provide some reassur
 
 
 
-Another related caveat concerns the Tier-1 filter that removes assessments where more than half of their values are missing. Upon review (Section~\ref{sec:robustness}), removed records averaged only 0.8 out of 14 completed tests and were highly similar demographically to retained records. Therefore, the Tier-1 filter likely removed primarily empty administrative records rather than an undetected severely impaired group. Still, due to missing data issues, the cognitive severity of removed records cannot be assessed directly, and only the 30-70\% threshold sensitivity analysis bounds the potential effect of this decision.
+Assessment eligibility required at least one observed retained test, allowing records with substantial missingness to enter the analysis. The stricter seven-observed-test sensitivity retained 6{,}602 index patients and gave ARI 0.903 against the reference three-group assignments on shared validation patients. This supports some robustness to sparse-record exclusion, while leaving the unobserved cognitive status of excluded encounters unresolved.
 
 
 
-Finally, the pipeline imputes and then clusters, whereas model-based alternatives exist, including latent profile analysis via full-information maximum likelihood (FIML). The Gaussian-mixture baseline in Section~\ref{sec:robustness} provides only an approximate model-based comparison because it is fitted after imputation rather than directly estimating profiles from incomplete data. Its BIC decreased through the largest tested solution, \(k=6\), which means that no optimum was identified within the tested range; this result does not itself distinguish a continuum from a model requiring more components. Thus, developing a formal latent profile analysis that uses FIML and evaluates a wider class range is another viable area of future development.
+The new observed-data mixtures integrate missing coordinates directly, addressing a limitation of the historical impute-then-cluster baseline. However, their missingness assumptions remain ignorable, their continuous distributions approximate bounded and discrete scores, and their dispersion floor regularizes singular solutions. Four of 32 fits failed the requested convergence tolerance, and both selected $t$ families reached the eight-component boundary. A unique class count therefore remains unidentified. Skew-$t$ and multivariate contaminated longitudinal models were not implemented.
 
 
 
@@ -56,6 +56,11 @@ Finally, HDBSCAN introduces sensitivity to hyperparameters. I conducted an exten
 
 Lastly, computational cost presents a fourth practical limit. Running UMAP + HDBSCAN fifty times per method is computationally intensive; however, due to modularity allowing for parallel processing, runtime costs were manageable on a typical consumer-grade laptop.
 
+
+The extension also has specific validation limits. Feature selection was inherited from the historical full cohort. Equal-domain scaling was introduced after inspecting discovery variances, so it is an exploratory sensitivity. High ARI across bounded Bayesian imputations remains conditional on that model and does not resolve MNAR. Test availability is associated with cluster membership, and neither domain weighting is clinically validated. The Gaussian-copula reference is estimated from these data and resamples missingness independently of values; its tail fractions are descriptive rather than an omnibus calibrated significance test. The separated positive control is not a power study, and a calibrated Silverman test was not implemented. Consensus summaries formed from validation assignment vectors are not separately validated prediction models.
+
+Finally, the earlier supplementary multiple-imputation and complete-case comparisons used raw-test aggregation, whereas the patient-level extension aligns test direction and scale before aggregation. The controlled comparisons quantify sensitivity to this difference but do not recalculate all earlier statistics under the standardized-domain specification. Those earlier statistics therefore cannot validate the patient-level preprocessing pipeline.
+
 \section{Future Directions}\label{sec:future}
 Four potential areas for future work arise from the findings and limitations described above.
 
@@ -65,7 +70,7 @@ Firstly, modeling the continuum directly. The most obvious implication of the fi
 
 
 
-Secondly, longitudinal clustering represents an obvious next step. Applying the developed pipeline to assessments collected at regular time points would allow researchers to describe how individual patients' positions on the cognitive-severity gradient evolve over time as part of their recovery trajectories: i.e., whether patients' initial levels predict longer-term outcomes and whether recovery rates differ depending on severity level \parencite{ponsford2014longitudinal}. Severity-based models describing recovery trajectories would represent much more valuable inputs to clinicians determining prognosis and rehabilitation-intensity decisions than cross-sectionally-derived assessments.
+Secondly, longitudinal work should extend the implemented linear random-effects mixture. Applying the developed pipeline to assessments collected at regular time points would allow researchers to describe how individual patients' positions on the cognitive-severity gradient evolve over time as part of their recovery trajectories: i.e., whether patients' initial levels predict longer-term outcomes and whether recovery rates differ depending on severity level \parencite{ponsford2014longitudinal}. The present trajectory subset is selected by visit availability and follow-up span; nonlinear change, informative dropout and external functional outcomes remain to be assessed. Its results do not yet establish prognostic or rehabilitation-planning utility.
 
 
 

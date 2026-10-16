@@ -7,7 +7,7 @@
 \section{Data Description}
 Data originates from a clinical neuropsychology database managed by a rehabilitation center. Raw data includes 22,075 records from 8,739 unique individuals with repeated follow-up assessments. Each assessment consists of 31 features relating to demographics/administrative details/injury specifics/neuropsychological results across six cognitive domains: Orientation/Attention/Visuospatial Perception/Language/Memory/Executive Function. Following Tier-1 filtering (described in Section~\ref{sec:filtering}), the analyzed dataset contains 17{,}406 assessments from 7{,}285 subjects.
 
-The primary unit of analysis is the assessment rather than the patient. Repeated follow-up assessments are retained as separate rows in the clustering, imputation-comparison, and assessment-level bootstrap analyses; they are not first aggregated within the 7{,}285 patients. This design preserves clinically observed change over time, but it does not account for within-patient dependence and may make stability estimates appear more precise than estimates obtained from a patient-grouped resampling design. The multinomial sensitivity analysis in Section~\ref{sec:h3_results} is the principal exception because its training, test, and bootstrap samples are grouped by patient.
+The historical primary unit of analysis is the assessment rather than the patient. The extension in Section~\ref{sec:extension_methods} instead uses one index assessment per patient and retains the patient split for trajectory modeling. Repeated follow-up assessments are retained as separate rows in the clustering, imputation-comparison, and assessment-level bootstrap analyses; they are not first aggregated within the 7{,}285 patients. This design preserves clinically observed change over time, but it does not account for within-patient dependence and may make stability estimates appear more precise than estimates obtained from a patient-grouped resampling design. The multinomial sensitivity analysis in Section~\ref{sec:h3_results} is the principal exception because its training, test, and bootstrap samples are grouped by patient.
 
 
 
@@ -22,19 +22,9 @@ Additionally, measures fall along varying scales (standardized z-scores/scaled s
 All data have undergone deidentification according to established standards for protecting patient privacy.
 
 \section{Tier 1 Filtering}\label{sec:filtering}
-Since many variables in the dataset exhibit large amounts of missingness, I performed filtering before imputation/clustering. In general, the primary analysis employs a fifty-percent filter. Any variable that exhibits more than fifty percent missingness is eliminated; any record exhibiting more than fifty percent missingness among remaining variables is eliminated.
+Variable selection used a 50\% missingness threshold and restricted the analysis to the 14 cognitive tests listed below. Assessment eligibility required at least one observed value among these retained tests. The 50\% threshold therefore applies to variable selection, while assessment eligibility follows the separate minimum-observation rule.
 
-
-
-This choice represents a compromise between maximizing data retention versus minimizing the amount of missingness placed on imputation models. While employing a seventy-percent filter would retain significantly more records/variables; this would increase the likelihood that artificial structure exists in the imputed data. Conversely, employing a thirty-percent filter would likely produce a clean matrix; however, it would eliminate substantially more clinically relevant records while reducing analytical capability.
-
-
-
-I perform sensitivity analyses utilizing filters between thirty percent and seventy percent in Section~\ref{sec:robustness}.
-
-
-
-Following application of this filter and elimination of assessments without documented cognitive testing, the dataset contains fourteen neuropsychological variables; seventeen thousand four hundred-six assessments from seven thousand two-hundred-eighty-five patients.
+The resulting matrix contains 17{,}406 assessments from 7{,}285 patients. Of these, 16{,}553 assessments contain at least seven observed tests; 853 contain fewer. The historical variable-threshold sensitivity is summarized in Section~\ref{sec:robustness}. A separately defined patient-level sensitivity to requiring seven observed tests is reported in Section~\ref{sec:extension_results}. A more restrictive row rule changes the cohort and should not be described as the rule that generated the historical matrix.
 
 \begin{table}[ht]
 \caption{Eligible neuropsychological variables after Tier~1 filtering, organised by cognitive domain.}
@@ -59,7 +49,7 @@ Executive Function & \texttt{FEPMR} & 1 \\
 
 \section{Imputation Methods}\label{sec:imputation}
 
-The next part of this section presents the ten different types of multiple imputation methods, grouped into the five categories outlined previously. For clustering performance, both silhouette score and number of clusters \(k\), I chose the optimal combination of UMAP+HDBSCAN using the domain-level features. The silhouette value calculated here is based only on the high-density region clustered by HDBSCAN before performing the \(k\)-nearest-neighbour noise-assignment process. Consequently, the silhouette value is somewhat higher than reported in the literature for fully covered assessments (see Section~\ref{sec:h1_results}); for example, MICE achieved 0.598 in the high-density area before reassignment and 0.526 when assessed across all assigned cases.
+The next part of this section presents ten imputation methods, grouped into the five categories outlined previously; these are not all multiple-imputation procedures. For clustering performance, both silhouette score and number of clusters \(k\), I chose the optimal combination of UMAP+HDBSCAN using the domain-level features. The silhouette value calculated here is based only on the high-density region clustered by HDBSCAN before performing the \(k\)-nearest-neighbour noise-assignment process. Consequently, the silhouette value is somewhat higher than reported in the literature for fully covered assessments (see Section~\ref{sec:h1_results}); for example, MICE achieved 0.598 in the high-density area before reassignment and 0.526 when assessed across all assigned cases.
 
 The two deep learning methods required additional training choices, so their technical details are specified here. For the denoising autoencoder (DAE), deliberately corrupted inputs were generated by masking the observed values. The corruption mask was sampled as follows:
 
@@ -131,7 +121,7 @@ A set of cognitive-domain-level features was created to represent aggregate vers
 Administration-frequency-weighted averages of variables representing each domain were then used as domain scores. Administration-frequency weights (\(w_j = 1 - r_j\), where \(r_j\) represents the missingness rate) were assigned to each variable \(j\) and normalised within domains. This weighting gives less influence to sparsely administered measures, whose composite contribution would otherwise depend more heavily on imputed values, and gives more influence to measures observed more often in routine practice. The weights should not be interpreted as psychometric reliability estimates: they do not quantify internal consistency, test-retest reliability, or measurement error. By reducing dimensionality from 14 individual variables to six domain-level scores, the number of variables available for distance-based algorithms is reduced, improving feature-space geometry. Furthermore, creating domain-level profiles facilitates clinical conceptualisation of cognitive deficit in relation to cognitive domains rather than individual variables. Some detail is sacrificed. For example, two patients could obtain equal average memory scores while differing in immediate versus delayed recall. Whether there is sufficient rationale for sacrificing this detail in exchange for reduced redundancy and improved interpretability is assessed in Hypothesis H4.
 
 \section{UMAP + HDBSCAN Pipeline}\label{sec:pipeline}
-Figure~\ref{fig:pipeline_diagram} shows the end-to-end process from imputed data to final cluster assignment. Prior to performing dimensional reduction using UMAP/HDBSCAN, I apply robust scaling using the median and interquartile range to reduce influence of floor and ceiling effects common in neuropsychological assessment \parencite{bellio2020analyzing,pinsky2023mad}. Floor effects occur when severely impaired patients accumulate at minimum values for an assessment tool \parencite{pinsky2023mad}, whereas ceiling effects occur when patients with no impairments accumulate at maximum values \parencite{pinsky2023mad}. Scale-free metrics like median and inter-quartile ranges help mitigate these effects. For each of the twenty imputed datasets (ten methods $\times$ two feature representations), I perform UMAP followed by HDBSCAN. Like other machine learning algorithms that rely heavily on initial conditions (in this case, random initialization), UMAP is stochastic. Therefore, a single embedding could capture variability due to either random initialization or geometric properties of the data. Therefore, I repeat each hyperparameter combination ten times and choose the embedding with highest silhouette score (based on initial HDBSCAN clustering).
+Figure~\ref{fig:pipeline_diagram} shows the end-to-end process from imputed data to final cluster assignment. Prior to performing dimensional reduction using UMAP/HDBSCAN, I apply robust scaling using the median and interquartile range to reduce influence of floor and ceiling effects common in neuropsychological assessment \parencite{bellio2020analyzing,pinsky2023mad}. Floor effects occur when severely impaired patients accumulate at minimum values for an assessment tool \parencite{pinsky2023mad}, whereas ceiling effects occur when patients with no impairments accumulate at maximum values \parencite{pinsky2023mad}. Median and interquartile-range scaling reduces sensitivity to extreme observations but does not remove floor or ceiling masses. If a domain has a narrow central range, this scaling can amplify its tails; Section~\ref{sec:extension_results} quantifies that sensitivity. For each of the twenty imputed datasets (ten methods $\times$ two feature representations), I perform UMAP followed by HDBSCAN. Like other machine learning algorithms that rely heavily on initial conditions (in this case, random initialization), UMAP is stochastic. Therefore, a single embedding could capture variability due to either random initialization or geometric properties of the data. Therefore, I repeat each hyperparameter combination ten times and choose the embedding with highest silhouette score (based on initial HDBSCAN clustering).
 
 \begin{center}
 \centering
@@ -293,7 +283,7 @@ where \(R_j^2\) denotes the coefficient of determination when regressing \(j\) o
 \subsection{Implementation}
 
 \begin{sloppypar}
-All analyses were implemented in Python (version 3.13).
+The historical analyses were implemented in Python (version 3.13); the patient-level extension uses a separate pinned Python 3.12 environment.
 Imputation used
 \texttt{scikit-learn} (KNN, NMF),
 \texttt{fancyimpute} (SoftImpute, EM),
@@ -304,8 +294,10 @@ UMAP used \texttt{umap-learn};
 HDBSCAN used the \texttt{hdbscan} library.
 Statistical tests used \texttt{scipy.stats} and \texttt{statsmodels}.
 Validation metrics used \texttt{scikit-learn}.
-The full source code, notebooks, and dashboard are available at
+The analysis code and dashboard are available at
 \url{https://github.com/zkunos/thesis_project}.
 \end{sloppypar}
 
 %----------------------------------------------------------------------------------------
+
+\input{Chapters_short/ClusteringExtensionMethods}

@@ -13,17 +13,26 @@ The source extract contains 22,075 assessments from 8,739 patients. Following Ti
 
 The primary unit of analysis is the assessment. Repeated follow-up assessments are retained as separate rows in most clustering and bootstrap analyses rather than grouped within patients. Consequently, within-patient dependence may inflate apparent stability and narrow assessment-level uncertainty intervals. The H3 multinomial sensitivity analysis is patient-grouped.
 
+The executed [2026 clustering extension](report/research/clustering_results_2026.md) adds patient-level discovery and validation, incomplete-data mixtures, independently refitted imputation ensembles, and longitudinal models. It finds reproducible partitions but substantial sensitivity to scaling and test availability. The historical results below remain separate from this extension.
+
 ## Project Structure
 
 ```
-├── notebooks/           # Jupyter analysis pipeline (0-14b plus executed copies)
-├── analysis/            # Reproducible scripts for report corrections and figures
+├── notebooks/           # Historical pipeline 0-14b and new research entry points 15-17
+├── analysis/            # Shared preprocessing, clustering experiments, tests and reporting
+├── dashboard/           # CogDash application, saved-model inference, and functional tests
 ├── data/                # Input data and imputed CSV outputs
 ├── results/             # Generated tables, assignments, and serialized results
 ├── report/              # LaTeX thesis, figures, references, and final PDF
 ├── presentation/        # Defence decks, transcripts, study cards, and PDFs
 └── outputs/             # Generated presentation artifacts
 ```
+
+## CogDash
+
+The local Streamlit dashboard presents the saved assessment-level findings alongside the patient-level clustering results. It includes independent-imputation repeatability, model comparisons, scaling sensitivity, trajectories, and exploratory assignment with the saved discovery-fitted model.
+
+From the repository root, run `./dashboard/run.ps1`, then open [CogDash locally](http://127.0.0.1:8501). See [dashboard setup](dashboard/README.md) for dependencies and required local results. The updated [user manual](presentation/cogdash_manual.pdf) includes fresh screenshots of the recreated interface. Research group assignments have no established diagnostic or treatment-planning validity.
 
 ## Notebook Execution Order
 
@@ -49,6 +58,11 @@ NB0 → NB1 + NB2 (parallel) → NB3 → NB4 → NB5 → NB6,7,8,9 (parallel) �
 | 13 | Sensitivity Analysis |
 | 14 | Additional Robustness Checks — assessment bootstrap (A-3), Holm correction (A-2), across-imputation sensitivity (A-4), listwise baseline (A-5), outcome-adjacent validation (D-1) |
 | 14b | Fix A-2 — replaces empirical bootstrap p-values with parametric one-sided p-values, regenerates `Backlog_H2_Holm.csv` |
+| 15 | Patient-level original-space benchmarks, incomplete-data mixtures and sensitivity checks |
+| 16 | Independent imputation ensembles, consensus and scaling sensitivity |
+| 17 | Patient trajectory models and consolidated research results |
+
+NB15 → NB16 → NB17 form a separate extension. Use the [research runner and setup instructions](analysis/README.md) to reproduce it. NB5 and NB14 now share direction-aligned, standardized domain construction; their stale cell outputs were cleared. Historical saved NB14 results predate this correction and require rerunning before replacement in the thesis.
 
 ## Imputation Methods
 
@@ -88,9 +102,12 @@ The Gaussian-mixture baseline tested `k=2` through `k=6`. BIC decreased through 
 ```bash
 cd report
 pdflatex -interaction=nonstopmode -halt-on-error main_short.tex
+bibtex main_short
+pdflatex -interaction=nonstopmode -halt-on-error main_short.tex
+pdflatex -interaction=nonstopmode -halt-on-error main_short.tex
 ```
 
-Run `pdflatex` twice after structural edits to resolve cross-references. The compiled thesis is available at `report/main_short.pdf`.
+This sequence updates the bibliography and resolves cross-references after structural edits. The compiled thesis is available at `report/main_short.pdf`. The added vector figures can be reproduced from the saved experiment with `.venv-research/Scripts/python.exe report/research/render_thesis_figures.py` from the repository root.
 
 ## Defence Materials
 
@@ -99,6 +116,16 @@ The `presentation/` directory contains the professional 20-minute defence deck, 
 - `thesis_defense_20min_professional.pptx`
 - `thesis_defense_20min_transcript.pdf`
 - `thesis_defense_study_cards.pdf`
+
+## Recent Clustering Research
+
+The [15 October 2026 research assessment](report/research/clustering_research_2026.md) evaluates seven articles published within the preceding year. The [original experiment protocol](report/research/clustering_experiment_protocol_2026.md), [executed results and limitations](report/research/clustering_results_2026.md), and [BibTeX references](report/research/clustering_recent_references.bib) accompany it.
+
+The extension uses 5,828 discovery and 1,457 validation patients. Across 20 stochastic imputations, k-means selects two groups in every training-silhouette screen; fixed three-group assignments have mean pairwise validation ARI 0.935. However, switching from robust to equal-domain scaling changes three-group assignments substantially (ARI 0.243), and test availability differs between groups. These results do not establish a unique set of discrete phenotypes.
+
+The thesis source now integrates the extension into the abstract, Chapter 3 methodology, Chapter 4 results, discussion, limitations and conclusions. The added source sections are `ClusteringExtensionMethods.tex` and `ClusteringExtensionResults.tex`, included from the existing chapters. Earlier supplementary outputs are explicitly identified as predating the preprocessing correction.
+
+The historical eligible matrix retains rows with **at least one observed retained test**. Its 50% missingness threshold applies to variable selection. The new analysis reports a separate sensitivity restricted to at least seven observed tests. Generated research outputs are in `results/research_2026/`; eight numerical validation tests pass.
 
 ## Requirements
 

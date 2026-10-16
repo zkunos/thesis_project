@@ -38,7 +38,8 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{references.bib} % The filename of the bibliography
+\addbibresource{references.bib}
+\addbibresource{research/clustering_recent_references.bib} % The filename of the bibliography
 
 % --- Citation style: square-bracket author-year with "et al." (match reference TFM) ---
 \ExecuteBibliographyOptions{maxcitenames=2,mincitenames=1}
@@ -97,7 +98,7 @@ headsepline, % Uncomment to get a line under the header
 \subject{Data Science} % Your subject area
 \keywords{acquired brain injury, cognitive phenotyping, clustering, UMAP, HDBSCAN, missing data imputation, neuropsychology} % Keywords
 \university{\href{http://www.ub.edu}{Universitat de Barcelona}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://department.university.com}{}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\department{} % No department URL supplied.
 \group{\href{http://researchgroup.university.com}{}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{\href{http://mat.ub.edu}{Facultat de Matemàtiques i Informàtica}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
@@ -134,13 +135,13 @@ headsepline, % Uncomment to get a line under the header
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Author:}\\
-\href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+\authorname
 \end{flushleft}
 \end{minipage}
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright} \large
 \emph{Supervisor:} \\
-\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\supname
 \end{flushright}
 \end{minipage}\\[3cm]
  
@@ -166,23 +167,15 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abstract}[]
 \addchaptertocentry{\abstractname}
-Cognitive performance post Acquired Brain Injury (ABI) has been identified as one of the greatest predictors of long term functional outcome. However, the patients who need intensive rehabilitation are usually the ones who will be unable to complete a full neuropsychological battery. Therefore, missingness is informative in this context. Fatigue, confusion, motor limitations, test tolerance, and examiner judgment can limit the testing completed. As a result, retaining healthier assessments will favorably bias the selection of patients included in analyses and exclude the most impaired patients. While broad diagnostic categories and injury severity bands provide some way to group patients based upon similar characteristics, they do not capture the necessary variability required to create personalized rehabilitation plans.
+Neuropsychological assessments after acquired brain injury (ABI) are often incomplete. This thesis examines whether clustering recovers reproducible cognitive structure while accounting for sensitivity to missing-data handling and feature construction.
 
+The historical analysis includes 17{,}406 assessments from 7{,}285 patients, using 14 tests across six domains and ten imputation methods. Its UMAP+HDBSCAN solution yields three descriptive severity bands. A fixed-reference comparison across imputations gives mean adjusted Rand index (ARI) 0.710. Clinical-unit association is small, without clear added patient-grouped predictive value beyond the broad diagnostic grouping. These results do not establish sharply discrete phenotypes.
 
+An exploratory extension uses the earliest eligible assessment per patient, with 5{,}828 discovery and 1{,}457 validation patients. Discovery-fitted preprocessing supports original-space clustering, observed-data robust mixtures, 20 independently refitted stochastic imputations, 50 patient subsamples and mixed-effects trajectories.
 
-This dissertation addresses these concerns through using a combination of missing-data imputation and unsupervised clustering. Complete assessments are retained and cognitive structures are inferred directly from test data. The dependency of the cognitive structures created by the selected imputation strategy is explicitly assessed.
+Two-group k-means is selected in all 20 imputation screens, with mean pairwise validation ARI 0.959; three-group k-means gives ARI 0.935. Changing from robust to equal-domain scaling nevertheless changes three-group assignments substantially (ARI 0.243), and test availability differs between groups. Robust $t$ mixtures improve observed-data fit but prefer eight components, the search boundary. Among 2{,}013 longitudinally eligible patients, multi-class trajectories introduce groups below the specified 5\% size threshold.
 
-
-
-Data were collected from 17{,}406 neuropsychological evaluations performed on 7{,}285 patients with ABI. Three cognitive-severity bands were identified: Above Average (38.6\%, $n = 6{,}725$); Near Normal (36.4\%, $n = 6{,}328$); and Global Impairment (25\%, $n = 4{,}353$). The main difference between these bands relates to the general level of cognition instead of profile shape. All six cognitive domains vary together, and one severity factor explains 56\% of their common variance. Hypothesis 1 was therefore partially supported: reproducible severity bands were recovered, but the evidence did not support sharply discrete phenotypes. Within this domain-aggregated density-clustering framework, there is no evidence to suggest an attention-specific dissociation exists.
-
-
-
-The cognitive-severity assignments were internally consistent across imputation strategies under the assumed missing-data framework. Addressing Hypothesis 2, all ten imputation strategies met the pre-specified silhouette and noise criteria, although per-cluster bootstrap matching was only moderate and cluster count varied across methods; in the shared-pipeline analysis the average adjusted Rand index (ARI) between imputation strategies was 0.71, and the primary multiple imputation by chained equations (MICE) strategy had a full-coverage silhouette of 0.526 after noise reassignment. Supporting Hypothesis 3, tier assignment was associated with clinical unit (Cramér's $V=0.16$), though a patient-grouped multinomial sensitivity analysis did not show a clear improvement in out-of-sample unit classification once tier was added to the broad diagnostic grouping. Supporting Hypothesis 4, domain-level aggregation reduced redundancy and improved numerical conditioning over variable-level clustering, decreasing mean variance inflation factor (VIF) from 2.8 to 1.9 and condition number from 62 to 12, while cluster separation changed only marginally. Taken together, these findings support the use of the pipeline for severity-based triage as an initial step in personalized rehabilitation planning.
-
-
-
-CogDash is a proof-of-concept interactive dashboard developed to demonstrate the pipeline and provide severity tier assignments with consensus confidence for research purposes. The code, notebooks and dashboard are accessible at \url{https://github.com/zkunos/thesis_project}.
+The evidence supports reproducible cognitive score groupings conditional on representation and imputation assumptions. Distinct clinical phenotypes and treatment utility remain unconfirmed. Independent outcomes and external cohorts are needed before clinical use. CogDash presents both analysis designs for research; analysis code is available at \url{https://github.com/zkunos/thesis_project}.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -205,6 +198,8 @@ According to the guidelines provided by the Facultad de Matemàtiques i Informà
 
 
 Throughout my research I utilized Claude (Anthropic) as an AI-assistant tool to improve my research workflow.
+
+For the October 2026 clustering extension, Codex (OpenAI) also assisted with literature assessment, implementation, numerical checks, results synthesis and integration into the report. These contributions do not replace the author's responsibility for reviewing the code, evidence and interpretation.
 
 
 
