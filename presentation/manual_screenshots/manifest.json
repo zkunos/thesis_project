@@ -20,8 +20,8 @@
       "state": "MICE; deterministic 5000-assessment display sample",
       "width": 1280,
       "height": 720,
-      "date": "2026-10-15",
-      "sha256": "8adec9c595d194bd5fb249919b6afcf232d9b095cf5fd9b529c8e6114a1a6ced"
+      "date": "2026-10-16",
+      "sha256": "8ed20773306747e1ed7d2164ed2ad8f6e1d9fd5ec9300bd2afb5e5d848f91efe"
     },
     {
       "file": "03_cognitive_profiles.jpg",
@@ -29,8 +29,8 @@
       "state": "MICE; all three groups",
       "width": 1280,
       "height": 720,
-      "date": "2026-10-15",
-      "sha256": "81576bad22edc4d917f6d1fbbb71cc588b44725a2ca405152ca63060b1889761"
+      "date": "2026-10-16",
+      "sha256": "1de41a2d759e738171a6bf73cdbabc46a3e3fcb243fdc43f9eab4994d69c0987"
     },
     {
       "file": "04_patient_lookup.jpg",
@@ -93,7 +93,7 @@
       "width": 1280,
       "height": 720,
       "date": "2026-10-16",
-      "sha256": "a667fd33e64aa7728de2e8ff468e08f49dd7194f71219887202d656e260f35aa"
+      "sha256": "4d7271b76dc606029ce5373e215548ba2cec6d203fd61516388519b97263c9be"
     },
     {
       "file": "11_research_repeatability.jpg",
@@ -159,8 +159,8 @@
   },
   "source_hashes": {
     "dashboard/Home.py": "be32fcc03eeb4b451b8f558ee204c8ae863e0128016cf9c4fd692011d7f3bfd8",
-    "dashboard/views.py": "0f27d5208c29ec01a95b6fa92ad6f9f76829a8d1b3048766a4e0d544fb200c57",
-    "dashboard/data.py": "5ff6f2b5cd57996a285c7f71f00a7848941b6dc7a6383d6875425a68d7b0ad98",
+    "dashboard/views.py": "b50085498c5a30df907ba2d59af8cacc4a8b24b5203bafb0fa1f6d59e717df3a",
+    "dashboard/data.py": "44b220aa9ad4c0b0f2f146b23109603dbdfcc7f175258d62c900af72fd5a4766",
     "results/dashboard/source_manifest.json": "7ff98dc1cdf67a932f7b414c059c08d74286df4d98a077433fb9aaf9df7288c2"
   }
 }

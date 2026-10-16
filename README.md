@@ -24,7 +24,7 @@ The executed [2026 clustering extension](report/research/clustering_results_2026
 ├── data/                # Input data and imputed CSV outputs
 ├── results/             # Generated tables, assignments, and serialized results
 ├── report/              # LaTeX thesis, figures, references, and final PDF
-├── presentation/        # Defence decks, transcripts, study cards, and PDFs
+├── presentation/        # Defence deck, PDF export, and CogDash manual
 └── outputs/             # Generated presentation artifacts
 ```
 
@@ -111,11 +111,7 @@ This sequence updates the bibliography and resolves cross-references after struc
 
 ## Defence Materials
 
-The `presentation/` directory contains the professional 20-minute defence deck, transcript, study cards, and supporting PDF exports. Key files include:
-
-- `thesis_defense_20min_professional.pptx`
-- `thesis_defense_20min_transcript.pdf`
-- `thesis_defense_study_cards.pdf`
+The `presentation/` directory contains the editable [defence deck](presentation/thesis_defense_severity_gradient.pptx), its [PDF export](presentation/thesis_defense_severity_gradient.pdf), and the CogDash manual. The deck summarizes the assessment-level analysis and includes the patient-level findings in its backup slides; the report and dashboard present the full extension.
 
 ## Recent Clustering Research
 
@@ -129,7 +125,7 @@ The historical eligible matrix retains rows with **at least one observed retaine
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.12 for the patient-level analysis and CogDash, with the pinned dependencies in `analysis/requirements-research.lock.txt` and `dashboard/requirements.txt`. Historical analyses were produced in a separate Python 3.13 environment.
 - Key packages: pandas, numpy, scikit-learn, umap-learn, hdbscan, matplotlib, seaborn, plotly, streamlit, torch, statsmodels, openpyxl
 
 ## License

@@ -4,6 +4,7 @@ os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 from pathlib import Path
 import re
+import json
 import unittest
 import numpy as np
 import pandas as pd
@@ -48,6 +49,24 @@ class ResultsTests(unittest.TestCase):
 
 
 class InterfaceTests(unittest.TestCase):
+    def test_group_colors_and_heatmap_scale_survive_filtering(self):
+        view = app("profiles")
+        def specs():
+            return [json.loads(element.proto.spec) for element in view.get("plotly_chart")]
+        original_line, original_heat = specs()
+        original_colors = {trace["name"]: trace["line"]["color"] for trace in original_line["data"]}
+        view.multiselect[0].set_value([2, 0]).run()
+        filtered_line, filtered_heat = specs()
+        for trace in filtered_line["data"]:
+            self.assertEqual(trace["line"]["color"], original_colors[trace["name"]])
+            self.assertEqual(trace["line"]["color"], data.group_colors()[trace["name"]])
+        for bound in ["cmin", "cmax"]:
+            self.assertEqual(original_heat["layout"]["coloraxis"][bound], filtered_heat["layout"]["coloraxis"][bound])
+        explorer = app("explorer")
+        for element in explorer.get("plotly_chart"):
+            for trace in json.loads(element.proto.spec)["data"]:
+                self.assertEqual(trace["marker"]["color"], original_colors[trace["name"]])
+
     def test_all_pages_render(self):
         for name, function in views.PAGES.items():
             with self.subTest(page=name):

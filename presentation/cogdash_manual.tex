@@ -105,7 +105,7 @@ The patient-level analysis uses the earliest eligible assessment per patient. A 
 \screen{01_home.jpg}{Home combines patient-level findings with historical assessment-level bands.}
 Read the four cards first: 7,285 index patients, the discovery/validation split, two-group repeatability of ARI 0.959, and agreement across scaling of ARI 0.243.
 
-The assessment-level chart shows the original named MICE groups: 6,725 Above Average, 4,353 Globally Impaired and 6,328 Near Normal assessments. These names describe the cohort partition without diagnostic or normative validation.
+The assessment-level chart shows the original named MICE groups: 6,725 Above-Average, 4,353 Global Impairment and 6,328 Near-Normal assessments. These names describe the cohort partition without diagnostic or normative validation.
 
 Select \ui{Explore patient-level evidence} or \ui{Patient-Level Research} to inspect the new analyses. Expand \ui{Hypothesis interpretation} for the H1--H4 summary.
 
@@ -169,7 +169,7 @@ Choose an \ui{Imputation method}, then add or remove entries in \ui{Groups}. Cle
 
 The line chart compares six mean domain profiles. The heatmap shows the same values numerically and by color. Scroll down for the table. Zero is the assessment cohort mean after standardization; positive and negative values indicate position within this cohort.
 
-Use profile shape to identify domains that differ between groups. Read magnitude alongside the severity gradient and preprocessing design. Labels and colors apply to the selected model.
+Use profile shape to identify domains that differ between groups. Read magnitude alongside the severity gradient and preprocessing design. Each group keeps its color when the selection changes and across Home, Cluster Explorer and Cognitive Profiles. Colors still apply only to the selected model.
 
 \note{These are cohort z-scores, not external age-, education- or population-adjusted norms. Historical group names are descriptive, without diagnostic cutoffs.}
 
@@ -241,13 +241,13 @@ Log-loss improvement is approximately 0.0013, with a 95\% interval from $-0.0006
 
 \textbf{Resampling stability} displays pairwise ARI and summary statistics. It samples assessment rows without grouping repeat visits. Patient-level resampling is reported separately.
 
-\textbf{Variable availability} plots silhouette against maximum variable missingness and lists candidate results. The threshold selects tests, not rows. A silhouette of $-1$ accompanies the no-cluster solution.
+\textbf{Variable availability} plots silhouette against maximum variable missingness and lists candidate results. The threshold selects tests, not rows. The 30\% fit recovers no clusters, so its silhouette is undefined and omitted from the plot; the saved table uses $-1$ as a sentinel.
 
 \note{Importance identifies inputs that reproduce this labeling. It does not establish causes of impairment or the clinical importance of a test.}
 
 \page{Robustness}
 \screen{10_robustness.jpg}{Bootstrap intervals tab; scroll for the complete table and sampling qualification.}
-\textbf{Bootstrap intervals} resample assessments and ignore within-patient dependence. Supplementary estimates can differ from headline values because of their own sampling and preprocessing basis.
+\textbf{Bootstrap intervals} resample assessments and ignore within-patient dependence. The H4 gap is $-0.002$, with a 95\% interval of [$-0.021$, 0.013], which includes zero. Supplementary estimates can differ from headline values because of their sampling and preprocessing basis.
 
 \textbf{Pairwise comparisons} presents multiplicity-adjusted tests within the fixed-reference design. Repeated pairwise tests do not establish discrete phenotypes.
 
@@ -291,7 +291,7 @@ Empty profile rejected & Enter at least one observed raw score. Leave missing te
 \end{tabular}
 
 \subsection*{Verification and source}
-Seven functional tests cover all eleven pages, data consistency, model assignment, input validation and key controls. Using the Python path set above, run:
+Functional tests cover all eleven pages, data consistency, model assignment, input validation and key controls. Using the Python path set above, run:
 {\small\begin{verbatim}
 & $py -m unittest dashboard.tests.test_dashboard -v
 \end{verbatim}}
