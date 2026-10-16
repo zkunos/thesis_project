@@ -22,7 +22,7 @@ Fourthly, the analytical approach has limited capacity to model temporal change.
 
 
 
-Of the 5{,}206 patients with longitudinal data (Section~\ref{sec:robustness}), the pattern described above is clinically plausible: 50.2\% of patients remain in the same tier, while of those whose tier changed, 706 moved towards improved function whereas 206 moved towards worsened function. This 3:1 ratio represents the expected direction of recovery. However, the degree to which this reflects true recovery versus selection factors (e.g., patients being discharged when they demonstrate improvement) cannot be completely distinguished.
+Of the 5{,}206 patients with longitudinal data (Section~\ref{sec:robustness}), 50.2\% retain the same tier across visits. Among the narrower subset of 912 patients with exactly two assessments and a tier change, 706 move toward higher-scoring bands and 206 toward lower-scoring bands. This pattern is compatible with recovery, but tier movement is not a functional outcome. Selection, discharge, visit timing and changes in test availability may also contribute.
 
 
 
@@ -30,11 +30,11 @@ Future longitudinal designs with standardized assessment intervals will be neces
 
 
 
-Furthermore, the imputation strategy introduces another constraint on interpretation. The MAR assumption cannot be tested from observed data alone \parencite{rubin1976inference,little2019statistical}. In clinical settings, a test may be incomplete due to the inability of a patient to complete it; therefore, the missing value may be informative and may represent impaired performance. If patterns of MNAR were prevalent in clinical settings, function might be overestimated. An upper bound on the impact of MNAR is provided by re-imputing every missing value to the lowest observed performance (the "tipping point" check; Section~\ref{sec:robustness}). Under that extreme assumption, the Global Impairment tier persisted and included 65\% of its original membership; however, the finer partition degraded. A formally-specified delta-shifted sensitivity analysis would further refine this bound.
+The imputation strategy introduces another constraint on interpretation. The MAR assumption cannot be tested from observed data alone \parencite{rubin1976inference,little2019statistical}. A test may be incomplete because a patient cannot perform it, making its missing value informative. Under such MNAR mechanisms, imputation could overestimate performance. The current comparisons do not establish an upper bound on this bias. A formally specified delta-shift sensitivity analysis is needed to assess departures from the working missingness model.
 
 
 
-Additionally, a structured co-occurrence of missingness may provide some reassurance regarding test-battery protocol-driven dropout rather than solely outcome-driven dropout. The comparison of 10 imputation methods also serves as a sensitivity analysis. High-confidence consensus labels were assigned to 86.2\% of assessments across methods, indicating that plausible imputation differences did not substantially affect the primary cognitive-severity structure for most of the cohort.
+Structured co-occurrence of missingness is compatible with test-battery protocols, but does not distinguish protocol-driven from outcome-dependent non-completion. The comparison of ten imputation methods gives at least 80\% assignment agreement for 86.2\% of assessments under a fixed MICE-fitted rule. This supports conditional assignment robustness; it does not establish that missingness is ignorable or that independently fitted pipelines recover the same groups.
 
 
 
@@ -50,11 +50,11 @@ Feature-engineering remains relevant. Non-cognitive features are eliminated and 
 
 
 
-Finally, HDBSCAN introduces sensitivity to hyperparameters. I conducted an extensive search (\(9 \times 120\) configurations) and selected optimal parameters [\texttt{min\_cluster\_size}$=1000$ and \texttt{epsilon}$=0.0$], maximizing the composite quality metric \(Q\). Because \(Q\) contains the silhouette score, and because the UMAP seed was also selected partly on silhouette performance, the reported absolute silhouette is optimistic by construction. It is best treated as a selected internal validation statistic rather than an unbiased estimate of cluster quality. Because the underlying structure is unidimensional, however, there is a relationship between cluster size and number of tiers. In addition to examining UMAP + HDBSCAN stochastically and potentially sensitively to random initialization and imperfect preservation of global structure, I applied ten random seeds per configuration/bootstrap sample/variable subset/subsampling rate combination, and PCA as an additional form of comparison. The main conclusion does not rely on UMAP alone; PCA also demonstrates that there is a strong cognitive-severity gradient (PC1 \(=56\%\)) represented by the first principal component. Re-running the entire pipeline with ten random seeds resulted in nearly identical labels (mean pairwise \(\mathrm{ARI}=0.957\); Section~\ref{sec:robustness}). While the exact number of tiers can vary slightly depending upon these checks, the overall order of severity is robust.
+HDBSCAN also introduces sensitivity to hyperparameters. The search evaluates \(9\times120\) configurations and selects the composite quality metric \(Q\). Because \(Q\) contains silhouette and the UMAP seed is selected partly on silhouette, the reported embedding separation is optimistic by construction. It is a selected internal statistic rather than an unbiased estimate of cluster quality. PCA provides complementary evidence of a dominant severity axis (PC1 \(=56\%\)), while the historical assessment-subsampling mean ARI of 0.273 shows that exact assignments are sensitive to resampling. Neither finding establishes a uniquely correct categorical partition.
 
 
 
-Lastly, computational cost presents a fourth practical limit. Running UMAP + HDBSCAN fifty times per method is computationally intensive; however, due to modularity allowing for parallel processing, runtime costs were manageable on a typical consumer-grade laptop.
+Computational cost presents a further practical limit. Running UMAP + HDBSCAN fifty times per method is computationally intensive; however, due to modularity allowing for parallel processing, runtime costs were manageable on a typical consumer-grade laptop.
 
 
 The extension also has specific validation limits. Feature selection was inherited from the historical full cohort. Equal-domain scaling was introduced after inspecting discovery variances, so it is an exploratory sensitivity. High ARI across bounded Bayesian imputations remains conditional on that model and does not resolve MNAR. Test availability is associated with cluster membership, and neither domain weighting is clinically validated. The Gaussian-copula reference is estimated from these data and resamples missingness independently of values; its tail fractions are descriptive rather than an omnibus calibrated significance test. The separated positive control is not a power study, and a calibrated Silverman test was not implemented. Consensus summaries formed from validation assignment vectors are not separately validated prediction models.

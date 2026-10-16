@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from dashboard.data import (DOMAINS, COLORS, METHODS, REPRESENTATIONS, RESULTS,
-                            table, saved, metadata, names, legacy_profiles,
+                            table, saved, metadata, names, group_colors, legacy_profiles,
                             cohort_z, hypothesis_rows, research_summary,
                             profile_model, assign_profile)
 
@@ -43,9 +43,10 @@ def method_select():
     return st.selectbox("Imputation method", methods, index=methods.index("MICE"))
 
 
-def profile_lines(frame, value, group, title=None):
+def profile_lines(frame, value, group, title=None, color_map=None):
     return px.line(frame, x="domain", y=value, color=group, markers=True,
                    category_orders={"domain": DOMAINS}, color_discrete_sequence=COLORS,
+                   color_discrete_map=color_map,
                    labels={"domain": "", value: "Domain composite", group: ""}, title=title)
 
 
@@ -61,8 +62,9 @@ def home():
     with left:
         st.subheader("Assessment-level severity bands")
         counts = table("Cluster_Names.csv").rename(columns={"clinical_name": "Band", "n_patients": "Assessments"})
+        band_colors = {r.Band: group_colors()[names()[r.cluster_id]] for r in counts.itertuples()}
         chart(px.bar(counts, x="Assessments", y="Band", orientation="h", text="Assessments",
-                     color="Band", color_discrete_sequence=COLORS).update_layout(showlegend=False), 270)
+                     color="Band", color_discrete_map=band_colors).update_layout(showlegend=False), 270)
         st.caption("17,406 assessments · 7,285 patients · 14 tests · 6 domains. Names describe the historical MICE partition.")
     with right:
         st.subheader("What the patient-level analysis adds")
@@ -157,19 +159,24 @@ def explorer():
     ids = np.linspace(0, len(labels)-1, min(5000, len(labels)), dtype=int)
     label_names = names(method)
     color = [label_names.get(int(v), "Noise") for v in labels[ids]]
+    color_options = dict(color_discrete_map=group_colors(method),
+                         category_orders={"color": list(label_names.values()) + ["Noise"]})
     metrics([("Assessments", f"{len(labels):,}"), ("Groups", str(len(np.unique(labels[labels >= 0])))),
              ("Noise", f"{np.mean(labels < 0):.1%}"), ("Points displayed", f"{len(ids):,}")])
     left, right = st.columns(2)
     with left:
         embedding = infra["tsne_2d"][ids]
-        chart(px.scatter(x=embedding[:, 0], y=embedding[:, 1], color=color, opacity=.65,
-                         labels={"x": "t-SNE 1", "y": "t-SNE 2"}, title="Fixed MICE t-SNE coordinates"), 380)
+        fig = px.scatter(x=embedding[:, 0], y=embedding[:, 1], color=color, opacity=.65,
+                         labels={"x": "t-SNE 1", "y": "t-SNE 2"}, title="Fixed MICE t-SNE coordinates", **color_options)
+        fig.update_layout(legend=dict(orientation="h", y=-.2))
+        chart(fig, 350)
     with right:
         embedding = infra["umap_embeddings"][method][ids]
         fig = px.scatter_3d(x=embedding[:, 0], y=embedding[:, 1], z=embedding[:, 2], color=color, opacity=.55,
-                            title=f"{method} UMAP coordinates")
+                            title=f"{method} UMAP coordinates", labels={"x": "UMAP 1", "y": "UMAP 2", "z": "UMAP 3"}, **color_options)
         fig.update_traces(marker_size=2)
-        chart(fig, 380)
+        fig.update_layout(legend=dict(orientation="h", y=-.2))
+        chart(fig, 350)
     st.caption("Each point is an assessment; repeated observations from a patient remain separate. The fixed t-SNE coordinates are recolored by the selected partition. UMAP coordinates change with the method. A deterministic 5,000-row display sample keeps interaction responsive.")
 
 
@@ -184,15 +191,27 @@ def profiles():
         st.info("Select at least one group to compare.")
         return
     standardized = cohort_z(frame)
-    means = standardized.assign(group=labels).groupby("group").mean().loc[selected]
+    all_means = standardized.assign(group=labels).groupby("group").mean()
+    color_limit = float(np.abs(all_means.to_numpy()).max())
+    means = all_means.loc[selected]
     long = means.rename_axis("Group").reset_index().melt(id_vars="Group", var_name="domain", value_name="z")
     long["Group"] = long.Group.map(label_names)
-    left, right = st.columns([1.15, 1])
+    left, right = st.columns([1, 1.15])
     with left:
-        chart(profile_lines(long, "z", "Group", "Cluster means in cohort z-score units").update_yaxes(title="Cohort z-score"), 350)
+        fig = profile_lines(long, "z", "Group", "Cluster means in cohort z-score units",
+                            color_map=group_colors(method)).update_yaxes(title="Cohort z-score")
+        fig.update_layout(legend=dict(orientation="h", y=-.4, font_size=10))
+        fig.update_xaxes(tickangle=-30)
+        chart(fig, 350)
     with right:
-        chart(px.imshow(means.rename(index=label_names), text_auto=".2f", color_continuous_scale="RdBu_r",
-                        color_continuous_midpoint=0, aspect="auto", title="Domain heatmap"), 350)
+        fig = px.imshow(means.rename(index=label_names), text_auto=".2f", color_continuous_scale="RdBu_r",
+                        zmin=-color_limit, zmax=color_limit, aspect="auto", title="Domain heatmap")
+        fig.update_xaxes(tickvals=DOMAINS, ticktext=["Orient.", "Attn.", "Visuo.", "Lang.", "Memory", "Exec."], tickangle=-30)
+        fig.update_yaxes(title="", ticktext=[label_names[k].replace("Global Impairment", "Global<br>Impairment").replace("Above-Average", "Above-<br>Average").replace("Near-Normal", "Near-<br>Normal") for k in selected],
+                         tickvals=[label_names[k] for k in selected])
+        fig.update_traces(textfont_size=10)
+        fig.update_layout(coloraxis_colorbar=dict(thickness=12, title="z"))
+        chart(fig, 350)
     grid(means.rename(index=label_names).reset_index().rename(columns={"group": "Group"}).round(3))
     st.caption("Z-scores reference this cohort, not external normative values. Names and colors are local to each model; they are not transferable clinical categories.")
 
@@ -325,10 +344,15 @@ def advanced():
         st.caption("This assessment-level analysis samples rows and does not account for repeated visits within patients. Patient-level resampling is reported separately.")
     with sensitivity:
         frame = table("Sensitivity_Analysis.csv")
-        chart(px.line(frame, x="threshold", y="silhouette", markers=True,
-                      labels={"threshold": "Maximum variable missingness (%)", "silhouette": "Silhouette"}, color_discrete_sequence=COLORS), 320)
+        plotted = frame.copy()
+        plotted.loc[plotted.n_clusters < 2, "silhouette"] = np.nan
+        fig = px.line(plotted, x="threshold", y="silhouette", markers=True,
+                      labels={"threshold": "Maximum variable missingness (%)", "silhouette": "Silhouette"}, color_discrete_sequence=COLORS)
+        fig.update_xaxes(range=[28, 72], dtick=10)
+        fig.add_annotation(x=30, y=0, yref="paper", text="No clusters", showarrow=False, yshift=15)
+        chart(fig, 320)
         grid(frame)
-        st.caption("The threshold selects variables. Assessment eligibility requires at least one retained test; this is not a maximum row-missingness rule. A silhouette of −1 accompanies the no-cluster solution.")
+        st.caption("The threshold selects variables. Assessment eligibility requires at least one retained test. At 30%, no clusters are recovered: silhouette is undefined and is omitted from the plot. The saved table uses −1 as a sentinel for that failed fit.")
 
 
 def robustness():
@@ -336,12 +360,18 @@ def robustness():
     st.info("Earlier multiple-imputation and complete-case comparisons used raw-test aggregation. They do not validate the standardized patient-level pipeline.")
     bootstrap, correction, missingness, followup = st.tabs(["Bootstrap intervals", "Pairwise comparisons", "Missing-data sensitivity", "Follow-up"])
     with bootstrap:
-        frame = table("Backlog_Bootstrap_CIs.csv")
+        frame = table("Backlog_Bootstrap_CIs.csv").copy()
         selected = frame[frame.metric.isin(["H2_mean_ARI", "H3_cramers_v", "H4_silhouette_gap"])].copy()
+        metric_names = {"H1_silhouette": "H1 · Silhouette", "H2_mean_ARI": "H2 · Mean ARI",
+                        "H3_chi2": "H3 · Chi-square", "H3_cramers_v": "H3 · Cramér's V",
+                        "H4_silhouette_gap": "H4 · Silhouette gap"}
+        selected["metric"] = selected.metric.map(metric_names)
         fig = px.scatter(selected, x="point", y="metric", error_x=selected.ci_hi-selected.point,
                          error_x_minus=selected.point-selected.ci_lo, labels={"point": "Estimate and 95% bootstrap interval", "metric": ""}, color_discrete_sequence=COLORS)
-        chart(fig, 260)
-        grid(frame.round(5))
+        fig.add_vline(x=0, line_dash="dot", line_color="#8A8F98")
+        chart(fig, 240)
+        frame["metric"] = frame.metric.map(metric_names)
+        grid(frame.rename(columns={"metric": "Statistic", "point": "Estimate", "ci_lo": "95% lower", "ci_hi": "95% upper"}))
         st.caption("Assessment-level resampling ignores within-patient dependence. These intervals should not be read as patient-grouped uncertainty.")
     with correction:
         frame = table("Backlog_H2_Holm.csv")

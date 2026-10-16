@@ -53,6 +53,12 @@ def names(method="MICE"):
     return {int(k): f"Group {int(k)}" for k in np.unique(labels) if k >= 0}
 
 
+def group_colors(method="MICE"):
+    """Keep fitted group identities stable across views and filtered selections."""
+    return {**{label: COLORS[group % len(COLORS)] for group, label in names(method).items()},
+            "Noise": "#8A8F98"}
+
+
 def hypothesis_rows():
     h2, h3, h4 = (saved(f"h{i}_results") for i in [2, 3, 4])
     return [

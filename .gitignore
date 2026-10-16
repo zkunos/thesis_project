@@ -55,9 +55,8 @@ node_modules/
 
 # Keep only the current defence deliverables from presentation/.
 /presentation/*
-!/presentation/thesis_defense_20min_professional.pptx
-!/presentation/thesis_defense_20min_transcript.pdf
-!/presentation/thesis_defense_study_cards.pdf
+!/presentation/thesis_defense_severity_gradient.pptx
+!/presentation/thesis_defense_severity_gradient.pdf
 !/presentation/cogdash_manual.tex
 !/presentation/cogdash_manual.pdf
 !/presentation/manual_screenshots/

@@ -86,7 +86,7 @@ For the UMAP+HDBSCAN combination, the hyperparameters I settled on were: \texttt
 \begin{center}
 \centering
 \includegraphics[width=0.9\textwidth]{Figures/tsne_umap_clusters.png}
-\captionof{figure}[t-SNE and UMAP cluster projections]{Two-dimensional representations of the data using t-SNE (left) and UMAP (right), with HDBSCAN cluster assignments coloured. UMAP reveals clearer separation of cluster areas.}
+\captionof{figure}[t-SNE and UMAP cluster projections]{The same 17,406 MICE assessment assignments shown in t-SNE coordinates (left) and the first two UMAP coordinates (right). Colours identify the three final severity bands after noise reassignment; projections illustrate the fitted partition and do not establish discrete phenotypes.}
 \label{fig:tsne_umap}
 \end{center}
 
@@ -95,7 +95,7 @@ Below are the radar plots showing mean cognitive domain score per tier, expresse
 
 
 
-Additionally, I created a random forest surrogate that attempts to recover the tier labels from the domain scores. The Gini importance for each domain shows which domains contribute most strongly to distinguishing among tiers. There is considerable inter-correlation between the domain scores (because they are all based on cognitive performance), so interpreting this figure requires caution: although Attention appears to have low Gini Importance relative to Working Memory and Processing Speed, for example, this may simply reflect a high degree of correlation between Attention and Working Memory rather than anything about attention being clinically unimportant.
+Additionally, I created a random forest surrogate that attempts to recover the tier labels from the domain scores. Gini importance describes each domain's contribution to reproducing those labels. The domains are correlated, and the labels were derived from the same scores. Attention's low importance relative to orientation, visuoperception and language therefore does not establish that attention is clinically unimportant; the ranking is conditional on this fitted partition.
 
 \begin{center}
 \centering
@@ -136,7 +136,7 @@ VAE        & 4 & 0.601 & 16.0 & 0.600 & 0.574--0.631 \\
 \end{tabular}
 \end{center}
 
-All ten methods passed the pre-specified silhouette and noise thresholds. However, strict per-cluster reproducibility was weaker: overall core Jaccard ranged from 0.509 to 0.630, and individual matched-cluster values ranged from 0.383 to 0.633, below the conventional 0.70 stability threshold in several cases. Recovered cluster count also varied from three to five. For the MICE labels, full-coverage silhouette was 0.526 in the selected UMAP embedding but only 0.079 in the robust-scaled six-domain space. Together with the concentric profiles and dominant first principal component, these results support reproducible severity ordering but not sharply discrete natural classes. I therefore regard H1 as partially supported: stable severity bands exist, whereas discreteness does not. Because the bootstrap sampled assessments rather than patients, repeated observations may inflate apparent stability and narrow uncertainty estimates.
+All ten methods passed the pre-specified silhouette and noise thresholds. However, strict per-cluster reproducibility was weaker: overall core Jaccard ranged from 0.509 to 0.630, and individual matched-cluster values ranged from 0.383 to 0.633, below the conventional 0.70 stability threshold in several cases. Recovered cluster count also varied from three to five. For the MICE labels, full-coverage silhouette was 0.526 in the selected UMAP embedding but only 0.079 in the robust-scaled six-domain space. Together with the concentric profiles and dominant first principal component, these results support reproducible severity ordering but not sharply discrete natural classes. I therefore regard H1 as partially supported: stable severity bands exist, whereas discreteness is not established. Because the bootstrap sampled assessments rather than patients, repeated observations may inflate apparent stability and narrow uncertainty estimates.
 
 \section{Hypothesis 2: Imputation Sensitivity Under a Fixed Partition}\label{sec:h2_results}
 Hypothesis 2 posits that different imputation methods will produce largely overlapping assignments when applied to the same incomplete data and evaluated within a fixed embedding and partition model.
@@ -184,7 +184,7 @@ The main hypothesis was that domain-aggregate features would reduce redundancy a
 
 
 
-Aggregate measures produced a marginally greater average silhouette score than did the individual variable-based measure (0.481 vs. 0.473; Figure~\ref{fig:h4_comparison}). More importantly, there was significant change in terms of how each set of measures conditioned the feature space. The average VIF decreased significantly, from 2.77 to 1.88, and the condition number decreased similarly, from 61.7 to 11.8. High VIFs indicate multicollinearity, which distorts computation of distances needed to perform the UMAP and HDBSCAN algorithms. Therefore, the decrease in VIFs indicates that the aggregation process reduced redundancy while maintaining the underlying cognitive constructs measured by the tests \parencite{lezak2012neuropsychological}.
+Aggregate measures produced a marginally greater average silhouette score than did the individual variable-based measure (0.481 vs. 0.473; Figure~\ref{fig:h4_comparison}). More importantly, the conditioning of the feature space changed. The average VIF decreased, from 2.77 to 1.88, and the condition number decreased similarly, from 61.7 to 11.8. High VIFs indicate multicollinearity, which distorts computation of distances needed to perform the UMAP and HDBSCAN algorithms. Therefore, the decrease in VIFs indicates that the aggregation process reduced redundancy while maintaining the underlying cognitive constructs measured by the tests \parencite{lezak2012neuropsychological}.
 
 
 
@@ -198,11 +198,11 @@ Therefore, Hypothesis 4 is supported primarily through reduced redundancy and im
 \end{center}
 
 \section{Feature Importance Analysis}\label{sec:feature_importance}
-To conduct this analysis, I trained a Random Forest surrogate model on the MICE-imputed Domain scores and used the tier labels as targets. It obtained an accuracy rate of 99.4\% in five-fold cross-validation. The accuracy of this surrogate model measures how well the tier labels can be predicted from the Domain scores. However, because the tier labels were created from the same Domain scores used in the clustering algorithm (UMAP + HDBSCAN), the surrogate model is essentially creating its own versions of the clustering boundaries. Therefore, since the surrogate model performs so well (i.e., nearly perfect accuracy), the tier labels demonstrate high degrees of separability in Domain space.
+I trained a Random Forest surrogate on the MICE-imputed domain scores, using the existing tier labels as targets. It obtained 99.4\% accuracy in five-fold cross-validation. Because those labels were derived from the same scores, this result shows that the fitted partition boundaries can be reproduced. It does not independently establish well-separated natural clusters or predict clinical outcomes.
 
 
 
-I employed Gini and permutation rankings to help illustrate the relative importance of each Domain. Orientation ranked highest (\(\text{Gini}=0.49\)), followed closely by visuoperceptual (\(\text{Gini}=0.24\)) and language (\(\text{Gini}=0.17\)), with attention (\(\text{Gini}=0.03\)) and executive function (\(\text{Gini}=0.02\)) last among the six domains (Figure~\ref{fig:feature_importance}). Although this order may provide some useful information about the importance of each Domain in terms of their relationships to one another, this ordering should be interpreted cautiously. It represents only what is internal to the clustering methodology and has been influenced partially by circularity. Additionally, Gini importance is biased when predictors are highly correlated \parencite{boulesteix2012overview}. As stated earlier, the six domains are highly positively correlated (both theoretically as part of the cognitive positive manifold and empirically as indicated by the first principal component in §\ref{sec:cluster_profiles}). Once a tree splits on a highly correlated Domain like orientation, attention appears redundant. Thus, even though attention ranks lowest, it is incorrect to infer that attention is clinically irrelevant. Rather, attention's position is best understood within the context of Figure~\ref{fig:radar_profiles} where the concentric profiles and principal component loadings determine whether the tiers represent total clinical severity or a Domain-specific dissociation.
+Gini importance ranked orientation highest (0.486), followed by visuoperception (0.237), language (0.171), memory (0.061), attention (0.028) and executive function (0.018; Figure~\ref{fig:feature_importance}). Permutation importance also placed orientation, visuoperception and language first, but placed attention last. These rankings describe inputs that reproduce the selected labels. Correlated predictors can share or substitute for one another\textquotesingle s contribution, affecting both rankings \parencite{boulesteix2012overview}. A low surrogate importance therefore does not imply clinical irrelevance. The domain profiles and principal-component results in Section~\ref{sec:cluster_profiles} provide complementary descriptions of the severity gradient.
 
 \begin{center}
 \centering
@@ -212,11 +212,11 @@ I employed Gini and permutation rankings to help illustrate the relative importa
 \end{center}
 
 \section{Robustness Analyses}\label{sec:robustness}
-There are several analyses that help clarify the robustness of the hypotheses. First, I used a "listwise deletion" baseline. Second, I conducted a subsampling stability study. Third, I estimated bootstrap confidence intervals. Fourth, I compared results across independent MICE imputations. Fifth, I validated the findings using time since injury as an alternative measure. Finally, I used multiple comparison corrections for the 45 pairwise H2 tests.
+There are several analyses that help clarify the robustness of the hypotheses. First, I used a "listwise deletion" baseline. Second, I conducted a subsampling stability study. Third, I estimated bootstrap confidence intervals. Fourth, I compared results across independent MICE imputations. Fifth, I described time since injury and within-patient tier transitions. Finally, I used multiple comparison corrections for the 45 pairwise H2 tests.
 
 
 
-\textbf{Bootstrap Confidence Intervals.} I performed a nonparametric bootstrap analysis at the assessment level. For the major estimates, I obtained very narrow 95\% confidence intervals around the estimated effects. For example, the bootstrap 95\% confidence interval for the H2 mean ARI is 0.710 [0.704, 0.716]; for H3, it is 0.16 [0.15, 0.18] (Cramér's V); and for H4, it is 0.05 [0.04, 0.06] (silhouette gap). These intervals reflect 17{,}406 assessment records, not 7{,}285 independent patients. Because follow-up assessments from the same patient were resampled independently, within-patient dependence was ignored; the intervals may therefore be too narrow and apparent stability may be inflated. They should not be interpreted as patient-level uncertainty estimates.
+\textbf{Bootstrap Confidence Intervals.} Assessment-level resampling gives H2 mean ARI 0.710 with a 95\% interval of [0.702, 0.717], H3 Cram\'{e}r\textquotesingle s $V=0.166$ [0.156, 0.175], and an H4 silhouette gap of $-0.002$ [$-0.021$, 0.013]. The H4 interval includes zero and does not support a separation improvement in this supplementary comparison. These saved estimates come from a separate supplementary calculation and need not equal the headline statistics. The earlier raw-test aggregation used in supplementary feature comparisons also differs from the standardized patient-level pipeline. Resampling treats 17{,}406 assessment records as independent, ignoring dependence within 7{,}285 patients; these intervals may therefore be too narrow and should not be interpreted as patient-grouped uncertainty.
 
 
 
@@ -228,11 +228,11 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 
 
 
-\textbf{Listwise Deletion Baseline.} If I discard the 46.9\% of the assessments with missing values and apply the pipeline only to the remaining 9{,}245 complete cases, I obtain two clusters with a silhouette of 0.257. Additionally, agreement between the MICE solution for those same patients and the solution based solely on complete cases is moderate (ARI 0.625, NMI 0.519), yet they are clearly not equivalent. Hence, imputation has a material impact upon the analysis: discarding the 46.9\% of the assessments with missing values changes both the quality and quantity of tiers recovered.
+\textbf{Listwise Deletion Baseline.} If I discard the 46.9\% of the assessments with missing values and apply the pipeline only to the remaining 9{,}245 complete cases, I obtain two clusters with a silhouette of 0.257. Additionally, agreement between the MICE solution for those same assessments and the solution based solely on complete cases is moderate (ARI 0.625, NMI 0.519), yet they are clearly not equivalent. Hence, imputation has a material impact upon the analysis: discarding the 46.9\% of the assessments with missing values changes both the quality and quantity of tiers recovered.
 
 
 
-\textbf{Subsampling Stability.} When processing random 80\% subsamples of the cohort using UMAP+HDBSCAN, I find that the majority of samples recover the same general severity structure; however, exact labels and numbers of clusters vary from two to five. This is precisely what would be expected if I were converting a continuous gradient into discrete categories and is consistent with the per-cluster Jaccard results for H1.
+\textbf{Subsampling Stability.} Twenty random 80\% assessment subsamples produce mean pairwise ARI 0.273 and median 0.277. Fifteen fits recover two clusters, three recover three clusters, and two recover no clusters. These results show substantial sensitivity of the historical UMAP+HDBSCAN assignments to resampling. They concern assessment rows and should not be conflated with the separate patient-level k-means stability experiment in Section~\ref{sec:extension_results}.
 
 
 
@@ -242,15 +242,15 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 \centering
 \includegraphics[width=0.8\textwidth]{Figures/sensitivity_analysis_a.png}\\[0.5em]
 \includegraphics[width=0.8\textwidth]{Figures/sensitivity_analysis_b.png}
-\captionof{figure}[Sensitivity to missingness threshold]{Effect of varying Tier~1 missingness threshold across five values (30 -- 70\%). Upper row: (a) Number of available variables and (b) Number of clusters identified. Lower row: (c) Silhouette score and (d) Proportion of noise. Vertical dashed lines indicate Tier~1 missingness threshold used in primary analyses.}
+\captionof{figure}[Sensitivity to missingness threshold]{Effect of varying Tier~1 missingness threshold across five values (30 -- 70\%). Upper row: (a) Number of available variables and (b) Number of clusters identified. Lower row: (c) Silhouette score and (d) Proportion of noise. The 30\% fit has no clusters, so its undefined silhouette is omitted. Vertical dashed lines indicate Tier~1 missingness threshold used in primary analyses.}
 \label{fig:sensitivity}
 \end{center}
 
-\textbf{Outcome-Adjacent Validation.} Although functional outcomes are unavailable for use as validating measures of impairment status at discharge, I examined functional change through time-since-injury (TSI) at each assessment as an alternate validating measure. TSI varies significantly by tier (Kruskal-Wallis test $p = 4 \times 10^{-28}$), with median TSI times of 214 days for Above Average, 188 days for Near Normal, and 172 days for Global Impairment. Thus, as TSI increases, severity of impairment decreases across these three tiers. Among the 5{,}206 patients who have had at least two assessments, 50.2\% (2{,}613 patients) maintain their original tier assignment while 49.8\% (2{,}593 patients) experience some degree of tier shift. While such movement could suggest that patients possess a set of fixed phenotypic characteristics, such movement is far more indicative of variability in severity along a spectrum of impairment severity. Furthermore, among the 912 patients who experienced exactly two assessments and changed tiers during that period, improvement in functional status occurred approximately three times as frequently as worsening in functional status (706 vs. 206 transitions), consistent with expectations regarding natural clinical recovery patterns.
+\textbf{Time Since Injury and Tier Transitions.} Median time since injury is 214 days for Above-Average, 188 days for Near-Normal and 172 days for Global Impairment. These cross-sectional differences do not measure individual recovery or provide an independent functional outcome. Among 5{,}206 patients with repeated assessments, 2{,}613 (50.2\%) remain in the same tier across their observed visits and 2{,}593 (49.8\%) change tier. A subset of 912 patients has exactly two assessments and a tier change: 706 move toward a higher-scoring band and 206 toward a lower-scoring band. This describes movement between cognitive-score bands, not validated functional improvement. Visit timing, discharge and changing test availability may contribute to the observed transitions.
 
 
 
-\textbf{Embedding Seed Stability.} To determine whether the clustering was due to UMAP's random initialization, I repeated the entire embedding and clustering process on the MICE-imputed domain scores using ten randomly selected seeds with equal hyperparameter settings. There was high concordance between labeling schemes; specifically, the mean pairwise ARI across the ten runs was 0.957 (median \(= 0.960\), min-max \(= [0.900, 1.000]\)). After k-nearest neighbor reassignment, this increased to 0.965. With respect to my finding that there exists a strong underlying severity axis supported by deterministic PCA (see §\ref{sec:cluster_profiles}), together with embedding seed stability, this further decreases concerns that the solution was simply an artifact of unstable UMAP initialization.
+\textbf{Initialization and Resampling.} The historical parameter search repeats UMAP initialization, but seed selection on silhouette is part of model selection rather than independent validation. The saved assessment-subsampling results above quantify a different source of variability. The patient-level extension separately reports initialization and patient-subsampling agreement for its fitted k-means partition.
 
 
 
@@ -258,7 +258,7 @@ There are several analyses that help clarify the robustness of the hypotheses. F
 
 
 
-\textbf{MNAR Tipping Point.} To establish bounds on potential missing-not-at-random mechanisms, I assumed every missing value was replaced by the worst observed performance on that variable -- either the minimum value or the maximum value depending on whether it was a timed ATMTA or not. Clearly, this is an intentionally extreme and conservative assumption. Under this condition, even though the partition became fractured and the silhouette fell to 0.030 because point-mass spikes were created when all missing values were forced to extreme values, a distinct lowest severity tier still existed and retained approximately 65.2\% of assessments originally labeled as Global Impairment. Therefore, even under extreme MNAR assumptions, Global Impairment is likely the most robust portion of the solution. Most importantly, extreme MNAR assumptions seem to degrade finer separation within lower severity tiers, and thus a formal delta-shifted tipping-point analysis seems like an interesting future direction.
+\textbf{Missing-Not-at-Random Sensitivity.} Agreement across imputation methods remains conditional on their assumptions about missing values. The current saved comparisons do not establish robustness to informative test non-completion. A formally specified delta-shift sensitivity analysis, with test direction respected and clinically justified shifts, remains future work.
 
 
 

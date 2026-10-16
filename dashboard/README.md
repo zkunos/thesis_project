@@ -62,6 +62,6 @@ Tables use escaped semantic HTML for portability. Plotly supplies interactive ch
 ./.venv-research/Scripts/python.exe -m unittest dashboard.tests.test_dashboard -v
 ```
 
-Seven functional tests cover all 11 pages, saved-data consistency, predictions against saved validation assignments, missing/nonfinite input, method changes, empty group selection, and the profile form. Browser verification and captures additionally cover the rendered charts and a synthetic complete profile.
+Functional tests cover all 11 pages, saved-data consistency, predictions against saved validation assignments, missing/nonfinite input, method changes, empty group selection, and the profile form. Browser verification and captures additionally cover the rendered charts and a synthetic complete profile.
 
 The [manual source](../presentation/cogdash_manual.tex) and [PDF manual](../presentation/cogdash_manual.pdf) document the recreated interface. Fifteen actual browser captures are in `presentation/manual_screenshots/`; the capture manifest records page state, dates, and hashes. Screenshots use synthetic examples for individual profiles.
