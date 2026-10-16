@@ -19,6 +19,7 @@ htmlcov/
 
 # Virtual environments and local secrets
 .venv/
+.venv-research/
 venv/
 env/
 .env
@@ -57,6 +58,11 @@ node_modules/
 !/presentation/thesis_defense_20min_professional.pptx
 !/presentation/thesis_defense_20min_transcript.pdf
 !/presentation/thesis_defense_study_cards.pdf
+!/presentation/cogdash_manual.tex
+!/presentation/cogdash_manual.pdf
+!/presentation/manual_screenshots/
+!/presentation/manual_screenshots/*.jpg
+!/presentation/manual_screenshots/manifest.json
 
 # LaTeX build artifacts. Final PDFs remain trackable.
 *.aux

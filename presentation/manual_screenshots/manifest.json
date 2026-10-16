@@ -1,0 +1,166 @@
+{
+  "application": "CogDash",
+  "version": "2.0",
+  "timezone": "Europe/Budapest",
+  "analysis_snapshot": "2026-10-15",
+  "capture_method": "Actual local browser screenshots; unmodified viewport captures",
+  "captures": [
+    {
+      "file": "01_home.jpg",
+      "route": "/",
+      "state": "Home; hypothesis panel collapsed",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "de2b24e2cb894892c48b243128e3481302f0f2a8b998f9e4189658e3276c92c9"
+    },
+    {
+      "file": "02_cluster_explorer.jpg",
+      "route": "/clusters",
+      "state": "MICE; deterministic 5000-assessment display sample",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "8adec9c595d194bd5fb249919b6afcf232d9b095cf5fd9b529c8e6114a1a6ced"
+    },
+    {
+      "file": "03_cognitive_profiles.jpg",
+      "route": "/profiles",
+      "state": "MICE; all three groups",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "81576bad22edc4d917f6d1fbbb71cc588b44725a2ca405152ca63060b1889761"
+    },
+    {
+      "file": "04_patient_lookup.jpg",
+      "route": "/lookup",
+      "state": "Synthetic example selected; no patient record",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "027c17ae7003ff58332b736841096e59d1a2732420e4866c5f5028c2acfaef02"
+    },
+    {
+      "file": "05_imputation_compare.jpg",
+      "route": "/imputation",
+      "state": "Fixed-reference ARI and NMI",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "2741b42d24e1d1c1b9341bea58c6b2f67996577049d899f0892ca13352a1abcf"
+    },
+    {
+      "file": "06_clinical_units.jpg",
+      "route": "/clinical",
+      "state": "Clinical unit cross-tabulation",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "d6a0a40ff1556eea103ea8796c7e5fec4c3373d2ddcfe521792d09917c7f2cdb"
+    },
+    {
+      "file": "07_hypothesis_summary.jpg",
+      "route": "/hypotheses",
+      "state": "All four hypothesis cards",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "86ee42e6244c5d32a88da0d47295531a1f44b6e691715b3be4f55e0991a4a434"
+    },
+    {
+      "file": "08_new_profile.jpg",
+      "route": "/new-profile",
+      "state": "Two groups; empty form; upper portion",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "903925b4cc8e48d7809bd733e415459f20ea5292f1da896ea9b76083300db2a1"
+    },
+    {
+      "file": "09_advanced_analytics.jpg",
+      "route": "/advanced",
+      "state": "Feature importance tab",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "63126e5dada99c21990c67dd2fd1bebeec921d60ad744e25ef65f31fbc02dba3"
+    },
+    {
+      "file": "10_robustness.jpg",
+      "route": "/robustness",
+      "state": "Bootstrap intervals tab; upper portion",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-16",
+      "sha256": "a667fd33e64aa7728de2e8ff468e08f49dd7194f71219887202d656e260f35aa"
+    },
+    {
+      "file": "11_research_repeatability.jpg",
+      "route": "/research",
+      "state": "Repeatability tab",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "0d84e61d6342cedd91bd59f5455420beaee1b1f893befd4afdd4976f6bfa1b4f"
+    },
+    {
+      "file": "12_research_scaling.jpg",
+      "route": "/research",
+      "state": "Scaling sensitivity tab; scrolled detail",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "83b916b65942519202c7eed14a5fa7c47725de231c0fde6ff8671cb5bf546877"
+    },
+    {
+      "file": "13_research_trajectories.jpg",
+      "route": "/research",
+      "state": "Trajectories tab; scrolled detail",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-16",
+      "sha256": "03b4fc28dd2da3a25bd5406a883eee23f0dafaf01a8419928d4f875318b289be"
+    },
+    {
+      "file": "14_research_models.jpg",
+      "route": "/research",
+      "state": "Model comparison tab; robust domains; selected models; scrolled detail",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-16",
+      "sha256": "ae059a18d7c140cee137febb955d7c9fcad9f1dd059705e1f8f51f78d835c6c0"
+    },
+    {
+      "file": "15_new_profile_result.jpg",
+      "route": "/new-profile",
+      "state": "Synthetic complete profile; two groups; result detail",
+      "width": 1280,
+      "height": 720,
+      "date": "2026-10-15",
+      "sha256": "c29620ad2abea6dd09563a0f9a5b98dc08b85ea202fcf537b226dc3f51dd960f"
+    }
+  ],
+  "synthetic_raw_profile": {
+    "OPERSONA": 6,
+    "OESPAI": 5,
+    "OTEMPS": 20,
+    "ASPAN": 5,
+    "ATMTA": 60,
+    "VPIMATGES": 8,
+    "LREPETICIOTB": 10,
+    "LDENOMINACIOTB": 10,
+    "LCOMPRENSIOTB": 10,
+    "MDIGITS": 6,
+    "MRAVLT075": 35,
+    "MRAVLT015": 6,
+    "MRAVLT015R": 12,
+    "FEPMR": 18
+  },
+  "source_hashes": {
+    "dashboard/Home.py": "be32fcc03eeb4b451b8f558ee204c8ae863e0128016cf9c4fd692011d7f3bfd8",
+    "dashboard/views.py": "0f27d5208c29ec01a95b6fa92ad6f9f76829a8d1b3048766a4e0d544fb200c57",
+    "dashboard/data.py": "5ff6f2b5cd57996a285c7f71f00a7848941b6dc7a6383d6875425a68d7b0ad98",
+    "results/dashboard/source_manifest.json": "7ff98dc1cdf67a932f7b414c059c08d74286df4d98a077433fb9aaf9df7288c2"
+  }
+}
