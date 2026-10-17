@@ -113,6 +113,8 @@ This sequence updates the bibliography and resolves cross-references after struc
 
 The rebuilt [defence deck](presentation/defense_2026/thesis_defense.pptx) and [PDF export](presentation/defense_2026/thesis_defense.pdf) contain 17 main slides for a 15-minute presentation and 10 backup slides for examiner questions. The PowerPoint includes timed speaker notes, sources, and editable charts and tables. The main presentation covers the historical analysis, patient-level validation, scaling and missingness sensitivity, and the limits of the clinical interpretation. The earlier deck and the CogDash manual remain in `presentation/`.
 
+The [speaking guide](presentation/defense_2026/defense_speaking_guide.docx) provides a transcript, delivery cue, and explanations of technical terms for every slide. Its main-slide timing totals 15 minutes; definitions and backup scripts are for preparation and questions.
+
 ## Recent Clustering Research
 
 The [15 October 2026 research assessment](report/research/clustering_research_2026.md) evaluates seven articles published within the preceding year. The [original experiment protocol](report/research/clustering_experiment_protocol_2026.md), [executed results and limitations](report/research/clustering_results_2026.md), and [BibTeX references](report/research/clustering_recent_references.bib) accompany it.
