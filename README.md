@@ -111,7 +111,7 @@ This sequence updates the bibliography and resolves cross-references after struc
 
 ## Defence Materials
 
-The `presentation/` directory contains the editable [defence deck](presentation/thesis_defense_severity_gradient.pptx), its [PDF export](presentation/thesis_defense_severity_gradient.pdf), and the CogDash manual. The deck summarizes the assessment-level analysis and includes the patient-level findings in its backup slides; the report and dashboard present the full extension.
+The rebuilt [defence deck](presentation/defense_2026/thesis_defense.pptx) and [PDF export](presentation/defense_2026/thesis_defense.pdf) contain 17 main slides for a 15-minute presentation and 10 backup slides for examiner questions. The PowerPoint includes timed speaker notes, sources, and editable charts and tables. The main presentation covers the historical analysis, patient-level validation, scaling and missingness sensitivity, and the limits of the clinical interpretation. The earlier deck and the CogDash manual remain in `presentation/`.
 
 ## Recent Clustering Research
 

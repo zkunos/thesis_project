@@ -5,66 +5,38 @@
 %----------------------------------------------------------------------------------------
 
 \section{Background and Problem Statement}
-Acquired Brain Injury (ABI) encompasses traumatic brain injuries (TBIs), strokes, encephalitis and hypoxic-ischemic injuries. Clinical impact is considerable. TBI alone contributes to millions of hospitalizations/emergency room visits annually \parencite{maas2017traumatic,brazinova2021epidemiology}; among working-age adults, ABI causes long-term disability, which can include physical, emotional, and cognitive sequelae \parencite{corrigan2010epidemiology}. Cognitive impairments can affect attention, memory, language, executive function, and other cognitive domains collectively; however, configurations vary substantially across patients.
+Acquired Brain Injuries (ABIs) consist of traumatic brain injuries (TBIs), stroke, encephalitis and hypoxic-ischemic injury. The clinical implications of ABIs are large. TBIs account for millions of emergency department visits/hospital admissions every year \parencite{maas2017traumatic,brazinova2021epidemiology} ; ABI can also cause long-term disabilities for adults of working age, with physical, behavioral/emotional and cognitive changes \parencite{corrigan2010epidemiology}. The areas that are typically impacted by ABI include attention, memory, language and executive functioning but vary significantly from one patient to another.
 
+The variation makes it difficult to develop individualized treatment/intervention plans based upon cognitive assessments of ABI patients. Post-ABI follow-up evaluations can identify patients who have sustained injuries of the same severity and yet demonstrate vastly different cognitive patterns and abilities. Commonly used criteria (diagnostic category or severity banding) grouping together different cognitive profiles will obscure clinically meaningful differences between individuals with identical diagnostic/severity categories \parencite{saatman2008classification}.
 
+This research aims to investigate the above-stated concerns empirically. As opposed to applying previously established clinical taxonomic criteria to the dataset used for this research, I apply an unsupervised clustering method to group patients by their performances as measured on multiple neuropsychological tests, and then examine the extent to which the groups (subgroups) obtained from such application are clinically relevant. Another common obstacle to conducting analyses with clinically-derived data involves missing values. Clinicians often leave out components of neuropsychological testing batteries when administering them due to time limitations, patient fatigue, clinician judgment, or patient-related issues which may impede the completion of all test administrations. Non-random omissions of some test items are therefore anticipated.
 
-Variability among patients poses a practical challenge for rehabilitation. Patients with identical injury severities may have very different cognitive profiles at follow-up evaluation following ABI, whereas common labels used for triage (diagnosis/severity band) aggregate distinctly different cognitive profiles and obscure clinically meaningful variations within groups \parencite{saatman2008classification}.
+Missing value imputations allow for retaining incomplete assessments; however, each procedure has its own assumptions about missing values. There is minimal documentation regarding how those assumptions affect subsequent cluster analysis, thus the relationship of those assumptions to cluster analysis is investigated directly within this dissertation.
 
-
-
-This dissertation addresses the issue empirically. Instead of applying a priori clinical taxonomy to the data set, I employ unsupervised clustering to derive cognitive subgroups from neuropsychological test scores and subsequently evaluate their clinical relevance. Clinically collected data pose an additional obstacle: missing values. Omission of full batteries occurs regularly in rehabilitation practice due to time restrictions, fatigue, examiner judgment, and patient limitations; therefore, nonrandom omission of items is expected.
-
-
-
-Missing value imputation allows retention of incomplete assessments; however, each method introduces its own assumptions about unknown values. Limited documentation exists regarding how those assumptions will impact subsequent clustering; this dissertation evaluates that dependency directly.
-
-
-
-Phenotyping refers to identification of cognitive subgroups via a data-driven approach. Whether those subgroups describe qualitatively distinct profiles or gradations of overall severity remains an empirical determination.
+The process of phenotyping represents the identification of cognitive subgroups through a data-driven process. The question remains unanswered as to whether these subgroups constitute qualitative differences in cognitive profiles or represent continuum levels of general severity.
 
 \section{Research Questions}
-There are four questions I seek to answer in this dissertation:
+The purpose of this study was to answer the following four research questions:
 
+Research Question RQ1: Is it possible to isolate discrete cognitive phenotypes through the use of an unsupervised clustering method applied to the imputed dataset on participants with a history of an acquired brain injury?
 
+Research Question RQ2: How much does the choice of an imputation methodology impact upon the identification of cognitive phenotypes?
 
-Question RQ1: Can unsupervised clustering of the imputed data indicate discrete cognitive phenotypes in patients with acquired brain injuries?
+Research Question RQ3: Are there associations between patient cluster assignment and clinical unit assignment? Such an association would suggest that cognitive tiers differ in their distribution among the populations served by different units.
 
+Research Question RQ4: Can either (a) increased stability in grouping or (b) improved interpretation occur if the clustering utilizes composite scores representing domain areas as opposed to using individual tests in the clustering?
 
-
-Question RQ2: What degree does choice of imputation strategy influence emergent phenotypes?
-
-
-
-Question RQ3: Is cluster membership associated with clinical unit assignment? If so, this would indicate that the cognitive tiers differ in their distribution across the populations served by different units.
-
-
-
-Question RQ4: Do phenotypes exhibit greater consistency and/or ease-of-interpretation when clustered using domain-level composite versus individual test variables?
-
-
-
-The ultimate goal is to construct a replicable phenotyping pipeline for routinely collected clinical data. Missingness will be modeled as part of the rehabilitation process itself rather than considered a posteriori nuisance.
+The objective ultimately is to create a reproducible phenotyping procedure based on routine clinical data collection. Missingness will be modeled as part of the rehabilitation process rather than treated as a nuisance only after data collection.
 
 \section{Hypotheses}
-This dissertation examines the following four hypotheses:
+I test four hypotheses in this dissertation.
 
+Hypothesis H1: My expectation using the UMAP/HDBSCAN pipeline is that there will be at least two cognitively stable clusters for most imputation methods. Also, I expect at most 30\% of all data points to be labeled as noise, and the average silhouette score will be at least 0.40.
 
+Hypothesis H2: I used the "fixed reference" from Chapter \ref{Chapter3} to test if group assignments were consistent across different imputation methods. Specifically, I expected the median pairwise ARI between imputations to exceed 0.50. As stated previously, I would view this as evidence that the assignment is robust to these specific imputed data sets, but it would not rule out artifacts shared by the representation or establish clinical phenotypes.
 
-Hypothesis H1: Using a UMAP/HDBSCAN pipeline, I anticipate finding at least two separate stable cognitive clusters for most imputation methods, with a noise point rate at most 30\% and a silhouette score of at least 0.40.
+Hypothesis H3: Chi-Square tests assessing association between cognition cluster membership and Clinical Unit population should show statistically significant results. I expect the value of Cramér's V to be greater than 0.10. These results would demonstrate differences among the populations served by clinical units.
 
+Hypothesis H4: By aggregating domain specific features, I expect the same level of separation among groups, but lower levels of redundancy. Metrics that I will use to determine if this is accurate include silhouette values, Variance Inflation Factor (VIF), and Condition Number (CN).
 
-
-Hypothesis H2: Agreement should exist between assignments generated using different imputation techniques (median pairwise ARI \(> 0.50\)). Under the fixed-reference design specified in Chapter~\ref{Chapter3}, high agreement supports assignment robustness across those imputations. It does not rule out artifacts shared by the feature representation or establish that the groups are clinical phenotypes.
-
-
-
-Hypothesis H3: Chi-square tests and Cramér's V effect sizes (\(> 0.10\)) should illustrate a statistically significant relationship between cluster membership and clinical unit, indicating that cluster membership reflects actual differences in populations serviced by different clinics.
-
-
-
-Hypothesis H4: Domain aggregation should preserve similar separation while reducing redundancy, as measured by silhouette, variance inflation factors and the condition number.
-
-
-
-An exploratory patient-level extension, implemented after the historical H1--H4 analyses, independently refits clustering across imputations and patient subsamples, compares feature scaling and incomplete-data mixtures, and models longitudinal cognitive scores. Its methods and results are reported in Sections~\ref{sec:extension_methods} and~\ref{sec:extension_results}; it is not a retrospective redefinition of the original hypotheses.
+An exploratory patient-level extension followed the historical H1-H4 analyses. It independently refits clustering across imputations and patient subsamples, compares feature scaling and incomplete-data mixture models, and models longitudinal cognitive scores. Methods and results are in Sections \ref{sec:extension_methods} and \ref{sec:extension_results}. It does not retrospectively redefine the original hypotheses.

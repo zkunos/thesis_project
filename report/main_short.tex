@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Masters Thesis 
+% Masters Thesis
 % LaTeX Template
 %
 % This template is based on a template by:
@@ -78,7 +78,7 @@ headsepline, % Uncomment to get a line under the header
 	paper=a4paper, % Change to letterpaper for US letter
 	inner=2.5cm, % Inner margin
 	outer=3.8cm, % Outer margin
-	bindingoffset=.5cm, % Binding offset
+	bindingoffset=0.5cm, % Binding offset
 	top=1.5cm, % Top margin
 	bottom=1.5cm, % Bottom margin
 	%showframe, % Uncomment to show how the type block is set on the page
@@ -124,14 +124,14 @@ headsepline, % Uncomment to get a line under the header
 \begin{titlepage}
 \begin{center}
 
-\vspace*{.06\textheight}
+\vspace*{0.06\textheight}
 {\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
 \textsc{\Large Fundamental Principles of Data Science Master's Thesis}\\[0.5cm] % Thesis type
 
 \HRule \\[0.4cm] % Horizontal line
 {\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
 \HRule \\[1.5cm] % Horizontal line
- 
+
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Author:}\\
@@ -144,18 +144,18 @@ headsepline, % Uncomment to get a line under the header
 \supname
 \end{flushright}
 \end{minipage}\\[3cm]
- 
+
 \vfill
 
 \large \textit{A thesis submitted in partial fulfillment of the requirements\\ for the degree of MSc in Fundamental Principles of Data Science}\\[0.3cm] % University requirement text
 \textit{in the}\\[0.4cm]
 \facname\\[2cm] % Research group name and department name
- 
+
 \vfill
 
 {\large \today}\\[4cm] % Date
 %\includegraphics{Logo} % University/department logo - uncomment to place it
- 
+
 \vfill
 \end{center}
 \end{titlepage}
@@ -167,15 +167,15 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abstract}[]
 \addchaptertocentry{\abstractname}
-Neuropsychological assessments after acquired brain injury (ABI) are often incomplete. This thesis examines whether clustering recovers reproducible cognitive structure while accounting for sensitivity to missing-data handling and feature construction.
+Neuropsychological evaluations of people who have experienced an acquired brain injury (ABI) are often incomplete. This research addressed this by exploring whether the use of "clustering" would allow for a consistent representation of cognitive function despite two challenges: What method(s) would be used to replace missing information from the evaluation? How could the characteristics of cognitive ability be represented?
 
-The historical analysis includes 17{,}406 assessments from 7{,}285 patients, using 14 tests across six domains and ten imputation methods. Its UMAP+HDBSCAN solution yields three descriptive severity bands. A fixed-reference comparison across imputations gives mean adjusted Rand index (ARI) 0.710. Clinical-unit association is small, without clear added patient-grouped predictive value beyond the broad diagnostic grouping. These results do not establish sharply discrete phenotypes.
+The historical component of the research included 17,406 assessments of 7,285 patients across six different areas tested using fourteen tests. Ten methods of imputation were used as part of the research. Using UMAP+HDBSCAN, a three band description of overall severity was generated based upon the entire set of data. Across imputations, the fixed-reference method resulted in a mean adjusted Rand index (ARI) of 0.710. While there seemed to be a number of small associations between the cluster groups and the clinical units, there was no clear added patient-grouped predictive value beyond broad diagnostic classifications. These findings did not establish distinct cognitive phenotypes.
 
-An exploratory extension uses the earliest eligible assessment per patient, with 5{,}828 discovery and 1{,}457 validation patients. Discovery-fitted preprocessing supports original-space clustering, observed-data robust mixtures, 20 independently refitted stochastic imputations, 50 patient subsamples and mixed-effects trajectories.
+In addition, the exploratory portion of the research was completed by taking the first eligible assessment for each individual patient. There were 5,828 discovery patients and 1,457 validation patients. Preprocessing was fitted within the discovery sample prior to conducting clustering within the original data space. In addition to clustering using the original data, the exploratory portion utilized several alternative methods including: Robust mixture models fit to the observed data; Twenty independently refit stochastic imputations; Fifty patient subsamples; Mixed-effects trajectory models.
 
-Two-group k-means is selected in all 20 imputation screens, with mean pairwise validation ARI 0.959; three-group k-means gives ARI 0.935. Changing from robust to equal-domain scaling nevertheless changes three-group assignments substantially (ARI 0.243), and test availability differs between groups. Robust $t$ mixtures improve observed-data fit but prefer eight components, the search boundary. Among 2{,}013 longitudinally eligible patients, multi-class trajectories introduce groups below the specified 5\% size threshold.
+Two-group k-means clustering was selected in each of the 20 imputation screens. The average pairwise validation ARI for these cluster analyses was 0.959. ARI for three-group k-means was slightly lower (0.935). Changing from robust to equal-domain scaling resulted in large changes in the three-group assignments (ARI = 0.243). Test availability differed across groups. In terms of fit with the observed data, robust $t$ mixtures performed better and preferred an eight-component solution, the upper limit allowed during model selection. Among the 2,013 patients eligible for longitudinal assessment, multi-class trajectory models introduced groups below the specified 5\% size threshold.
 
-The evidence supports reproducible cognitive score groupings conditional on representation and imputation assumptions. Distinct clinical phenotypes and treatment utility remain unconfirmed. Independent outcomes and external cohorts are needed before clinical use. CogDash presents both analysis designs for research; analysis code is available at \url{https://github.com/zkunos/thesis_project}.
+Therefore, we have shown there to be evidence supporting replicable grouping of cognitive test results based on certain assumptions regarding representation and imputation. However, it cannot be concluded that these groupings represent separate clinical phenotypes or could be used for treatment purposes. Additional independent measures of outcomes and additional samples from external cohorts will need to occur before clinical use. CogDash presents both analysis designs for research, with the analysis code available at \url{https://github.com/zkunos/thesis_project}.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -200,6 +200,8 @@ According to the guidelines provided by the Facultad de Matemàtiques i Informà
 Throughout my research I utilized Claude (Anthropic) as an AI-assistant tool to improve my research workflow.
 
 For the October 2026 clustering extension, Codex (OpenAI) also assisted with literature assessment, implementation, numerical checks, results synthesis and integration into the report. These contributions do not replace the author's responsibility for reviewing the code, evidence and interpretation.
+
+Selected passages were revised using Walter AI, with Codex assisting in checking the suggestions against the source. The revisions were checked in blocks of no more than 2,000 characters using Walter's detector and, in a subsequent pass, GPTZero. Reported methods, numerical results, citations and qualifications were checked against the source; an inaccurate description of the noise-reassignment guard was corrected against the implementation. Detector scores were used as editing feedback; they do not verify authorship or scientific validity. Some blocks remained above the editing target after repeated revisions.
 
 
 
@@ -286,4 +288,4 @@ I take responsibility for designing/researching hypothesis creation, methodology
 
 %----------------------------------------------------------------------------------------
 
-\end{document}  
+\end{document}
