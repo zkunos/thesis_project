@@ -115,6 +115,8 @@ The rebuilt [defence deck](presentation/defense_2026/thesis_defense.pptx) and [P
 
 The [speaking guide](presentation/defense_2026/defense_speaking_guide.docx) provides a transcript, delivery cue, and explanations of technical terms for every slide. Its main-slide timing totals 15 minutes; definitions and backup scripts are for preparation and questions.
 
+The [full spoken transcript](presentation/defense_2026/defense_full_transcript.docx) provides a first-person script with fuller explanations for all 27 slides. The 17 main slides retain a 15-minute core, with optional detail marked for longer rehearsals and questions. Reading the expanded main script in full takes approximately 25 to 28 minutes before extra pauses. The 10 backup slides have separate expanded answers.
+
 ## Recent Clustering Research
 
 The [15 October 2026 research assessment](report/research/clustering_research_2026.md) evaluates seven articles published within the preceding year. The [original experiment protocol](report/research/clustering_experiment_protocol_2026.md), [executed results and limitations](report/research/clustering_results_2026.md), and [BibTeX references](report/research/clustering_recent_references.bib) accompany it.
