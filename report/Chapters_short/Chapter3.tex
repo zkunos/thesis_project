@@ -5,26 +5,20 @@
 %----------------------------------------------------------------------------------------
 
 \section{Data Description}
-Data originates from a clinical neuropsychology database managed by a rehabilitation center. Raw data includes 22,075 records from 8,739 unique individuals with repeated follow-up assessments. Each assessment consists of 31 features relating to demographics/administrative details/injury specifics/neuropsychological results across six cognitive domains: Orientation/Attention/Visuospatial Perception/Language/Memory/Executive Function. Following Tier-1 filtering (described in Section~\ref{sec:filtering}), the analyzed dataset contains 17{,}406 assessments from 7{,}285 subjects.
+There were 22,075 raw assessments for 8,739 individuals within a clinical neuropsychology database that is managed by a rehabilitation center. Some of these individuals had assessments completed at different times. Within each assessment, there are 31 variables collected; they include demographics, administrative information, information related to their injury, and test results across six cognitive domains: orientation, attention, visuoperception (visuospatial), language, memory, and executive function. Following Tier-1 filtering as discussed in Section \ref{sec:filtering}, the number of assessments remaining after filtering was 17,406, with 7,285 unique individuals included in the final analyzed sample of data.
 
-The historical primary unit of analysis is the assessment rather than the patient. The extension in Section~\ref{sec:extension_methods} instead uses one index assessment per patient and retains the patient split for trajectory modeling. Repeated follow-up assessments are retained as separate rows in the clustering, imputation-comparison, and assessment-level bootstrap analyses; they are not first aggregated within the 7{,}285 patients. This design preserves clinically observed change over time, but it does not account for within-patient dependence and may make stability estimates appear more precise than estimates obtained from a patient-grouped resampling design. The multinomial sensitivity analysis in Section~\ref{sec:h3_results} is the principal exception because its training, test, and bootstrap samples are grouped by patient.
+In terms of the historical aspect of this study, the single assessment level represented the unit of observation. The patient-level extension in Section \ref{sec:extension_methods} uses each patient's earliest eligible assessment as the index assessment and retains the same discovery/validation patient split for trajectory modeling. For the historical analyses assessing clustering, imputation comparison, and assessment level bootstrap methods, each follow-up assessment was treated separately (as separate observations). The assessments were not aggregated into units representing the 7,285 patients. Although treating each assessment individually preserves those observed changes, it does not acknowledge the dependency that exists between consecutive assessments of the same individual. Therefore, the resulting stability estimates may appear to be more precise than if estimates were derived from resampling grouped by patient. The primary exception to these historical analyses was the multinomial sensitivity analysis located in Section \ref{sec:h3_results}, which involved grouping both the training/test sets and bootstrap samples by patient.
 
+The data come from an actual clinical environment. Therefore, in assessing which measures to administer, the psychologist making those decisions made use of their own professional judgment. They selected measures that would address questions related to the clinical issue at hand; and they did so taking into account whether or not the patient was capable of participating. The data then exhibit systematic patterns of missing data. While it is true that there are many measures that appear on most evaluations; many others will only appear when a particular clinical concern arises. In consequence, the rate of missing data across the various measures available for evaluation is indicative of the clinicians' decision-making process regarding how to assess the patient's clinical condition. Rates of missingness range from approximately 5\% for screening tools to greater than 90\% for specialty assessments.
 
+Variables in the dataset also differ significantly in terms of the percent of missing values each variable contains. Variables additionally differ from one another in terms of measurement scale (i.e., standardized z-scores/scaled scores/timed raw scores). Scales were aligned during domain aggregation (Section \ref{sec:domain_scores}). Table \ref{tab:missing_descriptive} displays the distribution of missing data among the 14 candidate variables. It can be seen that 53.1\% of the 17,406 assessments (n = 9,245) contained complete data for all 14 variables. Thus, if complete-case analysis were performed, it would result in exclusion of 46.9\% (8,161 assessments) of the sample size. The imputation approach (Section \ref{sec:imputation}) is designed to allow retention of these cases and their associated clinical observations.
 
-Given that these data originate from routine clinical practice rather than a specifically constructed research protocol, test selection was influenced by the neuropsychologist conducting testing, referral questions and the patient's capacity to participate. Therefore, missingness in the dataset is structured. Certain measures appear in almost every assessment; however, some are only available in response to certain clinical circumstances. Unlike missingness originating from research protocols that may control missingness through design; missingness in this dataset varies greatly; ranging from approximately 5\% for screening tools to over 90\% for specialty assessments.
-
-
-
-Additionally, measures fall along varying scales (standardized z-scores/scaled scores/raw timed measures). During domain aggregation (Section~\ref{sec:domain_scores}), these scales were unified. In Table~\ref{tab:missing_descriptive}, I display the missingness distribution for the fourteen candidate variables. Only 53.1\% (9{,}245 assessments) of the 17{,}406 records contained complete data across all fourteen variables; if I applied listwise deletion, 46.9\% (8{,}161 assessments) of the sample could potentially be lost because this portion of the dataset could not be analyzed. The imputation strategy (Section~\ref{sec:imputation}) is intended to avoid losing clinical information associated with this portion of the sample.
-
-
-
-All data have undergone deidentification according to established standards for protecting patient privacy.
+All data have been deidentified using standard procedures to protect patient confidentiality.
 
 \section{Tier 1 Filtering}\label{sec:filtering}
-Variable selection used a 50\% missingness threshold and restricted the analysis to the 14 cognitive tests listed below. Assessment eligibility required at least one observed value among these retained tests. The 50\% threshold therefore applies to variable selection, while assessment eligibility follows the separate minimum-observation rule.
+The selection criteria for variables were based upon a threshold of 50\% missing values so that the results of the analysis would be limited to the 14 cognitive tests listed below. Each assessment was required to have at least one observed score among these 14 retained tests. The 50\% missingness threshold therefore pertained to variables, but the eligibility requirements were established by the minimum number of observed scores in an assessment.
 
-The resulting matrix contains 17{,}406 assessments from 7{,}285 patients. Of these, 16{,}553 assessments contain at least seven observed tests; 853 contain fewer. The historical variable-threshold sensitivity is summarized in Section~\ref{sec:robustness}. A separately defined patient-level sensitivity to requiring seven observed tests is reported in Section~\ref{sec:extension_results}. A more restrictive row rule changes the cohort and should not be described as the rule that generated the historical matrix.
+This resulted in a total of 17,406 assessments with data from 7,285 patients. There were 16,553 assessments which contained at least 7 observed test scores among the 14 tests and there were 853 assessments containing less than 7 observed test scores. The sensitivity to the historic thresholds used to select variables is discussed in Section \ref{sec:robustness}. The patient-level sensitivity analysis which requires at least 7 observed test scores is included separately in Section \ref{sec:extension_results}. Applying a stricter row rule changes the cohort and cannot be described as the rule that created the original historical data matrix.
 
 \begin{table}[ht]
 \caption{Eligible neuropsychological variables after Tier~1 filtering, organised by cognitive domain.}
@@ -49,9 +43,9 @@ Executive Function & \texttt{FEPMR} & 1 \\
 
 \section{Imputation Methods}\label{sec:imputation}
 
-The next part of this section presents ten imputation methods, grouped into the five categories outlined previously; these are not all multiple-imputation procedures. For clustering performance, both silhouette score and number of clusters \(k\), I chose the optimal combination of UMAP+HDBSCAN using the domain-level features. The silhouette value calculated here is based only on the high-density region clustered by HDBSCAN before performing the \(k\)-nearest-neighbour noise-assignment process. Consequently, the silhouette value is somewhat higher than reported in the literature for fully covered assessments (see Section~\ref{sec:h1_results}); for example, MICE achieved 0.598 in the high-density area before reassignment and 0.526 when assessed across all assigned cases.
+The rest of this subsection describes ten methods of imputation. However, not all of these are multiple imputation methods. For the clustering evaluation, I gave the silhouette value and number of clusters \(k\) that provided the best results using UMAP + HDBSCAN with domain-level feature sets. Here, I give the silhouette value based only upon the high-density points that were identified and grouped by HDBSCAN before noise points were assigned to their nearest neighbors. This differs from evaluating all assigned cases, as in Section \ref{sec:h1_results}: MICE gave a silhouette of 0.598 before noise reassignment and 0.526 across all assigned cases.
 
-The two deep learning methods required additional training choices, so their technical details are specified here. For the denoising autoencoder (DAE), deliberately corrupted inputs were generated by masking the observed values. The corruption mask was sampled as follows:
+For the two deep learning methods used to generate estimates of missing values, there were also other options made available regarding their training. Therefore, technical details of these models will be provided below. The Denoising AutoEncoder (DAE) was trained on corrupted input, where observed values were masked. In order to create the corrupted inputs, masks were randomly selected according to the following distribution:
 
 \begin{equation}\label{eq:dae_corrupt}
 \mathbf{m}_i\sim
@@ -61,15 +55,15 @@ P_{\mathrm{miss}} & \text{with probability } 0.5,\\[2pt]
 \end{cases}
 \end{equation}
 
-where \(P_{\mathrm{miss}}\) denotes the empirical distribution of missingness patterns and \(\rho\) denotes the uniform corruption rate. This scheme allows the DAE to learn from random corruption as well as from missingness structures that resemble those observed in the clinical data.
+Here, \(P_{\mathrm{miss}}\) denotes the empirical distribution of missingness patterns and \(\rho\) is the uniform corruption rate. This allowed the DAE to train on random corruption as well as missingness patterns like those in the clinical data.
 
-For the variational autoencoder (VAE), cyclical annealing was used for the \(\beta\) term in the evidence lower bound. The annealing schedule was:
+The VAE used a cyclical annealing schedule for the \(\beta\) term in its evidence lower bound:
 
 \begin{equation}\label{eq:beta_cyclical}
 \beta(t)=\beta_{\max}\,\frac{t \bmod T}{T},\qquad T=40,\ \beta_{\max}=0.1,
 \end{equation}
 
-The deep-learning imputations were evaluated by holding out a subset \(H\) of observed entries and comparing the imputed values with the original values. Root mean square error and mean absolute error were computed as:
+Deep-learning imputation methods were assessed by removing a subset \(H\) of the observed entries and comparing the original values to those which had been estimated through imputation. Root mean square error (RMSE) and mean absolute error (MAE) were calculated using the following equations:
 
 \begin{equation}\label{eq:rmse}
 \mathrm{RMSE}=\sqrt{\frac{1}{|H|}\sum_{(i,j)\in H}\bigl(\hat{x}_{ij}-x_{ij}\bigr)^2},\qquad
@@ -77,7 +71,7 @@ The deep-learning imputations were evaluated by holding out a subset \(H\) of ob
 \end{equation}
 
 \begin{table}[htbp]
-\caption{A summary of the ten imputation methods broken down by the five-category taxonomy. The clustering performance columns report the optimal UMAP+HDBSCAN solution on domain-level features, using the high-density HDBSCAN core before \(k\)-nearest-neighbour noise assignment.}
+\caption{A summary of the ten imputation methods broken down by the six-category taxonomy. The clustering performance columns report the optimal UMAP+HDBSCAN solution on domain-level features, using the high-density HDBSCAN core before \(k\)-nearest-neighbour noise assignment.}
 \label{tab:method_summary}
 \centering
 \scriptsize
@@ -110,18 +104,20 @@ Learning     & VAE        & 2014 & 4 & 0.603 & Probabilistic; principled uncerta
 \end{table}
 
 \section{Calculating Scores for Each Cognitive Domain}\label{sec:domain_scores}
-A set of cognitive-domain-level features was created to represent aggregate versions of the variables related to each cognitive domain, while retaining the same 14 individual neuropsychological variables for comparison. Since many of the original measures are recorded on different scales (e.g., standardised scores versus scaled scores), direct aggregation may create scale-related problems unless scale alignment is performed first. To reduce potential problems from extreme imputations caused by outliers or sentinel codes, three processing steps were applied to each variable before aggregation:
+A collection of cognitive-domain features was additionally generated by aggregating of the variables in each area. The same 14 individual neuropsychological variables were retained for comparison. Several of the measures used different scales (i.e., standardized scores, scaled scores). Without scale alignment, those differences could cause problems during aggregation. To reduce problems from extreme imputed values associated with outliers or sentinel codes, three processing steps were completed on each variable before aggregation:
 
 \begin{enumerate}
-\item Winsorizing each variable over the 1st to 99th percentile range.
-\item Reversing the sign of all timed test results, so that higher aligned values indicate better performance.
-\item Standardising all variables to a mean of 0 and variance of 1.
+\item Winsorizing each variable at the 1st and 99th percentile.
+\item Inverting signs for time-based assessments to make higher scored values representative of superior performance.
+\item Standardizing each variable to have a mean of 0 and variance of 1.
 \end{enumerate}
 
-Administration-frequency-weighted averages of variables representing each domain were then used as domain scores. Administration-frequency weights (\(w_j = 1 - r_j\), where \(r_j\) represents the missingness rate) were assigned to each variable \(j\) and normalised within domains. This weighting gives less influence to sparsely administered measures, whose composite contribution would otherwise depend more heavily on imputed values, and gives more influence to measures observed more often in routine practice. The weights should not be interpreted as psychometric reliability estimates: they do not quantify internal consistency, test-retest reliability, or measurement error. By reducing dimensionality from 14 individual variables to six domain-level scores, the number of variables available for distance-based algorithms is reduced, improving feature-space geometry. Furthermore, creating domain-level profiles facilitates clinical conceptualisation of cognitive deficit in relation to cognitive domains rather than individual variables. Some detail is sacrificed. For example, two patients could obtain equal average memory scores while differing in immediate versus delayed recall. Whether there is sufficient rationale for sacrificing this detail in exchange for reduced redundancy and improved interpretability is assessed in Hypothesis H4.
+The overall scores for the domains were determined by calculating an administration-frequency-weighted mean of the variables that represent the respective domain. Each variable \(j\) received a weight \(w_j = 1 - r_j\), with \(r_j\) representing its missingness rate; weights were then normalized within each domain. Thus, variables that are measured more often will have a higher weight and therefore have a stronger impact when computing the domain score. In addition, the less frequent variables are reduced in their contribution to the domain score due to reliance on imputation of missing data. These weights do not measure psychometric reliability: they estimate neither internal consistency nor test-retest reliability or measurement error. Aggregating fourteen variables into six domain scores gives distance-based methods fewer dimensions to operate over. Clinicians who evaluate patient cognitive function based on a composite of multiple tests may find evaluating cognitive domains (e.g., attention, executive functions) easier to interpret than assessing individual test results. However, there is a trade-off in that two individuals receiving equivalent average memory scores may still demonstrate differences in immediate recall vs delayed recall. Hypothesis H4 addresses whether the reduction in redundancy and improvements in interpretation provide sufficient justification for accepting a loss of detail.
 
 \section{UMAP + HDBSCAN Pipeline}\label{sec:pipeline}
-Figure~\ref{fig:pipeline_diagram} shows the end-to-end process from imputed data to final cluster assignment. Prior to performing dimensional reduction using UMAP/HDBSCAN, I apply robust scaling using the median and interquartile range to reduce sensitivity to extreme observations in neuropsychological assessment \parencite{bellio2020analyzing,pinsky2023mad}. Floor effects occur when severely impaired patients accumulate at minimum values for an assessment tool \parencite{pinsky2023mad}, whereas ceiling effects occur when patients with no impairments accumulate at maximum values \parencite{pinsky2023mad}. Median and interquartile-range scaling reduces sensitivity to extreme observations but does not remove floor or ceiling masses. If a domain has a narrow central range, this scaling can amplify its tails; Section~\ref{sec:extension_results} quantifies that sensitivity. For each of the twenty imputed datasets (ten methods $\times$ two feature representations), I perform UMAP followed by HDBSCAN. Like other machine learning algorithms that rely heavily on initial conditions (in this case, random initialization), UMAP is stochastic. Therefore, a single embedding could capture variability due to either random initialization or geometric properties of the data. Therefore, I repeat each hyperparameter combination ten times and choose the embedding with highest silhouette score (based on initial HDBSCAN clustering).
+Figure \ref{fig:pipeline_diagram} provides a comprehensive depiction of all steps taken from imputation through final cluster designation. In order to decrease sensitivity of the UMAP (and subsequently the HDBSCAN) to the extremes in the neuropsychological assessment scores I perform robust scaling using the median and interquartile range \parencite{bellio2020analyzing,pinsky2023mad} before performing UMAP and HDBSCAN. When floor effects are present in an assessment, severely impaired individuals will tend to accumulate at the lower end of the scales used in that assessment \parencite{pinsky2023mad}; ceiling effects occur when those who have no impairment accumulate at the upper end of the scales for that same assessment \parencite{pinsky2023mad}. Robust scaling reduces some influence that extreme values would otherwise have but does not remove either type of concentration. Median and interquartile range scaling may also magnify tail influences if the central range of a distribution is narrow. This sensitivity is discussed further in Section \ref{sec:extension_results} and quantified.
+
+UMAP followed by HDBSCAN was run on twenty imputed datasets, representing ten methods and two feature representations. An embedding could represent both the geometric structure of the data and variability associated with UMAP's random initialization. To assess this variability, I ran each hyperparameter combination ten times and then selected the "best" embedding, defined as having the highest silhouette score produced during the initial application of HDBSCAN to cluster the data.
 
 \begin{figure}[htbp]
 \centering
@@ -150,7 +146,7 @@ Figure~\ref{fig:pipeline_diagram} shows the end-to-end process from imputed data
 \end{figure}
 
 \subsection{UMAP Parameter Grid}
-I utilized Euclidean distance as the distance metric and \texttt{min\_dist}$=0.0$ to encourage separation between dense areas in the embedding.
+I utilized Euclidean distance for the similarity measurement when comparing the points. I selected \texttt{min\_dist}=0.0 to encourage separation among clusters (dense areas) in the embeddings.
 
 \begin{table}[ht]
 \caption{UMAP hyperparameter grid. All combinations of these values were evaluated, giving 9 configurations.}
@@ -168,7 +164,7 @@ I utilized Euclidean distance as the distance metric and \texttt{min\_dist}$=0.0
 \end{table}
 
 \subsection{HDBSCAN Parameter Grid}
-Each UMAP embedding produced 120 possible candidate solutions (due to 120 different possible HDBSCAN configurations). To determine which configuration was "best," I employed a composite quality score that punished solutions with high silhouettes by allocating many assignments to noise:
+Each UMAP embedding was associated with 120 different configurations for HDBSCAN. Each configuration generated a candidate cluster solution. I utilized a compound quality score to select from these candidate cluster solutions. The quality score penalized those candidate cluster solutions that were able to achieve a high silhouette value but had many observations classified as noise:
 
 \begin{equation}
 Q = \text{silhouette} \times (1 - \text{noise proportion})
@@ -192,110 +188,92 @@ Q = \text{silhouette} \times (1 - \text{noise proportion})
 \end{table}
 
 \subsection{Sweep Procedure}
-The following procedures were employed for each imputed dataset. First, I preprocessed each dataset using a robust scaler. Second, I repeated each UMAP hyperparameter combination with ten random seeds, yielding ten embeddings per combination, and retained the embedding with the highest silhouette score. These repetitions assess sensitivity to stochastic initialisation; they are not folds of cross-validation. Third, I evaluated a grid of 120 HDBSCAN parameter configurations and selected the configuration yielding the highest quality score \(Q\). This is a hyperparameter sweep rather than 120-fold cross-validation. Fourth, I re-labelled observations previously labelled as noise. Noise points assigned by HDBSCAN were relocated to the nearest substantive cluster using k-nearest-neighbour similarity (\(k = 10\)) in UMAP space. This process yielded 100\% coverage. Re-labelling was allowed only when the silhouette decreased by less than 10\%, preserving separation between clusters.
+All of the imputed datasets underwent the same process flow.
+
+Firstly, data were scaled via a robust scaler.
+
+Secondly, for each combination of hyperparameters used for UMAP, ten random seeds produced ten embeddings.
+
+I chose the embedding from each combination which had the highest silhouette coefficient. These runs tested sensitivity to random seed initialization and were not cross-validation splits.
+
+Thirdly, I ran 120 different HDBSCAN parameter combinations and selected the one with the best quality score \(Q\). That was a search over hyperparameter space rather than a 120-fold cross validation.
+
+Fourthly, observations originally assigned to noise class were moved based on k-nearest neighbour similarity in the UMAP space (\(k = 10\)). The exported assignments had 100\% coverage. The reference fitting process allowed no greater than a 10\% reduction in silhouette when assigning labels; however, this provision was not applied during the subsequent method by method export of noise assignments.
 
 \subsection{Worked Example}
-Consider a hypothetical assessment with twelve observed retained tests and missing scores for the timed attention task and delayed verbal recall. In the historical analysis, MICE fills the missing entries; direction alignment, standardization and domain weighting then produce six composites. Robust scaling and UMAP transform these composites before HDBSCAN assigns a density-based group. Eligible noise points receive the separate KNN reassignment described above. The resulting names, Above-Average, Near-Normal and Global Impairment, describe cohort-relative severity. The H2 agreement diagnostic is a separate fixed-reference analysis and does not supply a clinical confidence score for this example. CogDash\textquotesingle s New Profile page instead applies the saved patient-level preprocessing and two- or three-group k-means model from Section~\ref{sec:extension_methods}; it reports distances to fitted centers.
+To illustrate, let us consider an assessment with twelve observed retained test results and missing scores on the timed attention task and delayed verbal recall. Using MICE, in the historical analysis, these two missing values are filled-in. Six composite scores are generated through direction alignment, standardization and domain weighting from these scores. Afterward the scores undergo robust scaling and are transformed using UMAP. Density-based grouping occurs next via HDBSCAN. Noise points that are eligible for reassignment receive a separate KNN reassignment as described earlier. Labels describing severity based on this cohort of patients include Above-Average, Near-Normal and Global Impairment. H2 represents a separate fixed-reference diagnostic; H2 does not assign a clinical confidence rating to this example. CogDash's New Profile page applies the saved patient-level preprocessing and either the two- or three-group k-means model in Section \ref{sec:extension_methods}, reporting distances to the fitted centers.
 
 \section{Hypothesis Definitions}\label{sec:hypotheses}
-\noindent \textbf{H1 (Stability and Discreteness of Cognitive Clusters)}. The UMAP + HDBSCAN pipeline is expected to identify at least two stable cognitive clusters for most imputation techniques. The stability criterion is met when the best solution from at least 8 of the 10 methods has an average silhouette $\geq 0.40$ and a pre-reassignment noise proportion $\leq 0.30$. These numerical thresholds evaluate partition quality and stability in the selected embedding; they do not by themselves establish that the clusters are discrete phenotypes. Discreteness is evaluated separately using profile shape, principal-component structure, separation in the original six-domain space, and sensitivity of the recovered cluster count.
+\textbf{H1 (Stability and Discreteness of Cognitive Clusters)}. Most likely, for many imputation methods, the UMAP + HDBSCAN pipeline will define at least two stable cognitive clusters. Criteria for evaluating the stability of each cluster include: First, that the top solution produced by at least eight of the ten imputation methods has an average silhouette value of at least 0.40; Second, that no more than 30\% of assessments were assigned to "noise" prior to their assignment to one of the defined clusters. These criteria alone do not establish that the partitions generated in the selected feature space correspond to distinct cognitive phenotypes. To evaluate discreteness beyond profile shape and to assess sensitivity to the number of clusters found, PCA and separate assessment in the original six domain space will be performed. Cluster-count sensitivity will also be examined.
 
+\textbf{H2 (Robustness Across Imputation Techniques)}. Moderate to high agreement between imputation methods is expected with respect to grouping when the geometric representations and clustering models are held constant. The principal means of discovery will continue to be UMAP + HDBSCAN. For H2, the secondary means of measuring agreement will involve applying a \(k\)-means labeling rule that was developed using data from the MICE embedding without modification to the other imputed datasets embedded into the same geometry. Agreement will be indicated where the median ARI is greater than 0.50 across all 45 pairs of imputation methods. NMI will provide supplementary evidence for agreement. Some latitude exists in choosing a threshold. The chosen threshold represents substantial overlap relative to chance and therefore indicates that cluster assignments are robust within a given reference framework. It does not require or claim that independently refitted UMAP + HDBSCAN pipelines recover the same number of tiers.
 
+\textbf{H3 (Relationship Between Clinical Unit and Cluster Membership)}. I anticipate that there is a connection between the clinical units and cluster membership. To assess whether my anticipation will be confirmed, I plan on developing contingency tables, and then evaluating chi-squared tests of independence for each imputed dataset. If the results confirm a connection between clinical units and cluster membership, it will be indicated as being a statistically significant relationship at \(\alpha = 0.05\) post-Bonferroni adjustments, along with Cramér's V greater than 0.10. As an additional sensitivity evaluation to account for possible confounding variables, I also plan to conduct a Cochran-Mantel-Haenszel test that is conditional upon an appropriate covariate selection.
 
-\noindent \textbf{H2 (Robustness Across Imputation Techniques)}. Solutions for the clustering problems should show reasonable to high agreement among the imputation methods when the embedding geometry and partition model are held fixed. The primary discovery pipeline remains UMAP+HDBSCAN. For H2 only, I use a deliberately fixed secondary agreement diagnostic: a \(k\)-means labelling rule is trained on the MICE embedding and then applied unchanged to all other imputations. H2 is supported if the median ARI across the $\binom{10}{2} = 45$ pairs of methods exceeds 0.50. NMI is reported as a complementary agreement measure. Although there is considerable flexibility in setting this threshold, it is greater than chance and implies substantial overlap in group membership under a common projection and labelling rule. This hypothesis therefore tests robustness of point assignments under a fixed reference structure; it does not require, or claim, that independently refitted UMAP+HDBSCAN solutions recover the identical number of tiers.
-
-
-
-\noindent \textbf{H3 (Relationship Between Clinical Unit \& Cluster Membership)}. Cluster membership is expected to be related to clinical unit. For each imputation technique, a contingency table is created and a chi-square test of independence is conducted. H3 is confirmed if the relationship remains statistically significant at \(\alpha = 0.05\) after a Bonferroni adjustment and Cramér's \(V > 0.10\). As a sensitivity check for potential confounds, a Cochran-Mantel-Haenszel (CMH) test is performed, conditioned on an appropriate covariate.
-
-
-
-\noindent \textbf{H4 (Clustering at Domain-Level vs. At Variable Level)}. I expect the cognitive features at the domain level to result in a clustering representation that is more interpretable and at least as well separated as the representation based on cognitive features at the variable level. H4 will be confirmed if the domain-level approach performs at least as well as or better than the variable-level approach on at least two of three metrics: (1) higher silhouette scores; (2) lower mean VIFs; and (3) lower condition numbers. Smaller values of VIF and condition number imply less multicollinearity and better numerical conditioning. Because cross-method agreement has already been assessed in H2, comparisons of feature representations are made in H4 exclusively.
+\textbf{H4 (Clustering at Domain Level versus Variable Level)}. I feel that grouping the cognitive attributes into their respective domains will assist in creating clusters that are easier to understand than when using the single attribute levels. Furthermore, I believe that the domain level clusters will demonstrate either comparable or improved separations compared to those found through the variable level clusters. H4 will be supported if at least two of the three metrics demonstrate that the domain level clusters were equivalent to or better than the variable level clusters. Those metrics that I plan on utilizing include silhouette score, mean VIF and condition number. Silhouette score indicates larger values represent better cluster separation. Lower values of VIF and condition numbers indicate lower degrees of multicollinearity issues and better numerical conditioning. Agreement across imputations was already assessed in H2; comparison of feature representations belongs to H4.
 
 \section{Statistical Tests and Validation}\label{sec:stats}
 
 \subsection{Statistical Conventions}
-Each statistical evaluation of hypotheses follows typical statistical practice. Each evaluation assesses the data relative to a null hypothesis \(H_0\), representing a "no-effect" baseline. The p-value is the probability of obtaining a test statistic as extreme as that obtained assuming \(H_0\) to be true; smaller p-values represent stronger evidence against \(H_0\). A predetermined significance level of \(\alpha = 0.05\) serves as the threshold for rejecting \(H_0\). For any parameter, a 95\% CI represents the range that would include the population parameter in 95\% of repeated random samples from the same population using the same methodology.
+The basic method for determining how well the research results support the statistical hypotheses is through traditional statistical procedures. Each assessment compares the data with a null hypothesis \(H_0\), representing a no-effect baseline. The p-value is the probability of a test statistic at least as extreme as the one observed, assuming \(H_0\) is true. Smaller p-values represent greater evidence of \(H_0\) being incorrect. A predetermined level of \(\alpha = 0.05\) is used as the criterion for determining when to reject \(H_0\). An additional aspect of this analysis includes creating confidence intervals (CIs). If you were to randomly sample multiple times from the same population using the same methods, 95\% of those CIs would contain the true population parameter.
 
+Bootstrapping generates new datasets using random sampling with replacement from your original dataset. These new datasets allow you to create a simulation of what your sampling distribution of a statistic might look like. From these bootstrapped datasets, you can determine the 2.5th percentile and 97.5th percentile of your distributions to create a bootstrap confidence interval. The z-score describes how many standard deviations away from the mean of a specific reference distribution a given score is. With the standardized scoring on the instruments used in this study, we are able to compare scores from different tests.
 
-
-For applications of bootstrapping, observed data are randomly sampled with replacement to generate a simulated approximation of the sampling distribution of a statistic. The 2.5th and 97.5th percentiles of that simulated distribution define the bootstrap CI. A z-score quantifies how many standard deviations away from the mean of a specified reference distribution a given value lies. With respect to the psychological testing instruments employed here, standardized testing permits scores derived from different instruments to be compared.
-
-
-
-Cohen defined standards for interpreting the magnitude of effects, specifically for standardized differences, i.e., Cohen's \(d\). Specifically, \(d = 0.20\) is interpreted as a small effect size, \(d = 0.50\) as a medium-sized effect, and \(d = 0.80\) as a large effect size. When applying Cramér's V as an effect size for evaluating chi-squared tests, \(V = 0.10\) is interpreted as a small effect size, \(V = 0.30\) as a medium effect size, and \(V = 0.50\) as a large effect size.
+Cohen provided guidelines regarding the size of effects based upon the standardized difference (d): \(d = 0.20\) represented a small effect, \(d = 0.50\) was a medium effect, and \(d = 0.80\) represented a large effect. In chi-square analyses, Cramér's V provides information about the strength of association. As such, I am utilizing descriptive standards to help interpret the magnitude of association; i.e., \(V = 0.10\) represented a small effect, \(V = 0.30\) represented a moderate effect, and \(V = 0.50\) represented a large effect.
 
 \begin{equation}\label{eq:cohend}
 d=\frac{\bar{x}_1-\bar{x}_2}{s_p},\qquad s_p=\sqrt{\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}},
 \end{equation}
 
 \subsection{Tests and Validation Procedures}
-\noindent \textbf{Bootstrap Stability}. I conduct an assessment-level bootstrap stability analysis for every imputation method using \(B = 50\) resamplings. Assessments are sampled as rows, so repeated observations from the same patient are not grouped during resampling. For each resampling, I refit HDBSCAN on the cached UMAP embeddings, recording the median silhouette (Eq.~\ref{eq:silhouette}) and pre-KNN noise proportions. Pre-KNN noise proportion is equal to the proportion of observations that do not belong to any meaningful cluster:
+\textbf{Bootstrap Stability}. I assess the bootstrap stability for each imputation method at the assessment level using \(B = 50\) bootstrap samples. This resampling is done per row, so that all assessments from one subject are treated as if they were separate rows. On each of these bootstrap samples, I run HDBSCAN on the pre-computed UMAP embeddings. I compute the pre-KNN noise ratio and the median silhouette value (Equation \ref{eq:silhouette}) for each of the bootstrap samples. The pre-KNN noise ratio represents those cases where there was no cluster assigned at this stage:
 
 \begin{equation}\label{eq:noise}
 \text{noise}=\frac{1}{n}\bigl|\{\,i:\text{label}(i)=\text{noise}\,\}\bigr|,
 \end{equation}
 
-This is also the value used in defining quality function \(Q\) (Eq.~\ref{eq:quality}). According to H1's pre-defined conditions, a method will be deemed successful if its median silhouette is larger than or equal to 0.40 and its pre-KNN noise proportion is less than or equal to 0.30; at least 8 of the 10 methods will need to satisfy both conditions. To evaluate per-cluster stability, I apply Hennig (2007)'s matching algorithm to the pre-KNN labels using the default threshold (i.e., 0.7).
+The pre-KNN noise ratio is used in the quality function \(Q\) (Equation \ref{eq:quality}). To meet H1, it requires that the median silhouette be greater than or equal to 0.40 and that the pre-KNN noise ratio be less than or equal to 0.30. In addition to meeting the two above mentioned criteria, at least eight of the ten methods assessed must meet them. I also apply Hennig's matching procedure to the pre-KNN labels to assess each cluster's stability, using a Jaccard threshold of 0.7 \parencite{hennig2007cluster}.
 
-
-
-\noindent \textbf{Pairwise Agreement}. In order to remove variability caused by refitting other parts of the pipeline, I employ a shared reference-pipeline strategy. This is a secondary sensitivity analysis, not the clustering procedure used to discover the primary tiers. One StandardScaler, one UMAP model, and one \(k\)-means model with \(k=3\) are trained on MICE-imputed domain scores. The remaining methods are then standardized, projected onto this MICE-trained pipeline, and classified using that same MICE-trained \(k\)-means model. The use of \(k\)-means here is intentional: it supplies a fixed labelling function so that the imputed values are the only element varying across methods. This design tests whether assessments produced by different imputation methods land in similar regions under a fixed embedding and partition; it does not test whether a newly fitted UMAP+HDBSCAN pipeline would reconstruct the same geometry, density hierarchy, or number of tiers from each imputed dataset. It creates the ARI (Eq.~\ref{eq:ari}) and NMI (Eq.~\ref{eq:nmi}) matrices comparing each method to each other shown as heatmaps in Chapter~\ref{Chapter4}. Confidence for each assessment is defined as:
+\textbf{Pairwise Agreement}. My secondary sensitivity analysis utilized a common reference pipeline. The primary tiers were derived using UMAP + HDBSCAN. There were three types of models: 1) One StandardScaler, 2) one UMAP model and 3) one \(k\)-means model with \(k=3\). These models were fit using MICE-imputed domain scores. Each set of fitted objects was then applied to every other imputation. Imputed values changed; however, fitted objects remained constant. This allowed me to determine if the assessments were located within the same regions of a common embedding and partition. It does not allow comparisons of the geometric structure, density hierarchies, or number of tiers produced when independently fitting UMAP + HDBSCAN. Heat maps containing pairwise ARI (Equation \ref{eq:ari}) and NMI (Equation \ref{eq:nmi}) across imputation methods are presented in Chapter \ref{Chapter4}. Agreement for each assessment is defined as follows:
 
 \begin{equation}\label{eq:consensus}
 \mathrm{conf}(i)=\max_{\ell}\frac{1}{M}\sum_{m=1}^{M}\mathbf{1}\!\left[\text{label}_m(i)=\ell\right],
 \end{equation}
 
-High-consensus assessments are those assigned to the modal cluster by at least \(0.8M = 0.8 \times 10 = 8\) methods. This agreement fraction is not a calibrated clinical probability.
+High-consensus assessments are those that received an assignment to the most frequently occurring cluster by at least \(0.8M = 0.8 \times 10 = 8\) methods. This ratio is not a calibrated clinical probability.
 
-
-
-\noindent \textbf{Chi-Square Test, Cramér's V, CMH Test}. Contingency tables arise from cross-classifying two categorical variables - e.g., cluster assignment and clinical unit - giving joint counts. Pearson's Chi-Square Test evaluates observed counts \(O_{ij}\) against expected counts \(E_{ij}\) under the null hypothesis that the two variables are independent:
+\textbf{Chi-Square Test, Cramér's V and CMH Test}. A contingency table provides a tabular representation of the joint distribution of two categorical variables, e.g., cluster assignments and clinical units. Pearson's chi-square test compares the observed counts \(O_{ij}\) with the expected counts \(E_{ij}\) under the assumption of independence:
 
 \begin{equation}\label{eq:chi2}
 \chi^2=\sum_{i=1}^{r}\sum_{j=1}^{c}\frac{(O_{ij}-E_{ij})^2}{E_{ij}},\qquad E_{ij}=\frac{O_{i\cdot}\,O_{\cdot j}}{n},
 \end{equation}
 
-with \(O_{i\cdot}\) and \(O_{\cdot j}\) denoting row sums and column sums, respectively. The test statistic is referenced against a Chi-Square distribution with \((r - 1)(c - 1)\) degrees of freedom to yield the p-value. Cramér's V is used to render association statistics scale-free for sample-size purposes, since it takes on values between zero and one:
+In this case, \(O_{i\cdot}\) and \(O_{\cdot j}\) are the sum of each row and each column. For the case of \(r\) rows and \(c\) columns, the test statistic will be assessed using a chi-square distribution with \((r - 1)(c - 1)\) degrees of freedom to get the p-value. Cramér's V scales the degree of association from zero to one, standardizing the chi-square value for sample size:
 
 \begin{equation}\label{eq:cramersv}
 V=\sqrt{\frac{\chi^2}{n\,(k-1)}},\qquad k=\min(r,c),
 \end{equation}
 
-The Cochran-Mantel-Haenszel Test extends Pearson's Chi-Square Test for data organized into strata (e.g., diagnosis subgroups). The CMH Test determines whether the association between cluster assignments and clinical units remains significant even when stratifying by an appropriate covariate:
+The Cochran-Mantel-Haenszel (CMH) Test extends the association analysis to multi-stratum data, such as sub-groups based upon diagnoses. The CMH test determines if the statistical significance of the association between clinical unit and cluster assignment is maintained after stratification by a relevant covariate:
 
 \begin{equation}\label{eq:cmh}
 \chi^2_{\mathrm{CMH}}=\frac{\bigl(\sum_{h}(a_h-\mathbb{E}[a_h])\bigr)^2}{\sum_{h}\operatorname{Var}(a_h)}.
 \end{equation}
 
-\noindent \textbf{Patient-Grouped Multinomial Sensitivity Analysis}. Because association statistics do not establish predictive performance, I also compared two regularised multinomial logistic models for detailed clinical-unit assignment. The baseline model used the broad diagnostic grouping supplied by the clinical-unit lookup; the augmented model added cognitive-severity tier. Units represented by fewer than 50 unique patients were combined into an ``other units'' category, leaving 17 outcome classes. Five-fold stratified group cross-validation kept every assessment from the same patient in a single fold. Held-out multinomial log loss was the primary performance measure, with accuracy and macro-F1 reported descriptively. The difference in out-of-fold log loss was bootstrapped 1{,}000 times by patient. Because the broad diagnostic grouping is derived from the same lookup as detailed clinical unit, this model is a sensitivity analysis of incremental classification performance rather than independent external validation.
+\textbf{Patient-Grouped Multinomial Sensitivity Analysis}. Since associations do not establish predictive performance, I compared two regularized multinomial logistic models for detailed clinical-unit assignment. The first model, which is the base model, uses the broad diagnostic categories provided in the clinical unit look-up file. The second model, or augmented model, includes cognitive-severity tier. Clinical units that represented less than 50 unique patients were combined to create a new "other units" category, creating 17 outcome classes. I used five-fold stratified group cross-validation so that all assessments from the same patient would always fall into a single fold. My held-out multinomial log-loss was my primary performance metric. Accuracy and macro F1 metrics were evaluated descriptively. I bootstrapped the difference in out-of-fold log loss 1,000 times by patient. As both the broad diagnostic category and the detailed clinical unit represent the same source, this model represents a sensitivity analysis of additional classification performance rather than independent external validation.
 
-
-
-\noindent \textbf{Variance Inflation Factor}. To quantify multicollinearity in regression models, VIF is used. For any variable \(j\), it is defined as:
+\textbf{Variance Inflation Factor}. VIF measures the extent of multicollinearity in regression models. For a variable \(j\), it is calculated as follows:
 
 \begin{equation}\label{eq:vif}
 \mathrm{VIF}_j=\frac{1}{1-R_j^2},
 \end{equation}
 
-where \(R_j^2\) denotes the coefficient of determination when regressing \(j\) on all other predictors. Any value exceeding 10 constitutes grounds for concern, and influences interpretation both at the variable level and in subsequent analyses at the domain level.
+Here, \(R_j^2\) is the coefficient of determination from regressing \(j\) on all the other predictors. A VIF greater than 10 warrants concern about multicollinearity, with implications for interpreting individual variables and the subsequent domain-level analyses.
 
 \subsection{Implementation}
 
 \begin{sloppypar}
-The historical analyses were implemented in Python (version 3.13); the patient-level extension uses a separate pinned Python 3.12 environment.
-Imputation used
-\texttt{scikit-learn} (KNN, NMF),
-\texttt{fancyimpute} (SoftImpute, EM),
-\texttt{miceforest} (MICE, PMM), and
-\texttt{missforest} (MissForest).
-DAE and VAE used \texttt{PyTorch}.
-UMAP used \texttt{umap-learn};
-HDBSCAN used the \texttt{hdbscan} library.
-Statistical tests used \texttt{scipy.stats} and \texttt{statsmodels}.
-Validation metrics used \texttt{scikit-learn}.
-The analysis code and dashboard are available at
-\url{https://github.com/zkunos/thesis_project}.
+Historical analyses were run using Python 3.13. An additional pinned Python 3.12 environment was created to allow for a patient-level extension. The methods of imputation come from a variety of packages including \texttt{scikit-learn} for KNN and NMF, \texttt{fancyimpute} for SoftImpute and expectation maximization (EM), \texttt{miceforest} for MICE and predictive mean matching (PMM), and \texttt{missforest} for MissForest. Denoising Autoencoder (DAE) and Variational Autoencoder (VAE) were implemented in \texttt{PyTorch}. UMAP and HDBSCAN were utilized through the use of the \texttt{umap-learn} library and the \texttt{hdbscan} library. All statistical testing was done using \texttt{scipy.stats} and \texttt{statsmodels}. Validation metrics were calculated via \texttt{scikit-learn}. The analysis code, together with the dashboard can be found at \url{https://github.com/zkunos/thesis_project}.
 \end{sloppypar}
 
 %----------------------------------------------------------------------------------------

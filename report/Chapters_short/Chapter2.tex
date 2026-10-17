@@ -5,216 +5,165 @@
 %----------------------------------------------------------------------------------------
 
 \section{Acquired Brain Injury and Cognitive Assessment}
-In the current clinical context, acquired brain injury (ABI) refers to damage to the brain that occurs after birth and is not attributable to a congenital or degenerative condition \parencite{ukdhsc2022abi}. ABI includes traumatic and non-traumatic causes, such as traumatic brain injury (TBI), stroke, encephalitis, and hypoxic-ischaemic brain injury. Although their aetiologies vary, these conditions share common rehabilitation challenges: cognitive outcomes are frequently major determinants of long-term functional status after the acute injury has resolved. The primary tool for measuring the cognitive effects of these injuries is neuropsychological evaluation. Standardised neuropsychological batteries generally assess visuospatial abilities, language, executive functions, learning and memory, and processing speed. Each domain relates to practical issues during rehabilitation. Attention difficulties can limit participation in therapy; memory impairment can impede the development of compensatory strategies; executive and language impairments can affect planning, self-advocacy, and communication; and visuospatial impairment can affect independent navigation. A cognitive profile can therefore provide valuable information for rehabilitation planning, medicolegal assessment, and return-to-work decisions.
+Acquired brain injury (ABI) refers to brain damage sustained after birth that is not due to a congenital or degenerative condition \parencite{ukdhsc2022abi}. It includes traumatic and non-traumatic injuries such as traumatic brain injury (TBI), stroke, encephalitis and hypoxia/ischemia. Although there are many different etiologies of ABI, their commonality lies within their shared rehabilitative challenges and outcomes. Cognitive deficits post-injury will frequently influence long term functional status. One way that clinicians assess cognitive deficits that result from these types of injuries is through administering standard, normed neuropsychological tests. Most standard test batteries are designed to assess individuals' abilities across multiple domains of cognition. This includes assessing an individual's ability to visually/spatially process information, process language, engage in tasks requiring executive functions, learn and retain new information, and finally, how quickly an individual can process information. Each domain assessed has practical implications. Examples include, but are not limited to, attention deficit impeding an individual's participation in therapeutic interventions, memory impairments limiting an individual's ability to develop effective compensatory strategies for daily living activities, limitations in executive and language skills contributing to issues with planning, self-advocacy and communicating needs, and visuospatial impairments impacting an individual's ability to independently navigate their environment. Thus, a cognitive profile generated through comprehensive administration of neuropsychological testing can provide valuable information for planning rehabilitation programs, assist in establishing medicolegal issues related to the injury, and inform return-to-work decisions.
 
+People who suffer from moderate to severe traumatic brain injuries (TBI) can have lasting cognitive problems, and there is no one way for people to recover from their injuries. Long-term studies have examined functioning for up to ten years after injury \parencite{ponsford2014longitudinal}. In their review, Rabinowitz and Levin [\citeyear{rabinowitz2014neuropsychological}] describe that the cognitive outcome depends upon a number of factors related to the injury itself as well as the patient's history, including the patient's age at time of injury and pre-injury neuropsychiatric status. Injury severity alone therefore cannot fully describe an individual's cognitive profile.
 
-
-It is also important to note that in individuals who sustain a moderate to severe TBI, there may be persistent cognitive deficits that do not uniformly resolve. In some cases, patients may demonstrate recovery of attention, while their memory and executive functions remain impaired. Conversely, other patients may display the opposite pattern, as documented in \textcite{ponsford2014longitudinal}'s longitudinal study. Similarly, \textcite{rabinowitz2014neuropsychological}, in their meta-analysis, indicated that significant cognitive deficits were present regardless of injury severity. Thus, severity of injury does not adequately represent the organization of each individual's cognitive deficit.
-
-
-
-Additionally, assessment practices introduce further variability into cognitive assessments. Neuropsychologists adjust standardized batteries based on a variety of factors, including referral questions, patient tolerance for testing and clinical judgment. As a result, the resultant databases exhibit considerable structured missingness. Therefore, multivariate analyses should accommodate this structural aspect of missingness rather than treat missing values as just another minor technical issue.
+Neuropsychologists will typically use modified versions of standard test batteries based upon such variables as: what specific questions were posed in the referral; the patient's tolerance for testing; and clinical judgment. Each of these decisions introduces additional variability/structured missingness into the resultant data sets. Therefore, multivariate analyses need to take this structured missingness into account rather than simply viewing the missing values as merely a minor methodological concern.
 
 \section{Missing Data in Clinical Research}
-Missing data are ubiquitous in clinical studies. \textcite{gravesteijn2021missing} indicate that approximately 20\% of clinical trials report greater than 10\% missing-data rates. \textcite{rubin1976inference} delineated three ways missing values could occur. Missing completely at random (MCAR) implies that missingness occurs randomly and independently of observed and unobserved variables. Missing at random (MAR) suggests that missingness is associated with observed variables but not with the missing variable given those variables are controlled for. Missing not at random (MNAR) suggests that missingness is dependent on the unobserved variable.
+Although missing data occur frequently in clinical research \parencite{gravesteijn2021missing}, three mechanisms are distinguished \textcite{rubin1976inference}: missing completely at random (MCAR), missing at random (MAR) and missing not at random (MNAR). Missing completely at random (MCAR) indicates that missingness is unrelated to all values (both seen and unseen). Missing at random (MAR) implies that missingness may depend upon the observed values, but once those values are accounted for, then there will be no dependence on the missing values. Missing not at random (MNAR) suggests that missingness remains dependent upon the unseen values even when the observed values are considered.
 
+Each type of missingness affects what statistical methodologies should be employed to produce reliable estimates. Under MCAR, listwise deletion is unbiased, but reduces the sample size and usually the efficiency of the study. When MAR exists, both multiple imputation and maximum likelihood estimation allow for valid inference under an appropriately constructed model. MNAR models require sensitivity analysis because observed data alone cannot establish assumptions about unobserved values \parencite{rubin1987multiple}.
 
+This understanding is especially important within clinical neuropsychology. Consider someone with severe attentional impairment who lacks the energy to complete an executive-function task, or a disoriented patient who is not given a memory test. In both examples, the missing value may be related to the value that would exist if the full test had been administered. Therefore, MAR is merely assumed as opposed to being definitively proven. MNAR patterns can coexist with missingness caused by assessment protocols. Although observed data alone cannot identify the missingness mechanism, auxiliary variables can make MAR more plausible by incorporating clinically relevant information \parencite{little2019statistical}.
 
-The type of missingness affects what methods can be applied. Listwise deletion is unbiased when the missingness follows an MCAR pattern but results in loss of efficiency. Methods like multiple imputation and maximum likelihood estimation allow valid inference when the assumptions for MAR are met and when the model is properly formulated. Sensitivity analysis is necessary when assuming MNAR behavior since there is no method using only observable data which can remove dependency on unobservable values \parencite{rubin1987multiple}.
-
-
-
-This distinction between types of missingness is particularly critical in clinical neuropsychology. For example, a severely impaired patient in terms of attentional functioning may not have sufficient energy to complete an executive-functioning task. A disoriented patient may receive no memory test whatsoever. Both situations describe missing scores which are likely related to the value that would have been scored if they had completed the test. Thus, MAR is a reasonable working assumption rather than a proven fact. It is possible that MNAR patterns exist simultaneously with missingness due to adherence to protocol. Although the specific mechanism of missingness cannot be determined solely from the observed data, auxiliary variables can help make the MAR assumption more plausible by controlling for clinically relevant information \parencite{little2019statistical}.
-
-
-
-The proportion of missing data alone does not determine the risk of bias. The reasons for missingness and the observed relationships among tests also affect the reliability of imputation. Variable selection should retain sufficient observed information for conditional estimation, and subsequent clustering should assess how imputation choices affect the recovered structure.
+The amount of missing data alone cannot establish the risk of bias. Instead, it is the reason(s) for which the data are missing along with observed associations among other measures that influence the quality of imputed values. To provide sufficient evidence for conditional estimation, variables should be selected to include in the analysis such that there exists enough observed data on each variable. Subsequent cluster analyses should examine how imputation decisions affect the structure recovered.
 
 \section{Imputation Methods}\label{sec:lit_imputation}
-Each of the ten methods used in this dissertation will be presented in order of increasing complexity. Consider the data matrix $X \in \mathbb{R}^{n \times p}$, which contains \(n\) assessments and \(p\) variables. Assume the \(i\)-th assessment includes \(p\) variables \(x_{ij}\), and let $\Omega = \{(i, j): x_{ij} \text{ is observed}\}$. Then $\Omega_j = \{i : (i, j) \in \Omega\}$ represents the observed rows for the \(j\)-th variable. Define the operator $P_\Omega$ as follows: for any entry $x_{ij}$ of the matrix $X$, $P_\Omega(x_{ij}) = x_{ij}$, if $(i,j) \in \Omega$; otherwise, $P_\Omega(x_{ij}) = 0$. The objective is to estimate $\hat{x}_{ij}$ for entries not in $\Omega$.
-
-
+The ten methods presented in this study are ordered by increasing complexity. Let the data matrix $X \in \mathbb{R}^{n \times p}$ contain \(n\) assessments and \(p\) variables. For assessment \(i\), $x_{ij}$ denotes the value of variable \(j\). Let $\Omega = \{(i, j): x_{ij} \text{ is observed}\}$. Then $\Omega_j = \{i : (i, j) \in \Omega\}$ represents the observed rows for the \(j\)-th variable. Define the operator $P_\Omega$ as follows: for any entry $x_{ij}$ of the matrix $X$, $P_\Omega(x_{ij}) = x_{ij}$, if $(i,j) \in \Omega$; otherwise, $P_\Omega(x_{ij}) = 0$. The task is to estimate the entries outside $\Omega$, with estimates denoted by $\hat{x}_{ij}$.
 
 \par\medskip
-\noindent\textbf{Mean Imputation Method}.
+\noindent\textbf{Mean Imputation Method}.\par\nobreak
 
-The mean imputation method substitutes each missing value with the arithmetic mean of the observed values for that variable.
+Mean imputation calculates the average of the observed values of a variable and assigns that mean to each missing value of the same variable.
 
 \begin{equation}\label{eq:mean}
 \hat{x}_{ij}=\bar{x}_j=\frac{1}{|\Omega_j|}\sum_{i\in\Omega_j}x_{ij}.
 \end{equation}
 
-The mean imputation method is fast and does not require any iteration. However, it reduces variance and covariance, creates distorted marginal distributions, and results in underestimated standard errors. Therefore, it was only used in this study as a baseline.
-
-
+Mean imputation is extremely rapid and is non-iterative. However, Mean imputation reduces variance and covariances among variables, alters marginal distribution of variables and decreases estimated standard error of parameters. Therefore, Mean imputation was employed exclusively as a reference point or "baseline" for purposes of this investigation.
 
 \par\medskip
-\noindent\textbf{K-Nearest Neighbors (KNN)}.
+\noindent\textbf{K-Nearest Neighbors (KNN)}.\par\nobreak
 
-The KNN imputation method finds the \(k\) most similar donor cases and assigns the missing value a weighted average of their observed values based on the Euclidean distance as the similarity measure. The KNN imputation method can be defined as follows:
+For each missing value, KNN imputation finds \(k\) nearest "donor cases" based upon Euclidean distance to define the degree of similarity. Then, KNN imputes a weighted average of values from these donor-cases into the missing values. The weights are inversely proportional to the distances, as follows:
 
 \begin{equation}\label{eq:knn}
 \hat{x}_{ij}=\frac{\sum_{k\in\mathcal{N}_i}w_{ik}\,x_{kj}}{\sum_{k\in\mathcal{N}_i}w_{ik}},\qquad w_{ik}=\frac{1}{d(i,k)},
 \end{equation}
 
-where \(\mathcal{N}_i\) is the set of \(k\) nearest donors and \(d(i,k)\) is the distance between observations on the jointly observed variables. Since KNN is a non-parametric method, it can better capture the local structure than mean imputation. There are some limitations for KNN. Small values of \(k\) may fit the noise, while large values of \(k\) may smooth too much meaningful pattern. As the size of the dataset increases, the computational cost of KNN becomes greater.
-
-
+where \(\mathcal{N}_i\) is the set of \(k\)-nearest neighbors and \(d(i,k)\) is the distance between observations in the jointly observed features. KNN is non-parametric and can capture local data structure more effectively than mean imputation. When using KNN as an imputation method you need to be careful when you are choosing your \(k\). If you choose too low of a \(k\), you may be fitting the noise instead of the signal. If you select too large of a \(k\), you may "smooth" away important patterns in your data. Larger datasets require longer computation times, which is a consideration for larger datasets.
 
 \par\medskip
-\noindent\textbf{Multiple Imputation by Chained Equations (MICE)}.
+\noindent\textbf{Multiple Imputation by Chained Equations (MICE)}.\par\nobreak
 
-Multiple Imputation by Chained Equations imputes each variable conditionally on all other variables and iteratively repeats this process over several iterations \parencite{vanbuuren2011mice}. In each iteration \(t\), each variable is drawn anew from its conditional model:
+MICE (Multiple Imputation by Chained Equations) is used for imputation of each variable in relation to all other variables in the dataset. However, each variable is iteratively imputed, over multiple iterations \parencite{vanbuuren2011mice}. Each iteration \(t\) draws new values for each variable from its conditional distribution:
 
 \begin{equation}\label{eq:mice}
 x_{ij}^{(t)}\sim p\!\left(x_{ij}\,\middle|\,\mathbf{x}_{i,-j}^{(t)};\,\theta_j\right),\qquad j=1,\dots,p,
 \end{equation}
 
-
-The form of the conditional model can be adapted to the type of data; e.g., linear models can be used for continuous variables and logistic models for binary variables. MICE retains multivariate relationships and can produce multiple imputations to quantify uncertainty. One of its limitations is that a model must be specified for every variable, and there are possibilities for problems during convergence.
-
-
+Depending on how you want to represent your variable(s), you may define different types of conditional models; i.e., linear models for continuous variables or logistic models for binary variables. The advantage of MICE is that it can maintain relationships between multiple variables and generate multiple imputations to allow you to measure uncertainty. Some disadvantages include defining a model for every variable and possible convergence problems.
 
 \par\medskip
-\noindent\textbf{Predictive Mean Matching (PMM)}.
+\noindent\textbf{Predictive Mean Matching (PMM)}.\par\nobreak
 
-PMM is a semi-parametric method that is commonly employed within MICE. The predictive mean matching algorithm first predicts new values for each missing value using a regression model. The imputed value is then randomly selected from among all previously observed values with similarly predicted values:
+PMM (Predictive Mean Matching) is commonly used in conjunction with MICE (i.e., as a semi-parametric imputation method). First, a regression model is created to predict values. Then, a missing value is replaced by a random selection of an observed donor value with a comparable model prediction:
 
 \begin{equation}\label{eq:pmm}
 \hat{x}_{ij}\sim\operatorname{Unif}\bigl\{x_{kj}:k\in\mathcal{D}_{ij}\bigr\},\qquad
 \mathcal{D}_{ij}=\bigl\{\,d\text{ observed }k\text{ minimising }|\hat{x}_{kj}-\hat{x}_{ij}|\,\bigr\}.
 \end{equation}
 
-
-In doing so, imputed values will always lie within the range of observed data, thus avoiding impossible values (e.g., negative scores on tests that include floors). However, one limitation is that a limited donor pool can cause repeated usage of the same observed values.
-
-
+Predictive mean matching selects observed donor values, keeping imputations within the observed range. This avoids impossible values, such as a negative score on a test with a floor. A limited donor pool can lead to repeated use of the same values.
 
 \par\medskip
-\noindent\textbf{MissForest}.
+\noindent\textbf{MissForest}.\par\nobreak
 
-MissForest is an iterative random-forest imputation method \parencite{stekhoven2012missforest}. For each variable \(j\), a forest \(f_j\) is trained using all available data with the remaining variables as predictors. Afterward, missing values are updated using the newly created forest, and this procedure is repeated until little change occurs:
+MissForest utilizes iterative random forests for its missing value imputation algorithm \parencite{stekhoven2012missforest}. For the first step, for every variable \(j\), a forest \(f_j\) is created based on all instances of \(j\) where \(j\) is known. All other variables are treated as predictor variables. Next, a missing value is replaced by using the newly constructed forest \(f_j\). The process repeats until changes are small.
 
 \begin{equation}\label{eq:missforest}
 \hat{x}_{ij}=f_j\!\left(\mathbf{x}_{i,-j}\right)\quad\text{until}\quad \sum_{(i,j)\notin\Omega}\bigl(x_{ij}^{(t)}-x_{ij}^{(t-1)}\bigr)^2 \text{ stops decreasing.}
 \end{equation}
 
-
-Because MissForest is a non-parametric method, it can model complex non-linear relationships and accommodate both continuous and discrete variables. Often MissForest performs well on benchmark datasets; however, it is computationally intensive and scales poorly when either the number of rows or trees is large.
-
-
+Since MissForest does not assume parametric distributions, it allows the discovery of complex relationships between variables and can also be applied to either continuous or categorical variables. Generally, MissForest often performs well on benchmark datasets. A significant drawback of MissForest is that it can be quite time consuming and its computational efficiency decreases rapidly with increasing amounts of data or number of trees.
 
 \par\medskip
-\noindent\textbf{Expectation-Maximization (EM)}.
+\noindent\textbf{Expectation-Maximization (EM)}.\par\nobreak
 
-EM is another method that iterates between an E-step, which computes the expected sufficient statistic, and an M-step, which adjusts the parameters by maximizing the log-likelihood \parencite{dempster1977maximum}. When assuming multivariate normality, EM converges to the maximum likelihood estimator, and missing blocks are filled-in using their conditional mean:
+Another iterative method is expectation-maximization (EM) \parencite{dempster1977maximum}. EM works by alternating between two different types of steps: An E-step which estimates the expected sufficient statistic, and an M-step which maximizes the likelihood function. Under a multivariate normal model, the iterations estimate model parameters and missing blocks can be filled using their conditional means:
 
 \begin{equation}\label{eq:em}
 \hat{\mathbf{x}}_{\mathrm{mis}}=\boldsymbol\mu_{\mathrm{mis}}+\Sigma_{\mathrm{mis},\mathrm{obs}}\,\Sigma_{\mathrm{obs},\mathrm{obs}}^{-1}\!\left(\mathbf{x}_{\mathrm{obs}}-\boldsymbol\mu_{\mathrm{obs}}\right),
 \end{equation}
 
-with the parameters \(\boldsymbol\mu\) and \(\Sigma\) being re-computed at each step. However, if many of the variables are severely skewed or bounded, then the multivariate normality assumption may be unreasonable.
-
-
+where \(\boldsymbol\mu\) and \(\Sigma\) are recomputed after every iteration. We should note that assuming a multivariate normal distribution may be unrealistic when there are many highly skewed or bounded variables.
 
 \par\medskip
-\noindent\textbf{SoftImpute}.
+\noindent\textbf{SoftImpute}.\par\nobreak
 
-SoftImpute employs a soft-thresholded singular-value decomposition to estimate a low-rank representation of the original data matrix \parencite{mazumder2010spectral}. It solves:
+SoftImpute uses Singular Value Decomposition (SVD) with soft-thresholding to create a low-rank approximation of the original input matrix \parencite{mazumder2010spectral}. Specifically SoftImpute solves:
 
 \begin{equation}\label{eq:softimpute}
 \min_{Z}\ \tfrac12\bigl\lVert P_\Omega(\mathbf{X}-Z)\bigr\rVert_F^2+\lambda\lVert Z\rVert_*,
 \end{equation}
 
-
-where \(S_\lambda(Z)=U\operatorname{diag}\bigl((d_i-\lambda)_+\bigr)V^\top\). Thus, \(\lambda\) determines what percentage of the variation in \(Z\) can be captured. Although SoftImpute is highly efficient for large sparse matrices, it could potentially ignore structure that does not fit within a low-rank model.
-
-
+where \(S_\lambda(Z)=U\operatorname{diag}\bigl((d_i-\lambda)_+\bigr)V^\top\). \(\lambda\) determines how much to shrink the singular values and therefore the rank of the estimated matrix. While SoftImpute can work efficiently on very large sparse matrices, it does not necessarily capture structure in the data that cannot be captured through a low rank estimate.
 
 \par\medskip
-\noindent\textbf{Non-Negative Matrix Factorization (NMF)}.
+\noindent\textbf{Non-Negative Matrix Factorization (NMF)}.\par\nobreak
 
-Similarly to SoftImpute, NMF factorizes the data into two non-negative lower-rank matrices \parencite{lee1999learning}:
+Like SoftImpute, Non-Negative Matrix Factorization (NNMF), or NMF, also uses lower dimensional representations of the data. NMF creates two non-negative matrices \parencite{lee1999learning} that together represent the original input matrix:
 
 \begin{equation}\label{eq:nmf}
 \min_{W\ge0,\,H\ge0}\ \bigl\lVert P_\Omega(\mathbf{X}-WH)\bigr\rVert_F^2,\qquad W\in\mathbb{R}^{n\times r}_{\ge0},\ H\in\mathbb{R}^{r\times p}_{\ge0}.
 \end{equation}
 
-
-The non-negative constraints make sense in terms of neuropsychological scores since they cannot be less than zero. Additionally, the factors derived from NMF can sometimes be interpreted as additive contributions to cognition. Similar to SoftImpute, NMF works best when the data can be summarized by a small number of non-negative factors. Thus, choosing the correct rank \(r\) is critical.
-
-
+NMF preserves the constraint when test scores are non-negative. The factors produced by NNMF provide an additive way of representing the score matrix. Sometimes, the factors of the score matrix can have meaningful interpretations. However, like all other methods described here, finding a good number of factors (i.e. determining a suitable \(r\)) is critical for producing useful results.
 
 \par\medskip
-\noindent\textbf{Denoising Autoencoder (DAE)}.
+\noindent\textbf{Denoising Autoencoder (DAE)}.\par\nobreak
 
-A denoising autoencoder (DAE) trains a neural network to predict complete data given intentionally degraded versions of that data under the MIDA framework \parencite{gondara2018mida}. Using encoder $f_\theta$, decoder $g_\theta$, and corrupted input $\tilde{\mathbf{x}}$, the goal is to minimize the reconstruction error:
+Within the MIDA paradigm, Denoising AutoEncoders (DAE's) learn a Neural Network to take in corrupt versions of the data and output reconstructions of the data \parencite{gondara2018mida}. For an encoder $f_\theta$, decoder $g_\theta$ and corrupted version of the data $\tilde{\mathbf{x}}$ , they try to find the minimum distance between their reconstruction of the original input and the original input:
 
 \begin{equation}\label{eq:dae}
 \mathcal{L}_{\mathrm{DAE}}(\theta)=\mathbb{E}\bigl\lVert\mathbf{x}-g_\theta\!\left(f_\theta(\tilde{\mathbf{x}})\right)\bigr\rVert^2.
 \end{equation}
 
-
-Thus, imputations are made by training multiple networks with varying random seed numbers and taking averages of their reconstructions. DAEs may outperform traditional methods when there are strong non-linear relationships among variables.
-
-
+The resulting imputed values are determined by averaging the values generated by multiple neural-network models, each initialized with a different random seed. Denoising autoencoders may outperform traditional imputation techniques when the relationships among variables are nonlinear.
 
 \par\medskip
-\noindent\textbf{Variational Autoencoder (VAE)}.
+\noindent\textbf{Variational Autoencoder (VAE)}.\par\nobreak
 
-A variational autoencoder (VAE) constructs a probabilistic generative latent space model by mapping observations onto probability distributions \parencite{kingma2014auto, mccoy2018variational}. To maximize the evidence lower bound (ELBO):
+For example, VAEs use probabilistic generative models to define probability distributions in latent variable space. In so doing, observations are represented as distributions over latent variables \parencite{kingma2014auto, mccoy2018variational}. The evidence lower bound (ELBO) can be maximized by:
 
 \begin{equation}\label{eq:vae}
 \mathcal{L}_{\mathrm{VAE}}=\mathbb{E}_{q_\phi(z\mid x)}\!\left[\log p_\theta(x\mid z)\right]-\beta\,D_{\mathrm{KL}}\!\left(q_\phi(z\mid x)\,\big\Vert\,p(z)\right),
 \end{equation}
 
+using a standard normal prior $p(z)=\mathcal{N}(\mathbf{0},\mathbf{I})$. In related work, \parencite{mattei2019miwae} used importance-weighted bounds for missing data, whereas \parencite{yoon2018gain} proposed a GAN-based method. Using VAEs provides an inherent way of producing imputed values based on samples from the latent distribution, followed by decoding each sample. If trained properly this also allows for a representation of the uncertainty of each individual value.
 
-the prior is assumed to follow $p(z)=\mathcal{N}(\mathbf{0},\mathbf{I})$. Recently \parencite{mattei2019miwae} proposed importance-weighted bounds for missing data while \parencite{yoon2018gain} proposed a GAN-based approach. In VAEs, imputed values are produced via samples from the latent distribution followed by decodings of each sample, providing a natural mechanism for representing uncertainty if trained properly.
+Deep learning techniques have advantages and disadvantages. They may take more computation time than simpler methods, but can learn nonlinear relationships without a manually specified simple functional form for each variable. Many architectures also contain stochastic elements: dropout in DAEs and latent sampling in VAEs are examples. These elements can be used to generate multiple imputations. However, deep learning models can overfit and their performance often depends heavily on architectural choices. This dissertation examines how these methods function on the small to medium-sized, relatively low-dimensional datasets typical of clinical neuropsychology \parencite{prakash2024benchmarking}.
 
-
-
-Deep learning methods typically require more computation than simple methods; however, they provide two potential benefits. They allow capturing non-linear structures without an explicit parametric model; additionally their stochastic elements - e.g., dropout in DAEs or latent sampling in VAEs - provide a natural mechanism for generating multiple imputations. Two disadvantages of deep learning methods are: sensitivity to overfitting and dependency upon architecture choices. This dissertation examines how well they function on the relatively small-to-medium sized low dimensional data characteristic of clinical neuropsychology \parencite{prakash2024benchmarking}
-
-
-
-\parencite{afkanpour2024identify} categorize imputation methods for clinical research into four classes: traditional methods (mean, EM, MICE); machine learning methods (KNN, MissForest); hybrid methods like PMM; and matrix completion methods like SoftImpute and NMF. I add a fifth class to these: Deep Learning - specifically for DAEs and VAEs. Comparing methods across these classes can determine whether the recovered cognitive structure is stable across assumptions of the imputation method.
+\parencite{afkanpour2024identify} divided imputation methods for clinical research into four categories. I add a fifth for the deep learning methods used here. Categories one through three are comprised of the well-known methodologies which include: Category One: Traditional Methods (mean imputation, EM, MICE); Category Two: Machine Learning Methods (KNN, MissForest); Category Three: Hybrid Methods (PMM). Matrix Completion represents Category Four (SoftImpute and NMF). Category Five was created specifically for Deep Learning Methodologies utilized in our study (DAEs and VAEs). Utilizing these five categories will allow us to determine whether the methodologies in each category provide consistent recovery of cognitive structures when utilizing each methodology with varying assumptions about estimating missing data.
 
 \section{Clustering in Neuropsychology}
-Clustering is a commonly employed statistical method within neuropsychology. A primary way of establishing clinical diagnoses or severity levels for patients who have experienced stroke, traumatic brain injury (TBI), or mild cognitive impairment (MCI) is to use diagnostic and/or severity categories. However, cluster analyses performed across different clinical groups, including TBI and MCI, show that statistically derived groupings of cognitive performance data do not always align with clinical diagnosis or severity level. From an empirical standpoint, this indicates that medical classifications used to represent cognitive heterogeneity after injury may fail to portray the full extent of that heterogeneity.
+Clustering is used as a statistical technique in neuropsychological research. Clinical judgments about diagnosis or disability after stroke, traumatic brain injury (TBI), or in mild cognitive impairment (MCI) often rely on categorical assessments. Across many different types of clinical populations (e.g. TBI; MCI), cluster analysis has been used. Many of the resultant analyses have indicated that the statistically derived groups of performance within the realm of cognition do not consistently match the clinical diagnosis or severity category that are given to those same populations. Therefore, from an empirical perspective, it appears that when clinicians utilize classification systems to describe cognitive variability among individuals post-injury, they do not fully capture the full range of cognitive variability present.
 
+A literature review of data-driven cognitive phenotyping after brain injury was conducted by \parencite{garcia2020data}. Trends were consistent in their reviews. First, many of the studies found two to four statistically defined cognitive clusters. Second, many of the studies found clusters based upon whether certain cognitive domains were more functional than others relative to an individual's overall level of functioning. Third, when possible and relevant, researchers found that group membership was significantly related to clinically important outcomes (i.e. return to work).
 
+Many aspects of research on data-driven cognitive phenotyping following brain injury are still underdeveloped. Many prior studies have been based on samples that ranged from approximately 100 to less than 200 subjects. The common practice among researchers was to exclude missing values by using complete cases. When missingness is MCAR (completely at random) this approach may be suitable for determining the characteristics of the remaining sample; however, when there is some degree of information within the missingness, then the use of complete cases can bias the resulting sample. Very few studies have investigated how sensitive clustering algorithms are to various parameter choices.
 
-A review of data-driven cognitive phenotyping following brain injury was completed by \parencite{garcia2020data}. Several common findings emerged across the reviewed studies. First, most studies identified two to four data-driven cognitive groupings. Second, grouping was usually based on comparisons between relative cognitive strengths and weaknesses in relation to each individual's overall level of cognitive functioning. Third, when applicable outcome measures were available, group membership was significantly associated with meaningful outcomes, such as return to work.
-
-
-
-Despite these findings, several gaps remain in the literature on data-driven cognitive phenotyping following brain injury. Sample sizes in many studies range from approximately 100 to fewer than 200 participants. Missing values are often excluded from analyses through complete-case methods, even though this can bias the resulting sample when missingness is informative. Few studies systematically evaluate the algorithmic sensitivity of clustering methods. This is particularly relevant for k-means, a widely used clustering algorithm that requires users to determine the number of clusters, \(k\), before analysing the data.
-
-
-
-Consequently, this dissertation proposes four design features to address limitations in the existing literature. Chapter~\ref{Chapter3} uses a larger clinical database; compares ten imputation methodologies against complete-case analysis; evaluates sensitivity to changes in hyperparameters and missingness thresholds; and uses HDBSCAN, which does not force outlier observations into predetermined centroids but instead identifies denser regions of observations as clusters.
+Therefore, this dissertation employed four distinct approaches to reduce the impact of these limitations. In Chapter \ref{Chapter3} I used a much larger clinical database; compared ten imputation strategies to each other and to complete case analyses; examined sensitivity to hyperparameters and to several missingness thresholds; and tested HDBSCAN as an alternative method to \(k\)-means. Unlike \(k\)-means, HDBSCAN does not require the number of clusters \(k\) to be specified before application. Instead HDBSCAN identifies clusters where the density of data points exceeds certain threshold(s); data points which do not fit into a cluster are identified as "noise" or outliers.
 
 \section{UMAP and HDBSCAN}
-There are two primary components to the clustering pipeline. First, UMAP reduces the dimensionality of the data. Second, HDBSCAN identifies dense regions of observations as clusters.
+The clustering process is composed of two key components: the UMAP for reducing the dimensionality of the input dataset and identifying clusters using HDBSCAN.
 
 \subsection{UMAP}
-UMAP is a type of non-linear manifold learning that preserves the general topological features of the data while reducing higher-dimensional data into lower-dimensional spaces. As such, this method does not use linear techniques like PCA, but instead seeks out the geometry of the original data. There is always a trade-off between preserving both local and global structure in the data. Three primary hyperparameters used in UMAP can help to achieve an optimal balance between the two:
-
-
+The first part (UMAP) applies a type of non-linear manifold learning. It seeks to reduce high-dimensional datasets to lower-dimensional representations while retaining as much of their original structure as possible. Because PCA and other forms of linear reductions cannot capture non-linear relationships present in the original data, UMAP can. As such, there are trade-offs involved with preserving the overall topological features of the data (i.e., globally) versus the local details, so we use three parameters to find a suitable balance between global and local structure:
 
 \begin{itemize}
 
-    \item \texttt{n\_neighbors}: Number of neighbors to consider when drawing connections between original space objects. Higher values of \texttt{n\_neighbors} create a larger-scale picture of the global properties of the data; conversely, lower values draw attention to the details of local structure.
+    \item \texttt{n\_neighbors}: This determines the number of neighboring points in the original data that should be used in the construction of each point's neighborhood graph. The larger this value is, the broader your view will be of the global properties of the data. Conversely, if you choose smaller values, you will have better insight into local relationships.
 
-    \item \texttt{min\_dist}: Minimum distance required between objects within the new space. If set too large, object proximity may become less meaningful; if set too small, object proximity will be highly relevant.
+    \item \texttt{min\_dist}: This governs how closely points can be placed together in the reduced space. If you increase this value, it results in spreading points farther apart from one another; conversely, setting it to a smaller value allows for denser grouping of related points.
 
-    \item \texttt{n\_components}: Target number of components in the new space.
+    \item \texttt{n\_components}: This is the target number of dimensions in the reduced space.
 
 \end{itemize}
 
-
-
-Technically, UMAP works with a graph of weighted neighbors. For each pair of an object \(x_i\) and one of its neighboring objects \(x_j\), there exists a directed membership probability denoted by \(p_{j\mid i}\). In Equation~\ref{eq:umap_p}, \(\rho_i\) denotes the distance from \(x_i\) to its closest neighbor and \(\sigma_i\) denotes a calibration factor such that \(\sum_j p_{j\mid i}=\log_2(k)\), where \(k\) is the value specified for \texttt{n\_neighbors}. The directed probabilities are then made symmetric according to Equation~\ref{eq:umap_sym}. Finally, in Equation~\ref{eq:umap_q}, \(q_{ij}\) defines the low-dimensional membership probability, with \(a\) and \(b\) being functions of \texttt{min\_dist}. Next, UMAP minimizes the cross-entropy in Equation~\ref{eq:umap_ce} between the high-dimensional and low-dimensional memberships.
+UMAP creates a weighted graph of neighboring objects. Each connection has a directed membership probability \(p_{j\mid i}\) linking an object \(x_i\) to one of its neighbors \(x_j\), as defined in Equation \ref{eq:umap_p}. Two parameters enter this calculation: \(\rho_i\), the distance from \(x_i\) to its closest neighbor, and \(\sigma_i\), a calibration factor chosen so that \(\sum_j p_{j\mid i}=\log_2(k)\), with \(k\) specified by \texttt{n\_neighbors}. The directed probabilities are made symmetric using Equation \ref{eq:umap_sym}. In Equation \ref{eq:umap_q}, \(q_{ij}\) is the low-dimensional membership probability, with \(a\) and \(b\) determined by \texttt{min\_dist}. Lastly, UMAP minimizes the cross-entropy given in Equation \ref{eq:umap_ce} between the high-dimensional and low-dimensional memberships.
 
 \begin{equation}\label{eq:umap_p}
 p_{j\mid i}=\exp\!\left(-\frac{\max\{0,\,d(x_i,x_j)-\rho_i\}}{\sigma_i}\right),
@@ -233,23 +182,19 @@ C=\sum_{i\ne j}\left[p_{ij}\log\frac{p_{ij}}{q_{ij}}+(1-p_{ij})\log\frac{1-p_{ij
 \end{equation}
 
 \subsection{HDBSCAN}
-HDBSCAN extends the capabilities of traditional DBSCAN by generating hierarchical representations of clusterings at varying levels of density and by identifying those aspects of the data that remain consistent across different clusterings. One major limitation of DBSCAN is that nested or variable-density clusters are difficult to recover from a single fixed neighbourhood radius. HDBSCAN addresses this issue directly by defining noise and allowing for automatic determination of the number of clusters. Key parameters include:
-
-
+HDBSCAN represents data through a hierarchy of clusters at varying levels of density and identifies groupings that persist across that hierarchy. With respect to the recovery of variable-density and nested clusters, DBSCAN suffers in comparison because it uses a constant radius. HDBSCAN's explicit density hierarchy addresses this limitation. It selects stable clusters without requiring their number in advance and assigns the remaining observations to noise. Three key parameters govern its operation:
 
 \begin{itemize}
 
-    \item \texttt{min\_samples}: Density estimate parameter.
+    \item \texttt{min\_samples} - Density estimation parameter.
 
-    \item \texttt{min\_cluster\_size}: Smallest acceptable cluster size.
+    \item \texttt{min\_cluster\_size} - Minimum size of a valid cluster.
 
-    \item \texttt{cluster\_selection\_epsilon}: Specifies how aggressively clusters should be merged.
+    \item \texttt{cluster\_selection\_epsilon} - Distance threshold used to merge nearby clusters.
 
 \end{itemize}
 
-
-
-In addition to adjusting distance measurements based on local density, HDBSCAN also uses mutual reachability distance as defined in Equation~\ref{eq:mreach} to connect pairs of objects. An MST is generated over these adjusted distances to form the basis for a hierarchical representation. Each node in this tree corresponds to either an object or a previously formed cluster. Persistent clusters are then selected based on their stability as described in Equation~\ref{eq:hdbscan_stab}, where \(\lambda_{\mathrm{birth}}(C)\) represents the density level at which cluster \(C\) was created and \(\lambda_{\max}(x,C)\) represents the highest density level at which point \(x\) remained part of cluster \(C\). Any remaining points that do not belong to any persistent cluster are designated as noise.
+To connect observations, HDBSCAN uses mutual reachability (Equation \ref{eq:mreach}), which adjusts distances to reflect local density. A minimum spanning tree over those distances provides the basis for the hierarchy. Successive levels form groups of observations, and cluster persistence is assessed through stability (Equation \ref{eq:hdbscan_stab}). For a given cluster \(C\), \(\lambda_{\mathrm{birth}}(C)\) is the density level at which \(C\) first appeared; \(\lambda_{\max}(x,C)\) is the highest density level at which \(x\) belonged to \(C\). Observations outside the selected persistent clusters are assigned to noise.
 
 \begin{equation}\label{eq:mreach}
 d_{\mathrm{mreach}}(a,b)=\max\bigl\{\operatorname{core}_k(a),\,\operatorname{core}_k(b),\,d(a,b)\bigr\}.
@@ -259,41 +204,48 @@ d_{\mathrm{mreach}}(a,b)=\max\bigl\{\operatorname{core}_k(a),\,\operatorname{cor
 S(C)=\sum_{x\in C}\bigl(\lambda_{\max}(x,C)-\lambda_{\mathrm{birth}}(C)\bigr),\qquad \lambda=\frac{1}{d_{\mathrm{mreach}}},
 \end{equation}
 
-Both UMAP and HDBSCAN have found widespread applications throughout computational biology and related fields because they can effectively discover structural elements in very-high-dimensional datasets.
+The ability to extract structure from high-dimensional datasets has led to applications of UMAP and HDBSCAN in computational biology and related fields.
 
 \section{Cluster Validation}
-When a gold standard is absent, assessing the validity of discovered clusters is indirect. Henceforth, this thesis employs a combination of internal validations, external consistency measurements and sensitivity analyses.
+The current research uses three different techniques in order to evaluate if the cluster structures produced by these methods are appropriate since they have no gold standard for reference. Internal validation methods, external consistency measures, as well as sensitivity analysis are used to indirectly assess the validity of this research.
 
 \subsection{Internal Validation}
-Internal validation involves comparing various attributes of different possible cluster solutions. Here, this thesis primarily relies on silhouette coefficients \parencite{rousseeuw1987silhouettes}, which compare within-cluster cohesion (the average similarity of each data-point to the other data-points in its own cluster) and between-cluster separation (the average similarity between each data-point and data-points outside its cluster). The silhouette value for an individual item lies in the interval [-1,+1]: Positive values denote good fit, values close to zero signify poor fit (as either an item fits poorly into its own group or fits very well into adjacent group(s)), and negative values represent incorrect assignment. The individual silhouette value is defined in Equation~\ref{eq:silhouette}, where \(a(i)\) denotes the mean intra-cluster dissimilarity for observation \(i\), and \(b(i)\) denotes the mean dissimilarity between observation \(i\) and members of the nearest alternative cluster. The average silhouette is then obtained by taking the mean of \(s(i)\) across all observations. As previously stated, I utilize the mean silhouette as the principal internal evaluation measure. Noise percentage is the second measure of evaluating how much of the total population is clustered in meaningful ways.
+Internal validation involves several aspects of cluster analysis. In this research we have used silhouette measures \parencite{rousseeuw1987silhouettes} to provide comparison of how well points in a cluster are cohesive (i.e., similar), with respect to how separated they are from points in their nearest neighbor cluster(s). A silhouette value will be a number in [-1,+1]. Silhouette scores greater than 0 indicate that a point is closer, on average, to other points assigned to the same cluster than to any other cluster. Scores close to 0 indicate little difference among those alternatives; while negative scores indicate that the point is actually closer to another cluster. These values do not determine whether an assignment is clinically correct. Each silhouette measure is calculated as per Equation \ref{eq:silhouette}, and is composed of two components: \(a(i)\); the mean distance between each point and every other point in the same cluster; and \(b(i)\); the mean distance from the point to every member of the nearest alternative cluster. The overall average silhouette for a set of clusters can be found by calculating the average of all \(s(i)\) values and will serve as our primary method of internally evaluating the quality of the clusters generated. Noise percentage is also reported. It is the proportion of observations left unassigned by density clustering and therefore describes its coverage.
 
 \begin{equation}\label{eq:silhouette}
 s(i)=\frac{b(i)-a(i)}{\max\{a(i),\,b(i)\}}.
 \end{equation}
 
 \subsection{External Validation}
-Measuring two different cluster solutions, e.g., when examining how consistent cluster assignments are between two different imputation methods, necessitates the employment of external validation measures. One common method is the Adjusted Rand Index (ARI) \parencite{hubert1985comparing}. The ARI examines how many pairs of cases have been assigned to identical clusters across two separate clusterings and then adjusts this count for chance. Let $U = \{U_i\}$ and $V = \{V_j\}$ be two clusterings of \(n\) objects with contingency counts $n_{ij} = |U_i \cap V_j|$, marginal sums $a_i = \sum_j n_{ij}$ and $b_j = \sum_i n_{ij}$. The ARI is calculated using Equation~\ref{eq:ari}; +1 represents perfect agreement, 0 represents random agreement, and values below 0 demonstrate systematic disagreement \parencite{robert2020comparing}. Next, I calculate Normalized Mutual Information (NMI), a mutual-information-theoretic method of quantifying how much one clustering discloses regarding another clustering normalized by entropy. Specifically, using mutual information $I(U;V)$ and Shannon entropies \(H(\cdot)\) \parencite{shannon1948mathematical}, Equation~\ref{eq:nmi} defines full agreement as 1 and no agreement as 0.
+Comparing cluster models for the same observations (e.g. cluster assignments generated using different imputation techniques), can be achieved by evaluating the degree of concordance among the resultant cluster models. An effective way to perform this evaluation is through the application of the adjusted Rand index (ARI) \parencite{hubert1985comparing}. This metric evaluates the degree of concordance between the pair-wise cluster assignments to evaluate if the concordance exceeds chance.
 
-
-
-For additional insight into individual clusters' similarities/differences, I apply the Jaccard index. If \(A\) and \(B\) denote sets containing points that make up a specific cluster under two respective solutions, the Jaccard index is computed using Equation~\ref{eq:jaccard}; thus values lie in [0, 1], with larger values demonstrating closer membership. Finally, I use Hennig Matching \parencite{hennig2007cluster} as a bootstrapping method of assessing cluster stability. Across \(R\) bootstrap iterations, each original cluster \(C_k\) is paired with the resampled cluster whose Jaccard overlap with it is maximal. The stability score of each original cluster \(C_k\) is then taken as the mean of these maxima in Equation~\ref{eq:hennig}. By convention, a per-cluster score > 0.7 is considered stable.
-
-
-
-Collectively, NMI and ARI evaluate whether two cluster solutions exhibit significant substantive agreement.
+To utilize the formula shown in Equation \ref{eq:ari}, we must first identify two clusterings of \(n\) objects denoted as $U = \{U_i\}$ and $V = \{V_j\}$. We will also need to identify contingency counts denoted as $n_{ij} = |U_i \cap V_j|$, where i and j index the clusters in U and V. The marginal totals denoted as $a_i = \sum_j n_{ij}$ represent the number of elements in \(U_i\). The marginal totals denoted as $b_j = \sum_i n_{ij}$ represent the number of elements in \(V_j\).
 
 \begin{equation}\label{eq:ari}
 \mathrm{ARI}=\frac{\displaystyle\sum_{ij}\binom{n_{ij}}{2}-\Bigl[\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}\Bigr]\Big/\binom{n}{2}}{\displaystyle\tfrac12\Bigl[\sum_i\binom{a_i}{2}+\sum_j\binom{b_j}{2}\Bigr]-\Bigl[\sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}\Bigr]\Big/\binom{n}{2}}.
 \end{equation}
 
+When ARI is maximally positive (+1) there exists a complete concordance between both cluster models. Conversely, ARI values which equal 0 indicate that the concordance observed between both cluster models equates to a chance baseline. Finally, negative values of ARI will indicate less than expected concordance between both cluster models \parencite{robert2020comparing}.
+
+In addition to the usage of ARI I also make use of normalized mutual information (NMI). NMI quantifies how much one cluster model provides information about another clustering, while providing normalization with respect to the entropy of each cluster model label.
+
+The results of comparing the cluster assignment solutions through mutual information (i.e., $I(U;V)$) and Shannon entropy (i.e., \(H(\cdot)\)) \parencite{shannon1948mathematical} as expressed in Equation \ref{eq:nmi} can range from 1 when there is perfect agreement among cluster assignments to 0 when they are found to be statistically independent.
+
 \begin{equation}\label{eq:nmi}
 \mathrm{NMI}(U,V)=\frac{2\,I(U;V)}{H(U)+H(V)},
 \end{equation}
+
+To measure the degree that clusters in one solution are either similar or dissimilar to those in another solution, I utilize the Jaccard Index. As indicated in Equation \ref{eq:jaccard}, where \(A\) and \(B\) represent the sets of observations that comprise the clusters being evaluated for similarity, the Jaccard Index represents the size of the intersection of the sets divided by the size of the union of the sets, with values in [0, 1]. Therefore, larger values of the index would indicate that the cluster memberships are more similar.
 
 \begin{equation}\label{eq:jaccard}
 J(A,B)=\frac{|A\cap B|}{|A\cup B|}.
 \end{equation}
 
+In addition to evaluating the similarity/dissimilarity between clusters across two solutions, I utilize clusterwise stability matching \parencite{hennig2007cluster}, to evaluate whether cluster assignments remain stable after repeated sampling. In each of \(R\) resampling iterations, I pair an original cluster \(C_k\) with the resampled cluster having the greatest Jaccard overlap with it. I then average these maximum overlaps across the iterations. This average value is referred to as the "stability score" for \(C_k\) and is expressed as in Equation \ref{eq:hennig}. A per-cluster score > 0.7 is used here as the stability criterion.
+
 \begin{equation}\label{eq:hennig}
 \hat{S}_k=\frac{1}{R}\sum_{r=1}^{R}\max_{k'}\,J\!\left(C_k,\,C_{k'}^{(r)}\right).
 \end{equation}
+
+\enlargethispage{2\baselineskip}
+Taken together, NMI and ARI enable a quantitative comparison of similarities and differences between two cluster assignments. Although both metrics enable an evaluation of agreement between two cluster assignments they are metrics that measure agreement and should not be used as statistical tests of significance.
